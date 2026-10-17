@@ -1,0 +1,454 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>P2.1 · ROS 2 y MVSim | RoboTest</title>
+  <link rel="stylesheet" href="../L3-Robot%20motion/Practica_Parcial1.css">
+  <link rel="stylesheet" href="../L3-Robot%20motion/Resumenes_Web.css">
+  <script src="../L3-Robot%20motion/Resumenes_Web.js" defer></script>
+</head>
+<body>
+  <div id="reading-progress" aria-hidden="true"></div>
+  <header class="topbar">
+    <a class="brand" href="../L3-Robot%20motion/Practica_Parcial1.html" aria-label="RoboTest, volver al inicio"><span class="brand-mark">R<span></span></span> ROBO<span>TEST</span></a>
+    <nav aria-label="Navegación principal"><a href="../L1-Introduction-to-Autonomous-Robotics/Resumen_L1_Introduccion_Robotica_Autonoma.html">L1</a><a href="Resumen_L2_Arquitecturas_Control_ROS2.html" aria-current=page>L2</a><a href="../L3-Robot%20motion/Resumen_L3_Movimiento_Robot.html">L3</a><a href="../L3-Robot%20motion/Practica_Parcial1.html">Test <span aria-hidden="true">↗</span></a></nav>
+  </header>
+  <main>
+    <section class="hero lesson-hero" aria-labelledby="hero-title">
+      <div class="hero-inner">
+        <div class="eyebrow"><span class="status-dot"></span> L2 · GUÍA DE PRÁCTICAS</div>
+        <h1 id="hero-title">ROS 2 y MVSim<span class="hero-period">.</span></h1>
+        <p>Guía de la práctica 2.1: mundo simulado, nodos, topics, TF y control por teclado.</p>
+        <div class="hero-actions"><a class="button primary" href="#apuntes">Empezar a leer <span aria-hidden="true">↘</span></a><a class="button subtle" href="../L3-Robot%20motion/Practica_Parcial1.html?lesson=L2#filters">Practicar el tema</a></div>
+        <div class="lesson-facts"><span>6 bloques de lectura</span><span>1 fórmulas renderizadas</span><span>Sin conexión</span></div>
+      </div>
+      <div class="hero-art" aria-hidden="true"><div class="grid-plane"></div><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="robot-icon"><span class="eye"></span><span class="eye"></span></div><div class="beacon beacon-a"></div><div class="beacon beacon-b"></div><span class="art-label label-a">SENSE</span><span class="art-label label-b">PLAN</span><span class="art-label label-c">ACT</span></div>
+    </section>
+    <div class="reading-wrap" id="apuntes">
+      <div class="reading-intro"><div><span class="overline">P2.1 / LECTURA</span><h2>Todo el contenido, mejor organizado.</h2><p>Índice navegable, secciones cortas y fórmulas legibles. El contenido del apunte original se mantiene íntegro.</p></div><a class="original-link" href="Guia_de_estudio_ROS2_y_practicas.md">Ver Markdown original ↗</a></div>
+      <details class="mobile-toc"><summary>Índice de contenidos <span aria-hidden="true">⌄</span></summary><nav class="toc-items" aria-label="Apartados de la página"><details class="toc-chapter" open><summary><span class="toc-number">01</span><span>Modelo mental</span></summary><div class="toc-links"><a href="#1-modelo-mental">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">02</span><span>Elementos: qué son y cuándo usarlos</span></summary><div class="toc-links"><a href="#2-elementos-qué-son-y-cuándo-usarlos">Ir al bloque</a><a href="#conceptos-que-añade-la-práctica-de-mvsim">Conceptos que añade la práctica de MVSim</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">03</span><span>Comandos de consulta y ejecución</span></summary><div class="toc-links"><a href="#3-comandos-de-consulta-y-ejecución">Ir al bloque</a><a href="#topics">Topics</a><a href="#servicios-parámetros-y-acciones">Servicios, parámetros y acciones</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">04</span><span>Aplicaciones y ejemplos que aparecen</span></summary><div class="toc-links"><a href="#4-aplicaciones-y-ejemplos-que-aparecen">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">05</span><span>Flujo mínimo de desarrollo</span></summary><div class="toc-links"><a href="#5-flujo-mínimo-de-desarrollo">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">06</span><span>Práctica 2.1 — Primeros pasos con ROS 2 y MVSim</span></summary><div class="toc-links"><a href="#6-práctica-21--primeros-pasos-con-ros-2-y-mvsim">Ir al bloque</a><a href="#61-entender-y-preparar-el-mundo">6.1. Entender y preparar el mundo</a><a href="#62-lanzar-y-distinguir-las-dos-vistas">6.2. Lanzar y distinguir las dos vistas</a><a href="#63-explorar-qué-produce-y-consume-el-robot">6.3. Explorar qué produce y consume el robot</a><a href="#64-moverlo-manualmente-y-pararlo">6.4. Moverlo manualmente y pararlo</a><a href="#65-crear-el-teleoperador-por-teclado">6.5. Crear el teleoperador por teclado</a></div></details></nav></details>
+      <div class="reading-columns"><aside class="toc-sidebar"><div class="toc-box"><span class="overline">EN ESTA PÁGINA</span><p>L2 · 6 bloques</p><nav class="toc-items" aria-label="Apartados de la página"><details class="toc-chapter" open><summary><span class="toc-number">01</span><span>Modelo mental</span></summary><div class="toc-links"><a href="#1-modelo-mental">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">02</span><span>Elementos: qué son y cuándo usarlos</span></summary><div class="toc-links"><a href="#2-elementos-qué-son-y-cuándo-usarlos">Ir al bloque</a><a href="#conceptos-que-añade-la-práctica-de-mvsim">Conceptos que añade la práctica de MVSim</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">03</span><span>Comandos de consulta y ejecución</span></summary><div class="toc-links"><a href="#3-comandos-de-consulta-y-ejecución">Ir al bloque</a><a href="#topics">Topics</a><a href="#servicios-parámetros-y-acciones">Servicios, parámetros y acciones</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">04</span><span>Aplicaciones y ejemplos que aparecen</span></summary><div class="toc-links"><a href="#4-aplicaciones-y-ejemplos-que-aparecen">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">05</span><span>Flujo mínimo de desarrollo</span></summary><div class="toc-links"><a href="#5-flujo-mínimo-de-desarrollo">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">06</span><span>Práctica 2.1 — Primeros pasos con ROS 2 y MVSim</span></summary><div class="toc-links"><a href="#6-práctica-21--primeros-pasos-con-ros-2-y-mvsim">Ir al bloque</a><a href="#61-entender-y-preparar-el-mundo">6.1. Entender y preparar el mundo</a><a href="#62-lanzar-y-distinguir-las-dos-vistas">6.2. Lanzar y distinguir las dos vistas</a><a href="#63-explorar-qué-produce-y-consume-el-robot">6.3. Explorar qué produce y consume el robot</a><a href="#64-moverlo-manualmente-y-pararlo">6.4. Moverlo manualmente y pararlo</a><a href="#65-crear-el-teleoperador-por-teclado">6.5. Crear el teleoperador por teclado</a></div></details></nav><a class="toc-practice" href="../L3-Robot%20motion/Practica_Parcial1.html?lesson=L2&amp;kind=Pr%C3%A1ctica#filters">Practicar preguntas ↗</a></div></aside><div class="reading-main"><article class="notes-body"><section id="ros-2--guía-de-estudio-y-prácticas" class="level1">
+<h1>ROS 2 — guía de estudio y prácticas</h1>
+<p>Referencia ampliable: conceptos de la lección, comandos útiles y prácticas realizadas. Los ejemplos de MVSim corresponden a la práctica <strong>2.1 Getting started with ROS2 and MVSim</strong>; sus rutas y comandos de instalación están pensados para Ubuntu 24.04 con ROS 2 Jazzy, no para ejecutarse directamente en macOS.</p>
+<section id="1-modelo-mental" class="level2">
+<h2>1. Modelo mental</h2>
+<p><strong>ROS 2</strong> es un ecosistema de bibliotecas y herramientas para construir robots; no sustituye al sistema operativo. Divide el software en <strong>nodos</strong> que intercambian información y coordinan tareas. Un <strong>paquete</strong> agrupa el código y los recursos; al ejecutar sus programas aparece un <strong>grafo</strong> de nodos y comunicaciones.</p>
+<pre class="text"><code>Paquete (código) → ejecutable → nodo en ejecución
+Sensor → publica topic → nodo de control → envía órdenes → actuador
+                          ↕ servicio / acción
+                     otros nodos</code></pre>
+<p>ROS 2 usa <strong>DDS</strong> para transportar datos y descubrir nodos sin un maestro central. La <strong>QoS</strong> configura propiedades de comunicación como fiabilidad e historial: publicador y suscriptor necesitan políticas compatibles para intercambiar mensajes.</p>
+</section>
+<section id="2-elementos-qué-son-y-cuándo-usarlos" class="level2">
+<h2>2. Elementos: qué son y cuándo usarlos</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Elemento</th>
+<th>Definición y función</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Paquete</strong></td>
+<td>Unidad de organización y distribución de software. Contiene nodos, configuración o interfaces; <code>package.xml</code> declara sus metadatos y dependencias. Puede construirse con <code>ament_cmake</code> (C++) o <code>ament_python</code> (Python).</td>
+</tr>
+<tr>
+<td><strong>Workspace</strong></td>
+<td>Directorio de trabajo con <code>src/</code> (fuentes), <code>build/</code> (intermedios), <code>install/</code> (resultado) y <code>log/</code> (registros). <code>colcon</code> construye los paquetes.</td>
+</tr>
+<tr>
+<td><strong>Ejecutable y nodo</strong></td>
+<td>El ejecutable es el programa que se inicia; un <strong>nodo</strong> es un componente ROS 2 en ejecución, normalmente con una responsabilidad concreta. Un ejecutable puede alojar varios nodos.</td>
+</tr>
+<tr>
+<td><strong>Grafo ROS</strong></td>
+<td>Conjunto de nodos activos y sus conexiones: topics, servicios y acciones. No es lo mismo que la estructura de archivos de los paquetes.</td>
+</tr>
+<tr>
+<td><strong>Namespace</strong></td>
+<td>Prefijo que separa recursos con el mismo nombre; por ejemplo, <code>/turtlesim1/turtle1/pose</code> distingue una simulación de otra.</td>
+</tr>
+<tr>
+<td><strong>Interfaz</strong></td>
+<td>Define la estructura de datos intercambiados. <code>.msg</code> define mensajes, <code>.srv</code> petición y respuesta, y <code>.action</code> objetivo, resultado y feedback.</td>
+</tr>
+<tr>
+<td><strong>Topic</strong></td>
+<td>Canal con nombre para datos publicados por uno o más nodos y recibidos por uno o más suscriptores. Útil para flujos como lecturas láser o velocidades; no espera una respuesta.</td>
+</tr>
+<tr>
+<td><strong>Servicio</strong></td>
+<td>Intercambio cliente–servidor de <strong>petición → respuesta</strong>. Útil para operaciones puntuales, como crear una tortuga o reiniciar un sensor.</td>
+</tr>
+<tr>
+<td><strong>Parámetro</strong></td>
+<td>Valor de configuración que pertenece a un nodo; puede consultarse o, si el nodo lo admite, modificarse en ejecución. Ejemplo: una velocidad o una frecuencia.</td>
+</tr>
+<tr>
+<td><strong>Acción</strong></td>
+<td>Operación cliente–servidor que puede durar tiempo: acepta un objetivo, ofrece feedback, termina con un resultado y permite cancelación. Útil para navegar hasta una posición.</td>
+</tr>
+<tr>
+<td><strong>Launch file</strong></td>
+<td>Archivo Python, XML o YAML que arranca y configura varios procesos/nodos, sus argumentos y namespaces de una vez.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Regla para elegir:</strong> datos continuos → <strong>topic</strong>; consulta/orden breve con respuesta → <strong>servicio</strong>; tarea prolongada con progreso o cancelación → <strong>acción</strong>; ajuste de un nodo → <strong>parámetro</strong>.</p>
+<section id="conceptos-que-añade-la-práctica-de-mvsim" class="level3">
+<h3>Conceptos que añade la práctica de MVSim</h3>
+<ul>
+<li><strong>MVSim</strong> simula mundo, física, robot y sensores; <strong>RViz2</strong> visualiza <em>datos ROS 2</em> y transformaciones, no el mundo XML completo. La GUI de MVSim muestra el estado interno de la simulación; RViz2 solo muestra lo publicado y configurado para representar.</li>
+<li><strong>Archivo <code>.world.xml</code></strong>: describe escenario, vehículos, posición inicial, sensores y GUI. Una <strong>clase</strong> de vehículo (<code>jackal</code>) es una definición reutilizable; una <strong>instancia</strong> (<code>robot</code>) es el vehículo concreto colocado en ese mundo. <code>&lt;include&gt;</code> incorpora definiciones y admite argumentos como <code>default_sensors</code> o <code>sensor_period_sec</code>; <code>${sensor_yaw|0.0}</code> usa un valor recibido o el predeterminado <code>0.0</code>.</li>
+<li><strong>Sensores y frecuencia</strong>: un <strong>LiDAR</strong> mide distancias mediante rayos (2D: barrido plano; 3D: espacio); una <strong>cámara RGB</strong> produce imágenes; una <strong>IMU</strong> mide movimiento inercial (aceleración y giro); <strong>GNSS/GPS</strong> proporciona posición global. <code>sensor_period_sec="0.10"</code> supone teóricamente <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo>=</mo><mn>1</mn><mi>/</mi><mi>T</mi><mo>=</mo><mn>10</mn><mspace width="0.167em"></mspace><mtext mathvariant="normal">Hz</mtext></mrow><annotation encoding="application/x-tex">f=1/T=10\,\text{Hz}</annotation></semantics></math>. La frecuencia efectiva se comprueba con <code>ros2 topic hz</code> y puede variar por la carga de simulación.</li>
+<li><strong>Mapa de ocupación</strong>: representación de celdas libres, ocupadas o desconocidas que RViz2 puede dibujar; no equivale a mostrar toda la geometría visual de MVSim.</li>
+<li><strong>Publicador, suscriptor y tipo</strong>: MVSim publica <code>/scanner1</code> (<code>sensor_msgs/msg/LaserScan</code>) y RViz2 puede suscribirse; MVSim se suscribe a <code>/cmd_vel</code> (<code>geometry_msgs/msg/Twist</code>). Para conectarse importan <strong>nombre, tipo y QoS compatible</strong>. Un topic puede figurar aunque no haya publicadores o suscriptores: los extremos se descubren por separado.</li>
+<li><strong>QoS</strong>: además de fiabilidad e historial/profundidad, incluye durabilidad (disponibilidad de mensajes para suscriptores nuevos) y plazo esperado entre mensajes. <code>ros2 topic info &lt;topic&gt; --verbose</code> enseña endpoints y políticas.</li>
+<li><strong>Odometría frente a verdad de simulación</strong>: <code>/odom</code> representa una estimación del movimiento que puede acumular deriva; <code>/base_pose_ground_truth</code> es la pose que el simulador conoce exactamente, útil para evaluar estimadores pero no como entrada de uno que pretenda estimar la posición.</li>
+<li><strong><code>Twist</code> y velocidades locales</strong>: en <code>/cmd_vel</code>, <code>linear.x</code> indica avance/retroceso en m/s y <code>angular.z</code> giro en rad/s, respecto al robot; en un robot terrestre de tracción diferencial el resto suele quedar a cero. Publicar a la vez desde dos nodos en <code>/cmd_vel</code> <strong>no</strong> establece prioridades automáticamente.</li>
+<li><strong>Watchdog</strong>: si dejan de llegar órdenes durante demasiado tiempo, MVSim puede detener el robot. <code>Ctrl+C</code> mata al publicador, pero no manda una velocidad cero: para parar inmediatamente se publica un <code>Twist</code> nulo; el watchdog queda como respaldo.</li>
+<li><strong>TF y marcos de referencia</strong>: <code>map → odom → base_link → sensores</code> relaciona una referencia global, una referencia odométrica local continua, el cuerpo del robot y los sensores. <code>/tf</code> publica transformaciones dinámicas y <code>/tf_static</code> las estáticas; RViz2 las necesita para colocar los datos. Las órdenes <code>Twist</code> se entienden en el marco local del vehículo en esta práctica.</li>
+<li><strong>Tiempo simulado</strong>: el simulador puede publicar un reloj para que los nodos usen tiempo de simulación; <code>disable_sim_time_clock</code> cambia ese comportamiento. Hay que distinguir este reloj del tiempo real del ordenador.</li>
+<li><strong>Overlay y entorno</strong>: <code>source /opt/ros/jazzy/setup.bash</code> expone ROS 2 instalado; <code>source &lt;workspace&gt;/install/setup.bash</code> añade los paquetes propios. Cada terminal tiene su entorno; <code>colcon build</code> genera <code>build/</code>, <code>install/</code> y <code>log/</code>.</li>
+<li><strong><code>rclpy</code></strong>: biblioteca Python para crear nodos ROS 2. <code>create_publisher(Twist, '/cmd_vel', 10)</code> crea un publicador (el <code>10</code> es profundidad de cola/QoS abreviada); <code>publish</code> envía mensajes. <code>rclpy.spin()</code> procesa callbacks bloqueando; <code>spin_once(..., timeout_sec=0.0)</code> permite atenderlos dentro de un bucle de teclado.</li>
+</ul>
+</section>
+</section>
+<section id="3-comandos-de-consulta-y-ejecución" class="level2">
+<h2>3. Comandos de consulta y ejecución</h2>
+<p>Los argumentos entre <code>&lt; &gt;</code> son marcadores que debes sustituir. Los comandos de inspección del grafo requieren nodos en marcha.</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Comando</th>
+<th>Para qué sirve</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ros2 pkg list</code></td>
+<td>Lista paquetes disponibles.</td>
+</tr>
+<tr>
+<td><code>ros2 pkg executables &lt;paquete&gt;</code></td>
+<td>Lista ejecutables de un paquete.</td>
+</tr>
+<tr>
+<td><code>ros2 pkg prefix &lt;paquete&gt;</code></td>
+<td>Muestra su ubicación de instalación.</td>
+</tr>
+<tr>
+<td><code>ros2 pkg prefix --share mvsim</code></td>
+<td>Encuentra el directorio de recursos instalados de MVSim sin suponer una ruta fija.</td>
+</tr>
+<tr>
+<td><code>ros2 run &lt;paquete&gt; &lt;ejecutable&gt;</code></td>
+<td>Inicia un ejecutable del paquete.</td>
+</tr>
+<tr>
+<td><code>ros2 launch &lt;paquete&gt; &lt;archivo_launch&gt;</code></td>
+<td>Arranca el conjunto configurado en un archivo launch.</td>
+</tr>
+<tr>
+<td><code>ros2 node list</code></td>
+<td>Lista nodos activos.</td>
+</tr>
+<tr>
+<td><code>ros2 node info &lt;nodo&gt;</code></td>
+<td>Muestra sus publicadores, suscriptores, servicios y acciones.</td>
+</tr>
+<tr>
+<td><code>ros2 interface show &lt;tipo&gt;</code></td>
+<td>Muestra campos de una interfaz de mensaje, servicio o acción.</td>
+</tr>
+</tbody>
+</table>
+<section id="topics" class="level3">
+<h3>Topics</h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Comando</th>
+<th>Para qué sirve</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ros2 topic list</code></td>
+<td>Lista topics activos.</td>
+</tr>
+<tr>
+<td><code>ros2 topic info &lt;topic&gt;</code></td>
+<td>Muestra tipo y número de publicadores/suscriptores de un topic.</td>
+</tr>
+<tr>
+<td><code>ros2 topic info &lt;topic&gt; --verbose</code></td>
+<td>Añade nombres de nodos, extremos y perfiles QoS; útil para detectar publicadores duplicados.</td>
+</tr>
+<tr>
+<td><code>ros2 topic echo &lt;topic&gt;</code></td>
+<td>Imprime los mensajes recibidos continuamente; <code>--once</code> lee uno y sale.</td>
+</tr>
+<tr>
+<td><code>ros2 topic hz &lt;topic&gt;</code></td>
+<td>Mide la frecuencia de publicación.</td>
+</tr>
+<tr>
+<td><code>ros2 topic pub -r &lt;Hz&gt; &lt;topic&gt; &lt;tipo&gt; '&lt;datos&gt;'</code></td>
+<td>Publica mensajes periódicos del tipo indicado.</td>
+</tr>
+</tbody>
+</table>
+<p>Un caso del tema es <code>/turtle1/cmd_vel</code>: recibe mensajes <code>geometry_msgs/msg/Twist</code> con componentes <code>linear</code> y <code>angular</code>. La tortuga interpreta esos mensajes como órdenes de movimiento. Con <code>turtlesim_node</code> abierto en otra terminal, se puede probar así:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> topic pub <span class="at">--once</span> /turtle1/cmd_vel geometry_msgs/msg/Twist <span class="st">&#39;{linear: {x: 1.0}, angular: {z: 0.5}}&#39;</span></span></code></pre></div>
+<p><code>--once</code> envía un único mensaje; <code>-r &lt;Hz&gt;</code> lo repetiría periódicamente.</p>
+</section>
+<section id="servicios-parámetros-y-acciones" class="level3">
+<h3>Servicios, parámetros y acciones</h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Comando</th>
+<th>Para qué sirve</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ros2 service list</code></td>
+<td>Lista servicios disponibles.</td>
+</tr>
+<tr>
+<td><code>ros2 service type &lt;servicio&gt;</code></td>
+<td>Obtiene el tipo de interfaz de un servicio.</td>
+</tr>
+<tr>
+<td><code>ros2 service find &lt;tipo&gt;</code></td>
+<td>Busca servicios con ese tipo.</td>
+</tr>
+<tr>
+<td><code>ros2 service call &lt;servicio&gt; &lt;tipo&gt; '&lt;petición&gt;'</code></td>
+<td>Envía una petición y espera respuesta.</td>
+</tr>
+<tr>
+<td><code>ros2 param list</code></td>
+<td>Lista parámetros de los nodos activos.</td>
+</tr>
+<tr>
+<td><code>ros2 param get &lt;nodo&gt; &lt;parámetro&gt;</code></td>
+<td>Lee un valor.</td>
+</tr>
+<tr>
+<td><code>ros2 param set &lt;nodo&gt; &lt;parámetro&gt; &lt;valor&gt;</code></td>
+<td>Solicita cambiarlo.</td>
+</tr>
+<tr>
+<td><code>ros2 param describe &lt;nodo&gt; &lt;parámetro&gt;</code></td>
+<td>Muestra su descripción y restricciones.</td>
+</tr>
+<tr>
+<td><code>ros2 param dump &lt;nodo&gt;</code></td>
+<td>Exporta sus parámetros a YAML.</td>
+</tr>
+<tr>
+<td><code>ros2 param load &lt;nodo&gt; &lt;archivo.yaml&gt;</code></td>
+<td>Carga valores desde YAML.</td>
+</tr>
+<tr>
+<td><code>ros2 action</code></td>
+<td>Familia de herramientas para inspeccionar y usar acciones; en el material no se detalla un subcomando concreto.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>No confundir:</strong> <code>ros2 topic/service/action</code> son herramientas de terminal; <code>.msg/.srv/.action</code> son definiciones de los datos que usan los nodos.</p>
+</section>
+</section>
+<section id="4-aplicaciones-y-ejemplos-que-aparecen" class="level2">
+<h2>4. Aplicaciones y ejemplos que aparecen</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Aplicación o ejemplo</th>
+<th>Qué se inicia / qué enseña</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ros2 run turtlesim turtlesim_node</code></td>
+<td>Abre <strong>turtlesim</strong>, simulador sencillo de una tortuga: permite observar movimiento, topics y servicios.</td>
+</tr>
+<tr>
+<td><code>mimic</code> de <code>turtlesim</code></td>
+<td>Nodo que escucha los movimientos de una tortuga y envía órdenes para que otra los reproduzca; ilustra la conexión entre nodos y el uso de namespaces. En el material se presenta dentro de un lanzamiento con varias tortugas.</td>
+</tr>
+<tr>
+<td><code>ros2 run rqt_graph rqt_graph</code></td>
+<td>Abre <strong>rqt_graph</strong> para visualizar gráficamente nodos y conexiones por topics. También se muestra la invocación <code>rqt_graph</code>.</td>
+</tr>
+<tr>
+<td><code>ros2 launch mvsim demo_indoor_outdoor.launch.py</code></td>
+<td>Lanza la simulación MVSim del mundo interior/exterior y, por defecto, RViz2. <code>--show-args</code> enseña sus opciones; <code>headless:=true</code> oculta la GUI de MVSim, no necesariamente RViz2.</td>
+</tr>
+<tr>
+<td><strong>MVSim GUI / RViz2</strong></td>
+<td>La primera muestra la simulación y su verdad interna; RViz2 muestra los mensajes y transformaciones ROS 2 publicados.</td>
+</tr>
+<tr>
+<td><strong>RViz</strong></td>
+<td>Herramienta de visualización mencionada entre las utilidades del ecosistema; en la práctica 2.1 se abre <strong>RViz2</strong> desde el launch de MVSim.</td>
+</tr>
+<tr>
+<td><code>ros2 run robot_teleop keyboard_control</code></td>
+<td>Ejecuta el nodo Python de teleoperación que crea el estudiante y publica velocidades en <code>/cmd_vel</code>.</td>
+</tr>
+<tr>
+<td><strong>Nav2</strong></td>
+<td>Sistema de navegación de ROS 2. El ejemplo de su árbol de comportamiento combina calcular ruta, seguirla, replanificar y recuperar fallos; no es un comando concreto de lanzamiento.</td>
+</tr>
+<tr>
+<td><code>ros2 run my_package_cmake my_node</code> / <code>ros2 run my_package_python my_node</code></td>
+<td>Ejecutan los nodos de ejemplo construidos en C++ o Python, respectivamente.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="5-flujo-mínimo-de-desarrollo" class="level2">
+<h2>5. Flujo mínimo de desarrollo</h2>
+<ol type="1">
+<li><strong>Cargar el entorno de ROS 2</strong> en la terminal donde se trabajará (ejemplo de la lección, ROS 2 Jazzy en Linux): <code>source /opt/ros/jazzy/setup.bash</code>.</li>
+<li><strong>Crear el workspace:</strong> <code>mkdir -p ~/dev_ws/src</code>; entrar en <code>~/dev_ws</code>.</li>
+<li><strong>Crear un paquete</strong> desde <code>src/</code>: <code>ros2 pkg create --build-type ament_cmake --node-name my_node my_package_cmake</code> para C++, o <code>ros2 pkg create --build-type ament_python --node-name my_node my_package_python</code> para Python.</li>
+<li><strong>Implementar y registrar el nodo:</strong> en C++, editar el código y <code>CMakeLists.txt</code>; en Python, el módulo y <code>setup.py</code> (<code>console_scripts</code>). El manifiesto común es <code>package.xml</code>.</li>
+<li><strong>Construir</strong> desde la raíz del workspace: <code>colcon build</code> (todo) o <code>colcon build --packages-select &lt;paquete&gt;</code> (solo uno).</li>
+<li><strong>Cargar lo construido y ejecutar:</strong> <code>source install/setup.bash</code> y después <code>ros2 run &lt;paquete&gt; &lt;ejecutable&gt;</code>. Repetir <code>source</code> en terminales nuevas, salvo que el entorno ya se cargue automáticamente.</li>
+</ol>
+<p><strong>Secuencia para entender un sistema en marcha:</strong> <code>ros2 node list</code> → <code>ros2 node info &lt;nodo&gt;</code> → <code>ros2 topic list</code> → <code>ros2 topic echo &lt;topic&gt;</code> → <code>rqt_graph</code>. Así se pasa de identificar componentes a ver qué datos fluyen entre ellos.</p>
+</section>
+<section id="6-práctica-21--primeros-pasos-con-ros-2-y-mvsim" class="level2">
+<h2>6. Práctica 2.1 — Primeros pasos con ROS 2 y MVSim</h2>
+<p><strong>Qué se hace:</strong> explorar un mundo simulado, modificar los sensores para una máquina virtual, lanzar MVSim y RViz2, descubrir qué datos circulan, conducir el robot publicando <code>Twist</code> y crear un nodo Python que lo controle con el teclado. El notebook es <strong>guía e informe</strong>, no algo que deba ejecutarse entero: los comandos van en varias terminales y las respuestas, capturas y código se incorporan al notebook.</p>
+<section id="61-entender-y-preparar-el-mundo" class="level3">
+<h3>6.1. Entender y preparar el mundo</h3>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> pkg prefix <span class="at">--share</span> mvsim</span></code></pre></div>
+<p>Busca el directorio <code>share</code> del paquete, normalmente <code>/opt/ros/jazzy/share/mvsim</code>. Allí están <code>mvsim_tutorial/demo_indoor_outdoor.world.xml</code>, los archivos de lanzamiento y configuraciones de RViz2; en <code>definitions/</code> hay clases y sensores reutilizables. No conviene fijar la ruta a mano si el paquete puede estar instalado en otro sitio.</p>
+<p>En el mundo original hay <strong>un vehículo <code>robot</code> de clase <code>jackal</code></strong>, cuya definición está en <code>definitions/jackal.vehicle.xml</code>. Con <code>default_sensors="true"</code>, la clase incorpora el LiDAR 2D <code>scanner1</code>, LiDAR 3D <code>lidar1</code> y cámara RGB <code>cam1</code>; el mundo agrega un GNSS <code>gps1</code> y una IMU. Son distintas cosas: el <em>mundo</em> coloca la instancia y configura el entorno, la <em>clase</em> define el vehículo reutilizable y cada <em>sensor</em> aporta observaciones. <code>init_pose</code> indica posición y orientación inicial (<code>x y yaw</code>, con el yaw del XML en grados).</p>
+<p>Para aligerar la simulación en una máquina virtual, la práctica desactiva los sensores predeterminados con <code>default_sensors="false"</code> en el <strong>archivo de mundo</strong>, y añade solo <code>definitions/lidar2d.sensor.xml</code> al vehículo. Así se evita renderizar la cámara y el LiDAR 3D sin modificar la clase compartida por otros mundos. En el LiDAR conservado: <code>sensor_x/y/z</code> sitúan el sensor respecto al robot, <code>sensor_yaw</code> lo orienta, <code>sensor_name="scanner1"</code> lo identifica, <code>fov_degrees="270"</code> determina su campo de visión, <code>raytrace_3d</code> controla la intersección de rayos con geometría 3D y <code>sensor_period_sec="0.10"</code> define una muestra teórica cada 0,1 s (10 Hz). Si se ven aproximadamente 9,7 Hz, no implica necesariamente un fallo.</p>
+</section>
+<section id="62-lanzar-y-distinguir-las-dos-vistas" class="level3">
+<h3>6.2. Lanzar y distinguir las dos vistas</h3>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> launch mvsim demo_indoor_outdoor.launch.py <span class="at">--show-args</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> launch mvsim demo_indoor_outdoor.launch.py</span></code></pre></div>
+<p>Un <em>launch</em> prepara los parámetros y archivos del mundo e inicia <code>mvsim_node</code> y, si <code>use_rviz</code> es verdadero, RViz2. Entre los argumentos mostrados están <code>world_file</code>, <code>headless</code>, <code>use_rviz</code>, <code>do_fake_localization</code> (transformación ficticia <code>map → odom</code>), <code>publish_tf_odom2baselink</code>, <code>force_publish_vehicle_namespace</code> y <code>disable_sim_time_clock</code>. Se pasan como <code>nombre:=valor</code>; por ejemplo:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> launch mvsim demo_indoor_outdoor.launch.py headless:=true</span></code></pre></div>
+<p><code>headless</code> oculta la ventana de MVSim, <strong>no necesariamente RViz2</strong>. MVSim muestra la geometría y pose real del simulador (<em>ground truth</em>); RViz2 muestra los datos ROS recibidos (láser, mapa, poses, transformaciones) y puede mostrar menos detalles que la GUI sin que falten elementos en la simulación. <code>Ctrl+C</code> en la terminal del launch detiene los procesos iniciados.</p>
+</section>
+<section id="63-explorar-qué-produce-y-consume-el-robot" class="level3">
+<h3>6.3. Explorar qué produce y consume el robot</h3>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> topic list</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> topic info /scanner1 <span class="at">--verbose</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> topic echo /scanner1</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> topic hz /scanner1</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="ex">rqt_graph</span></span></code></pre></div>
+<p><code>list</code> da nombres; <code>info --verbose</code> permite identificar tipo, publicadores, suscriptores y QoS; <code>echo</code> enseña datos; <code>hz</code> mide la frecuencia; <code>rqt_graph</code> muestra flechas entre nodos a través de topics. <strong>MVSim publica sensores y estado, pero consume órdenes</strong>; RViz2 suele consumir datos. Resumen de canales centrales (dependen de la configuración efectiva del mundo):</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Topic</th>
+<th>Tipo / significado</th>
+<th>Sentido principal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/scanner1</code></td>
+<td><code>sensor_msgs/msg/LaserScan</code>: distancias del LiDAR 2D</td>
+<td>MVSim → RViz2/otros nodos</td>
+</tr>
+<tr>
+<td><code>/odom</code></td>
+<td><code>nav_msgs/msg/Odometry</code>: estimación de pose y velocidad, susceptible de deriva</td>
+<td>MVSim → localización/navegación</td>
+</tr>
+<tr>
+<td><code>/base_pose_ground_truth</code></td>
+<td><code>nav_msgs/msg/Odometry</code>: pose real conocida por la simulación</td>
+<td>MVSim → evaluación</td>
+</tr>
+<tr>
+<td><code>/cmd_vel</code></td>
+<td><code>geometry_msgs/msg/Twist</code>: velocidad deseada</td>
+<td>controlador → MVSim</td>
+</tr>
+<tr>
+<td><code>/imu</code>, <code>/gps1</code></td>
+<td>lecturas de la IMU y GNSS simulados</td>
+<td>MVSim → localización</td>
+</tr>
+<tr>
+<td><code>/tf</code>, <code>/tf_static</code></td>
+<td>transformaciones entre marcos, dinámicas y estáticas</td>
+<td>publicadores TF → RViz2/otros</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Matiz importante:</strong> <code>/odom</code> y <code>/base_pose_ground_truth</code> pueden tener el mismo tipo sin significar lo mismo; el primero estima, el segundo permite comprobar el error. Si RViz2 conserva un display para una cámara desactivada, puede aparecer su topic con <strong>0 publicadores y 1 suscriptor</strong>: su nombre por sí solo no prueba que la cámara siga funcionando. Consultar <code>ros2 topic info &lt;topic&gt; --verbose</code>.</p>
+</section>
+<section id="64-moverlo-manualmente-y-pararlo" class="level3">
+<h3>6.4. Moverlo manualmente y pararlo</h3>
+<p>Con el launch activo, en otra terminal:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> topic pub <span class="at">--rate</span> 10 /cmd_vel geometry_msgs/msg/Twist <span class="dt">\</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">&#39;{linear: {x: 0.5}, angular: {z: 0.2}}&#39;</span></span></code></pre></div>
+<p><code>linear.x=0.5</code> hace avanzar (m/s) y <code>angular.z=0.2</code> lo hace girar (rad/s): juntos describen una curva. Para girar sobre sí mismo, <code>linear.x=0</code>; para retroceder, <code>linear.x&lt;0</code>. <code>--rate 10</code> envía 10 órdenes por segundo; sin <code>--once</code>, el publicador sigue activo. Después de <code>Ctrl+C</code>, enviar una parada explícita:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> topic pub <span class="at">--once</span> /cmd_vel geometry_msgs/msg/Twist <span class="dt">\</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">&#39;{linear: {x: 0.0}, angular: {z: 0.0}}&#39;</span></span></code></pre></div>
+<p>Una interrupción <strong>no equivale a mandar ceros</strong>; el watchdog solo detendrá el robot tras un tiempo sin órdenes. Si se mueve inesperadamente, <code>ros2 topic info /cmd_vel --verbose</code> revela si otro publicador sigue activo. Para distinguir robot de cámara, comparar <code>position.x/y</code> en dos lecturas de <code>ros2 topic echo /base_pose_ground_truth --once</code>.</p>
+</section>
+<section id="65-crear-el-teleoperador-por-teclado" class="level3">
+<h3>6.5. Crear el teleoperador por teclado</h3>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> ~/robotics_ws/src</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/robotics_ws/src</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> pkg create <span class="at">--build-type</span> ament_python <span class="at">--dependencies</span> rclpy geometry_msgs <span class="at">--node-name</span> keyboard_control robot_teleop</span></code></pre></div>
+<p><code>robot_teleop</code> es el <strong>paquete</strong>; <code>keyboard_control</code> es el <strong>ejecutable/nodo</strong>. <code>package.xml</code> declara dependencias; <code>setup.py</code> instala el programa mediante <code>console_scripts</code>. El nodo crea un publicador <code>Twist</code> en <code>/cmd_vel</code> y asigna <strong><code>w</code> avanzar, <code>s</code> retroceder, <code>a</code> girar izquierda, <code>d</code> girar derecha y espacio parar</strong>. Cada tecla produce un mensaje: <code>linear.x</code> y <code>angular.z</code> determinan el movimiento. En Python la lectura inmediata de teclas necesita <code>termios</code>/<code>tty</code> (modo de terminal) y <code>select</code> (espera con tiempo límite); se debe restaurar el terminal en <code>finally</code>. Si el bucle de teclado comparte hilo con ROS 2, <code>rclpy.spin_once(node, timeout_sec=0.0)</code> atiende callbacks sin bloquearlo. Al cerrar: publicar cero, restaurar terminal, destruir nodo y llamar a <code>rclpy.shutdown()</code>.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/robotics_ws</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="ex">colcon</span> build <span class="at">--packages-select</span> robot_teleop</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> install/setup.bash</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> run robot_teleop keyboard_control</span></code></pre></div>
+<p>El <code>source</code> se hace en <strong>cada terminal</strong> donde se usen paquetes propios; si cambian las entradas instaladas en <code>setup.py</code>, recompilar y volver a cargar el entorno. En <code>rqt_graph</code> debe verse <code>keyboard_control → /cmd_vel → mvsim</code>. Si el paquete no aparece, revisar compilación, instalación y entorno; si falta el ejecutable, comprobar <code>console_scripts</code> y <code>ros2 pkg executables robot_teleop</code>. Nunca usar simultáneamente la publicación manual de velocidad y el teclado sin coordinar sus órdenes.</p>
+<p><strong>Cadena completa de la práctica:</strong> XML del mundo → MVSim simula y publica sensores → ROS 2 distribuye mensajes y TF → RViz2 representa lo recibido → terminal o nodo <code>keyboard_control</code> publica <code>/cmd_vel</code> → MVSim mueve el robot. Esa separación permite cambiar simulador, visualizador o controlador sin rediseñar todo el sistema.</p>
+</section>
+</section>
+</section>
+</article><section class="related"><span class="overline">SIGUE ESTUDIANDO</span><h2>Más material del bloque</h2><div class="related-grid"><a class="related-card" href="Resumen_L2_Arquitecturas_Control_ROS2.html"><span>L2 · TEORÍA</span><strong>Arquitecturas de control y ROS 2</strong><small>Volver al resumen ↗</small></a></div></section><div class="end-link"><span>Fin de esta guía</span><a href="../L3-Robot%20motion/Practica_Parcial1.html?lesson=L2#filters">Ahora, ponte a prueba <span aria-hidden="true">→</span></a></div></div></div>
+    </div>
+  </main>
+  <footer><div class="wrap"><span>ROBO<span>TEST</span> / P2.1</span><span>Apuntes completos · Fórmulas en MathML · Funcionamiento sin conexión</span></div></footer>
+  <a class="back-top" href="#hero-title" aria-label="Volver arriba">↑</a>
+</body>
+</html>

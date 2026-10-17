@@ -1,0 +1,604 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>L2 · Arquitecturas de control y ROS 2 | RoboTest</title>
+  <link rel="stylesheet" href="../L3-Robot%20motion/Practica_Parcial1.css">
+  <link rel="stylesheet" href="../L3-Robot%20motion/Resumenes_Web.css">
+  <script src="../L3-Robot%20motion/Resumenes_Web.js" defer></script>
+</head>
+<body>
+  <div id="reading-progress" aria-hidden="true"></div>
+  <header class="topbar">
+    <a class="brand" href="../L3-Robot%20motion/Practica_Parcial1.html" aria-label="RoboTest, volver al inicio"><span class="brand-mark">R<span></span></span> ROBO<span>TEST</span></a>
+    <nav aria-label="Navegación principal"><a href="../L1-Introduction-to-Autonomous-Robotics/Resumen_L1_Introduccion_Robotica_Autonoma.html">L1</a><a href="Resumen_L2_Arquitecturas_Control_ROS2.html" aria-current=page>L2</a><a href="../L3-Robot%20motion/Resumen_L3_Movimiento_Robot.html">L3</a><a href="../L3-Robot%20motion/Practica_Parcial1.html">Test <span aria-hidden="true">↗</span></a></nav>
+  </header>
+  <main>
+    <section class="hero lesson-hero" aria-labelledby="hero-title">
+      <div class="hero-inner">
+        <div class="eyebrow"><span class="status-dot"></span> L2 · RESUMEN DE LA LECCIÓN</div>
+        <h1 id="hero-title">Arquitecturas de control y ROS 2<span class="hero-period">.</span></h1>
+        <p>De los paradigmas y los árboles de comportamiento a los nodos, topics y herramientas ROS 2.</p>
+        <div class="hero-actions"><a class="button primary" href="#apuntes">Empezar a leer <span aria-hidden="true">↘</span></a><a class="button subtle" href="../L3-Robot%20motion/Practica_Parcial1.html?lesson=L2#filters">Practicar el tema</a></div>
+        <div class="lesson-facts"><span>21 bloques de lectura</span><span>Apartados navegables</span><span>Sin conexión</span></div>
+      </div>
+      <div class="hero-art" aria-hidden="true"><div class="grid-plane"></div><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="robot-icon"><span class="eye"></span><span class="eye"></span></div><div class="beacon beacon-a"></div><div class="beacon beacon-b"></div><span class="art-label label-a">SENSE</span><span class="art-label label-b">PLAN</span><span class="art-label label-c">ACT</span></div>
+    </section>
+    <div class="reading-wrap" id="apuntes">
+      <div class="reading-intro"><div><span class="overline">L2 / LECTURA</span><h2>Todo el contenido, mejor organizado.</h2><p>Índice navegable, secciones cortas y fórmulas legibles. El contenido del apunte original se mantiene íntegro.</p></div><a class="original-link" href="Resumen_L2_Arquitecturas_Control_ROS2.md">Ver Markdown original ↗</a></div>
+      <details class="mobile-toc"><summary>Índice de contenidos <span aria-hidden="true">⌄</span></summary><nav class="toc-items" aria-label="Apartados de la página"><details class="toc-chapter" open><summary><span class="toc-number">01</span><span>Contenidos de la lección</span></summary><div class="toc-links"><a href="#1-contenidos-de-la-lección">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">02</span><span>Concepto de arquitectura de control robótico</span></summary><div class="toc-links"><a href="#2-concepto-de-arquitectura-de-control-robótico">Ir al bloque</a><a href="#21-contexto-dentro-de-la-asignatura">2.1. Contexto dentro de la asignatura</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">03</span><span>Propiedades deseables de una arquitectura</span></summary><div class="toc-links"><a href="#3-propiedades-deseables-de-una-arquitectura">Ir al bloque</a><a href="#31-paralelismo">3.1. Paralelismo</a><a href="#32-flexibilidad-en-tiempo-de-ejecución">3.2. Flexibilidad en tiempo de ejecución</a><a href="#33-modularidad">3.3. Modularidad</a><a href="#34-robustez">3.4. Robustez</a><a href="#35-facilidad-de-uso">3.5. Facilidad de uso</a><a href="#36-rendimiento">3.6. Rendimiento</a><a href="#37-servicios-generales">3.7. Servicios generales</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">04</span><span>Clasificación de las arquitecturas</span></summary><div class="toc-links"><a href="#4-clasificación-de-las-arquitecturas">Ir al bloque</a><a href="#41-paradigma-deliberativo">4.1. Paradigma deliberativo</a><a href="#42-paradigma-reactivo">4.2. Paradigma reactivo</a><a href="#43-paradigma-híbrido">4.3. Paradigma híbrido</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">05</span><span>Árboles de comportamiento (Behavior Trees)</span></summary><div class="toc-links"><a href="#5-árboles-de-comportamiento-behavior-trees">Ir al bloque</a><a href="#51-definición-y-papel">5.1. Definición y papel</a><a href="#52-funcionamiento-mediante-ticks">5.2. Funcionamiento mediante ticks</a><a href="#53-familias-de-nodos">5.3. Familias de nodos</a><a href="#54-nodos-personalizados-y-nav2">5.4. Nodos personalizados y Nav2</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">06</span><span>ROS: Robot Operating System</span></summary><div class="toc-links"><a href="#6-ros-robot-operating-system">Ir al bloque</a><a href="#61-definición">6.1. Definición</a><a href="#62-evolución">6.2. Evolución</a><a href="#63-relevancia">6.3. Relevancia</a><a href="#64-difusión">6.4. Difusión</a><a href="#65-instalación-y-ayuda">6.5. Instalación y ayuda</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">07</span><span>ROS 1 frente a ROS 2</span></summary><div class="toc-links"><a href="#7-ros-1-frente-a-ros-2">Ir al bloque</a><a href="#71-comunicaciones">7.1. Comunicaciones</a><a href="#72-descubrimiento-sin-maestro">7.2. Descubrimiento sin maestro</a><a href="#73-lenguajes">7.3. Lenguajes</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">08</span><span>Ecosistema y componentes de ROS 2</span></summary><div class="toc-links"><a href="#8-ecosistema-y-componentes-de-ros-2">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">09</span><span>Paquetes</span></summary><div class="toc-links"><a href="#9-paquetes">Ir al bloque</a><a href="#91-comandos">9.1. Comandos</a><a href="#92-ejemplo-de-packagexml">9.2. Ejemplo de package.xml</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">10</span><span>Nodos</span></summary><div class="toc-links"><a href="#10-nodos">Ir al bloque</a><a href="#101-ejecutar-e-inspeccionar">10.1. Ejecutar e inspeccionar</a><a href="#102-archivos-launch">10.2. Archivos launch</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">11</span><span>Topics y mensajes</span></summary><div class="toc-links"><a href="#11-topics-y-mensajes">Ir al bloque</a><a href="#111-comandos">11.1. Comandos</a><a href="#112-grafo">11.2. Grafo</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">12</span><span>Servicios</span></summary><div class="toc-links"><a href="#12-servicios">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">13</span><span>Parámetros</span></summary><div class="toc-links"><a href="#13-parámetros">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">14</span><span>Acciones</span></summary><div class="toc-links"><a href="#14-acciones">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">15</span><span>Comparación de mecanismos</span></summary><div class="toc-links"><a href="#15-comparación-de-mecanismos">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">16</span><span>Desarrollo con colcon</span></summary><div class="toc-links"><a href="#16-desarrollo-con-colcon">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">17</span><span>Workspace de colcon</span></summary><div class="toc-links"><a href="#17-workspace-de-colcon">Ir al bloque</a><a href="#171-creación">17.1. Creación</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">18</span><span>Estructura y creación de paquetes</span></summary><div class="toc-links"><a href="#18-estructura-y-creación-de-paquetes">Ir al bloque</a><a href="#181-paquete-cmakec">18.1. Paquete CMake/C++</a><a href="#182-paquete-python">18.2. Paquete Python</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">19</span><span>Implementar un nodo CMake/C++</span></summary><div class="toc-links"><a href="#19-implementar-un-nodo-cmakec">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">20</span><span>Implementar un nodo Python</span></summary><div class="toc-links"><a href="#20-implementar-un-nodo-python">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">21</span><span>Referencias</span></summary><div class="toc-links"><a href="#21-referencias">Ir al bloque</a></div></details></nav></details>
+      <div class="reading-columns"><aside class="toc-sidebar"><div class="toc-box"><span class="overline">EN ESTA PÁGINA</span><p>L2 · 21 bloques</p><nav class="toc-items" aria-label="Apartados de la página"><details class="toc-chapter" open><summary><span class="toc-number">01</span><span>Contenidos de la lección</span></summary><div class="toc-links"><a href="#1-contenidos-de-la-lección">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">02</span><span>Concepto de arquitectura de control robótico</span></summary><div class="toc-links"><a href="#2-concepto-de-arquitectura-de-control-robótico">Ir al bloque</a><a href="#21-contexto-dentro-de-la-asignatura">2.1. Contexto dentro de la asignatura</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">03</span><span>Propiedades deseables de una arquitectura</span></summary><div class="toc-links"><a href="#3-propiedades-deseables-de-una-arquitectura">Ir al bloque</a><a href="#31-paralelismo">3.1. Paralelismo</a><a href="#32-flexibilidad-en-tiempo-de-ejecución">3.2. Flexibilidad en tiempo de ejecución</a><a href="#33-modularidad">3.3. Modularidad</a><a href="#34-robustez">3.4. Robustez</a><a href="#35-facilidad-de-uso">3.5. Facilidad de uso</a><a href="#36-rendimiento">3.6. Rendimiento</a><a href="#37-servicios-generales">3.7. Servicios generales</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">04</span><span>Clasificación de las arquitecturas</span></summary><div class="toc-links"><a href="#4-clasificación-de-las-arquitecturas">Ir al bloque</a><a href="#41-paradigma-deliberativo">4.1. Paradigma deliberativo</a><a href="#42-paradigma-reactivo">4.2. Paradigma reactivo</a><a href="#43-paradigma-híbrido">4.3. Paradigma híbrido</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">05</span><span>Árboles de comportamiento (Behavior Trees)</span></summary><div class="toc-links"><a href="#5-árboles-de-comportamiento-behavior-trees">Ir al bloque</a><a href="#51-definición-y-papel">5.1. Definición y papel</a><a href="#52-funcionamiento-mediante-ticks">5.2. Funcionamiento mediante ticks</a><a href="#53-familias-de-nodos">5.3. Familias de nodos</a><a href="#54-nodos-personalizados-y-nav2">5.4. Nodos personalizados y Nav2</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">06</span><span>ROS: Robot Operating System</span></summary><div class="toc-links"><a href="#6-ros-robot-operating-system">Ir al bloque</a><a href="#61-definición">6.1. Definición</a><a href="#62-evolución">6.2. Evolución</a><a href="#63-relevancia">6.3. Relevancia</a><a href="#64-difusión">6.4. Difusión</a><a href="#65-instalación-y-ayuda">6.5. Instalación y ayuda</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">07</span><span>ROS 1 frente a ROS 2</span></summary><div class="toc-links"><a href="#7-ros-1-frente-a-ros-2">Ir al bloque</a><a href="#71-comunicaciones">7.1. Comunicaciones</a><a href="#72-descubrimiento-sin-maestro">7.2. Descubrimiento sin maestro</a><a href="#73-lenguajes">7.3. Lenguajes</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">08</span><span>Ecosistema y componentes de ROS 2</span></summary><div class="toc-links"><a href="#8-ecosistema-y-componentes-de-ros-2">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">09</span><span>Paquetes</span></summary><div class="toc-links"><a href="#9-paquetes">Ir al bloque</a><a href="#91-comandos">9.1. Comandos</a><a href="#92-ejemplo-de-packagexml">9.2. Ejemplo de package.xml</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">10</span><span>Nodos</span></summary><div class="toc-links"><a href="#10-nodos">Ir al bloque</a><a href="#101-ejecutar-e-inspeccionar">10.1. Ejecutar e inspeccionar</a><a href="#102-archivos-launch">10.2. Archivos launch</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">11</span><span>Topics y mensajes</span></summary><div class="toc-links"><a href="#11-topics-y-mensajes">Ir al bloque</a><a href="#111-comandos">11.1. Comandos</a><a href="#112-grafo">11.2. Grafo</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">12</span><span>Servicios</span></summary><div class="toc-links"><a href="#12-servicios">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">13</span><span>Parámetros</span></summary><div class="toc-links"><a href="#13-parámetros">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">14</span><span>Acciones</span></summary><div class="toc-links"><a href="#14-acciones">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">15</span><span>Comparación de mecanismos</span></summary><div class="toc-links"><a href="#15-comparación-de-mecanismos">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">16</span><span>Desarrollo con colcon</span></summary><div class="toc-links"><a href="#16-desarrollo-con-colcon">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">17</span><span>Workspace de colcon</span></summary><div class="toc-links"><a href="#17-workspace-de-colcon">Ir al bloque</a><a href="#171-creación">17.1. Creación</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">18</span><span>Estructura y creación de paquetes</span></summary><div class="toc-links"><a href="#18-estructura-y-creación-de-paquetes">Ir al bloque</a><a href="#181-paquete-cmakec">18.1. Paquete CMake/C++</a><a href="#182-paquete-python">18.2. Paquete Python</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">19</span><span>Implementar un nodo CMake/C++</span></summary><div class="toc-links"><a href="#19-implementar-un-nodo-cmakec">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">20</span><span>Implementar un nodo Python</span></summary><div class="toc-links"><a href="#20-implementar-un-nodo-python">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">21</span><span>Referencias</span></summary><div class="toc-links"><a href="#21-referencias">Ir al bloque</a></div></details></nav><a class="toc-practice" href="../L3-Robot%20motion/Practica_Parcial1.html?lesson=L2&amp;kind=Pr%C3%A1ctica#filters">Practicar preguntas ↗</a></div></aside><div class="reading-main"><article class="notes-body"><section id="l2--arquitecturas-de-control-robótico-y-ros-2" class="level1">
+<h1>L2 — Arquitecturas de control robótico y ROS 2</h1>
+<section id="1-contenidos-de-la-lección" class="level2">
+<h2>1. Contenidos de la lección</h2>
+<p>La lección se divide en cinco bloques:</p>
+<ol type="1">
+<li><strong>Concepto:</strong> definición, contexto y propiedades deseables.</li>
+<li><strong>Clasificación:</strong> paradigmas deliberativo, reactivo e híbrido; árboles de comportamiento.</li>
+<li><strong>ROS:</strong> evolución, relevancia, difusión, instalación y ayuda; comparación entre ROS y ROS 2.</li>
+<li><strong>Componentes y comandos de ROS 2:</strong> paquetes, nodos, topics, servicios, parámetros y acciones.</li>
+<li><strong>Desarrollo de software en ROS 2:</strong> <code>colcon</code>, espacios de trabajo y creación de paquetes y nodos con CMake y Python.</li>
+</ol>
+</section>
+<section id="2-concepto-de-arquitectura-de-control-robótico" class="level2">
+<h2>2. Concepto de arquitectura de control robótico</h2>
+<p>Una <strong>arquitectura de control robótico</strong> es un marco de software que administra y coordina el comportamiento de un sistema robótico mediante la integración de:</p>
+<ul>
+<li>Sensores y percepción.</li>
+<li>Actuadores.</li>
+<li>Módulos de toma de decisiones.</li>
+</ul>
+<p>En una arquitectura completa pueden integrarse funciones de localización, movimiento, mapping, percepción, interacción humana y monitorización.</p>
+<section id="21-contexto-dentro-de-la-asignatura" class="level3">
+<h3>2.1. Contexto dentro de la asignatura</h3>
+<p>L2 proporciona la estructura que conecta los demás temas: L1 —introducción—, L3 —movimiento—, L4 —sensores—, L5 —localización—, L6 —mapping—, L7 —SLAM— y L8 —planificación de movimiento—. La arquitectura de control permite que todas esas funciones trabajen como un sistema coordinado.</p>
+</section>
+</section>
+<section id="3-propiedades-deseables-de-una-arquitectura" class="level2">
+<h2>3. Propiedades deseables de una arquitectura</h2>
+<section id="31-paralelismo" class="level3">
+<h3>3.1. Paralelismo</h3>
+<p>Es la capacidad de ejecutar procesos o comportamientos simultáneamente. Un robot debe poder realizar a la vez lectura sensorial, localización, planificación de caminos, evitación de obstáculos y control.</p>
+<p><strong>Importancia:</strong> permite percibir, pensar y actuar al mismo tiempo, mejorando la capacidad de respuesta. Por ejemplo, un robot puede moverse y evitar obstáculos mientras recalcula su ruta.</p>
+</section>
+<section id="32-flexibilidad-en-tiempo-de-ejecución" class="level3">
+<h3>3.2. Flexibilidad en tiempo de ejecución</h3>
+<p>La arquitectura debe permitir ajuste y reconfiguración durante la ejecución: cambiar comportamientos, añadir o eliminar módulos y actualizar parámetros sin detener el robot.</p>
+<p><strong>Importancia:</strong> facilita adaptarse a situaciones nuevas, actualizar comportamientos o aprender de la experiencia. Un ejemplo es cambiar de estrategia de navegación en un entorno dinámico.</p>
+</section>
+<section id="33-modularidad" class="level3">
+<h3>3.3. Modularidad</h3>
+<p>Debe proporcionar encapsulación, abstracción y reutilización del software. La diapositiva presenta una estructura por capas:</p>
+<ol type="1">
+<li><strong>Aplicaciones:</strong> exploración, mapping, reparto, etc.</li>
+<li><strong>Comportamientos/tareas:</strong> navegación, manipulación, etc.</li>
+<li><strong>Abstracciones/interfaces:</strong> API, mensajes y servicios.</li>
+<li><strong>Drivers de hardware:</strong> sensores y actuadores.</li>
+</ol>
+<p><strong>Importancia:</strong> los componentes son más fáciles de entender, probar y reutilizar. Por ejemplo, se puede reutilizar un módulo de localización en distintos robots.</p>
+</section>
+<section id="34-robustez" class="level3">
+<h3>3.4. Robustez</h3>
+<p>Mide cómo funciona la arquitectura cuando falla algún componente y si permite implementar controladores tolerantes a fallos. Debe detectar y aislar fallos, recuperarse o degradar sus prestaciones de forma controlada y mantener la operación cuando sea posible. Ejemplo: continuar navegando con sensores de respaldo si falla el principal.</p>
+</section>
+<section id="35-facilidad-de-uso" class="level3">
+<h3>3.5. Facilidad de uso</h3>
+<p>Debe ser accesible y disponer de:</p>
+<ul>
+<li>API bien documentadas.</li>
+<li>Bibliotecas y frameworks.</li>
+<li>Herramientas de visualización.</li>
+<li>Registro y depuración.</li>
+<li>Soporte de simulación.</li>
+</ul>
+<p>Esto reduce el tiempo de desarrollo y los errores, disminuye la curva de aprendizaje y facilita pruebas y mantenimiento. Ejemplos: ROS, <code>rqt</code>, RViz y simuladores.</p>
+</section>
+<section id="36-rendimiento" class="level3">
+<h3>3.6. Rendimiento</h3>
+<p>La arquitectura debe ofrecer ejecución eficiente, fiable y, cuando sea necesario, en tiempo real:</p>
+<ul>
+<li>Cumplimiento de plazos temporales.</li>
+<li>Uso eficiente de CPU y memoria.</li>
+<li>Ejecución fiable.</li>
+<li>Baja latencia.</li>
+</ul>
+<p>El ejemplo visual muestra sensores a <strong>100 Hz</strong>, procesamiento en menos de <strong>50 ms</strong> y actuación posterior. El objetivo es reaccionar dentro del plazo y terminar la tarea de forma fiable, por ejemplo evitando colisiones bajo límites temporales estrictos.</p>
+</section>
+<section id="37-servicios-generales" class="level3">
+<h3>3.7. Servicios generales</h3>
+<p>Una arquitectura también debe proporcionar:</p>
+<ul>
+<li>Comunicación entre módulos.</li>
+<li>Monitorización de la ejecución.</li>
+<li>Secuenciación y gestión de prioridades.</li>
+<li>Lectura y procesamiento de sensores.</li>
+<li>Actuación sobre dispositivos físicos.</li>
+<li>Interfaces con humanos —HRI—, Internet y otros robots.</li>
+<li>Escalabilidad.</li>
+<li>Otras funciones dependientes de la aplicación final.</li>
+</ul>
+</section>
+</section>
+<section id="4-clasificación-de-las-arquitecturas" class="level2">
+<h2>4. Clasificación de las arquitecturas</h2>
+<section id="41-paradigma-deliberativo" class="level3">
+<h3>4.1. Paradigma deliberativo</h3>
+<p>Fue el paradigma de <strong>Shakey (1967)</strong>, el primer robot considerado “inteligente”. Supone un entorno estático, ejecución de tareas perfectamente fiable y ausencia de reacción ante perturbaciones externas.</p>
+<pre class="text"><code>SENSE → PLAN → ACT
+   ↖    ENTORNO    ↙</code></pre>
+<p>Primero se percibe, luego se planifica y finalmente se actúa. Entre los resultados tecnológicos asociados a Shakey destacan:</p>
+<ul>
+<li>Algoritmo de búsqueda A*.</li>
+<li>Transformada de Hough.</li>
+<li>Grafo de visibilidad.</li>
+</ul>
+</section>
+<section id="42-paradigma-reactivo" class="level3">
+<h3>4.2. Paradigma reactivo</h3>
+<p>Propuesto por <strong>Michael Arbib en 1980</strong>. Supone que no hay planificación de tareas, el entorno es muy dinámico y poco fiable, y el robot funciona mediante reacciones. La percepción se vincula directamente con la acción para responder rápidamente.</p>
+</section>
+<section id="43-paradigma-híbrido" class="level3">
+<h3>4.3. Paradigma híbrido</h3>
+<p>Combina los paradigmas anteriores desde comienzos de la década de 1990:</p>
+<ul>
+<li>Planifica tareas para alcanzar objetivos globales.</li>
+<li>Monitoriza la ejecución del plan.</li>
+<li>Reacciona ante estímulos externos.</li>
+<li>Es el paradigma más usado actualmente.</li>
+</ul>
+<section id="organización-típica-por-capas" class="level4">
+<h4>Organización típica por capas</h4>
+<p><strong>Capa deliberativa:</strong> modelo del mundo, planificador o solucionador de tareas y agenda de tareas.</p>
+<p><strong>Capa de ejecución:</strong> secuenciador del plan, navegación reactiva, mapping, localización y manipulación.</p>
+<p><strong>Capa física —sensores y actuadores—:</strong> sensores exteroceptivos y propioceptivos, voz, control de motores, conexión a Internet y actuadores sobre el entorno.</p>
+<p>Se muestra también un ejemplo moderno que integra interacción humano–robot e IA generativa mediante <strong>Agent–Client Protocol</strong>: <em>Human-Robot Interaction in GenAI Architectures via the Agent-Client Protocol</em>, arXiv:2607.14919.</p>
+</section>
+</section>
+</section>
+<section id="5-árboles-de-comportamiento-behavior-trees" class="level2">
+<h2>5. Árboles de comportamiento (<em>Behavior Trees</em>)</h2>
+<section id="51-definición-y-papel" class="level3">
+<h3>5.1. Definición y papel</h3>
+<p>Un <strong>árbol de comportamiento (BT)</strong> es un árbol jerárquico de nodos que controla el flujo de ejecución de tareas en un agente autónomo, como un robot o una entidad virtual.</p>
+<p>En robótica actúa como secuenciador y ejecutor moderno del plan:</p>
+<ul>
+<li>Recibe metas o planes del planificador de tareas.</li>
+<li>Selecciona y secuencia habilidades como navegación reactiva o manipulación.</li>
+<li>Comprueba precondiciones: localización válida, objeto detectado, batería suficiente, etc.</li>
+<li>Activa recuperaciones o interrupciones cuando es necesario.</li>
+</ul>
+</section>
+<section id="52-funcionamiento-mediante-ticks" class="level3">
+<h3>5.2. Funcionamiento mediante <em>ticks</em></h3>
+<ol type="1">
+<li>La raíz recibe periódicamente una señal <strong>tick</strong>.</li>
+<li>El tick se propaga hasta un nodo hoja.</li>
+<li>El nodo ejecuta su función asociada.</li>
+<li>Devuelve <code>SUCCESS</code>, <code>FAILURE</code> o <code>RUNNING</code>.</li>
+<li>Las hojas contienen los comandos reales mediante los que el árbol interactúa con el sistema.</li>
+</ol>
+</section>
+<section id="53-familias-de-nodos" class="level3">
+<h3>5.3. Familias de nodos</h3>
+<section id="nodos-de-control" class="level4">
+<h4>Nodos de control</h4>
+<ul>
+<li><strong>Sequence:</strong> activa hijos de izquierda a derecha; avanza solo con <code>SUCCESS</code>, devuelve inmediatamente <code>FAILURE</code> si falla alguno y solo devuelve <code>SUCCESS</code> si todos tienen éxito.</li>
+<li><strong>Fallback/Selector:</strong> pasa al siguiente hijo ante <code>FAILURE</code>, termina en el primer <code>SUCCESS</code> y solo falla si fallan todos.</li>
+<li><strong>Parallel:</strong> coordina ejecuciones simultáneas conforme a su política de éxito y fallo.</li>
+</ul>
+</section>
+<section id="decoradores" class="level4">
+<h4>Decoradores</h4>
+<p>Modifican el flujo o resultado de otro nodo. Ejemplos: <code>Inverter</code>, <code>Repeat</code> y <code>Delay</code>.</p>
+</section>
+<section id="hojas" class="level4">
+<h4>Hojas</h4>
+<ul>
+<li><strong>Actions:</strong> ejecutan trabajo.</li>
+<li><strong>Conditions:</strong> comprueban condiciones.</li>
+</ul>
+<p>Las acciones pueden ser síncronas —bloquean hasta <code>SUCCESS</code> o <code>FAILURE</code>— o asíncronas —pueden devolver <code>RUNNING</code>—.</p>
+</section>
+</section>
+<section id="54-nodos-personalizados-y-nav2" class="level3">
+<h3>5.4. Nodos personalizados y Nav2</h3>
+<p>Pueden definirse e importarse nodos personalizados. <code>PipelineSequence</code>, por ejemplo, puede mantener varios hijos <code>RUNNING</code>, permitiendo seguir un camino mientras se replantea.</p>
+<p>La rama de navegación predeterminada de <strong>ROS Nav2</strong> incluye:</p>
+<ul>
+<li><code>PipelineSequence</code> como raíz de <code>NavigateWithReplanning</code>.</li>
+<li><code>ControllerSelector</code>, topic <code>controller_selector</code> y controlador por defecto <code>FollowPath</code>.</li>
+<li><code>PlannerSelector</code>, topic <code>planner_selector</code> y planificador por defecto <code>GridBased</code>.</li>
+<li><code>RateController</code> a <strong>1,0 Hz</strong>.</li>
+<li>Secuencia con <code>GoalUpdater</code>, <code>ComputePathToPose</code> y <code>TruncatePath</code> a distancia <strong>1,0</strong>.</li>
+<li><code>FollowPath</code>, usando el controlador seleccionado y el camino truncado.</li>
+<li><code>KeepRunningUntilFailure</code>.</li>
+</ul>
+<p>Nodos personalizados del BT completo:</p>
+<ul>
+<li><strong><code>RecoveryNode</code>:</strong> intenta la operación principal; ante <code>FAILURE</code>, ejecuta recuperación y reintenta hasta <code>number_of_retries</code>.</li>
+<li><strong><code>PipelineSequence</code>:</strong> activa todos sus hijos en cada tick; permite replanificar mientras se sigue el camino.</li>
+<li><strong><code>ReactiveFallback</code>:</strong> selector prioritario que reevalúa hijos de mayor prioridad y puede interrumpir.</li>
+<li><strong><code>SequenceStar</code>:</strong> secuencia con memoria; continúa desde el último hijo <code>RUNNING</code> sin repetir hijos ya exitosos.</li>
+<li><strong><code>RateController</code>:</strong> decorador que limita ticks a una frecuencia y conserva el último estado del hijo.</li>
+</ul>
+<p>El ejemplo completo de recuperación usa:</p>
+<ul>
+<li><code>NavigateRecovery</code> con hasta <strong>6 reintentos</strong>.</li>
+<li><code>ComputePathToPose</code> con un reintento y planificador <code>GridBased</code>.</li>
+<li><code>FollowPath</code> con un reintento y controlador <code>FollowPath</code>.</li>
+<li>Limpieza de <em>costmaps</em> local y global.</li>
+<li><code>Spin</code> de aproximadamente <strong>1,57 rad</strong> y <code>Wait</code> de <strong>5 s</strong>.</li>
+</ul>
+<p>También se muestran un gran BT para <strong>SANCHO</strong>, robot social, y un ejemplo audiovisual de aplicación práctica.</p>
+</section>
+</section>
+<section id="6-ros-robot-operating-system" class="level2">
+<h2>6. ROS: Robot Operating System</h2>
+<section id="61-definición" class="level3">
+<h3>6.1. Definición</h3>
+<p><strong>ROS</strong> es un metasistema operativo de código abierto para robots. Proporciona:</p>
+<ul>
+<li>Abstracción del hardware.</li>
+<li>Control de dispositivos de bajo nivel.</li>
+<li>Funcionalidad común ya implementada.</li>
+<li>Paso de mensajes entre procesos.</li>
+<li>Gestión de paquetes.</li>
+<li>Infraestructura para desarrollo colaborativo.</li>
+</ul>
+<p>No es un sistema operativo completo convencional, sino un ecosistema de herramientas, bibliotecas y comunicaciones.</p>
+</section>
+<section id="62-evolución" class="level3">
+<h3>6.2. Evolución</h3>
+<ul>
+<li>Comenzó en <strong>2007</strong> en la Universidad de Stanford.</li>
+<li>Willow Garage lo desarrolló entre <strong>2007 y 2013</strong>.</li>
+<li>Pasó a la <strong>Open Source Robotics Foundation</strong>, renombrada <strong>Open Robotics</strong> en 2017.</li>
+<li>Ha tenido numerosas versiones o distribuciones.</li>
+</ul>
+</section>
+<section id="63-relevancia" class="level3">
+<h3>6.3. Relevancia</h3>
+<ul>
+<li><em>ROS: An Open-Source Robot Operating System</em> se presentó en 2009 en un workshop de IEEE ICRA.</li>
+<li>En septiembre de 2026, la diapositiva indica <strong>15.205 citas</strong>.</li>
+<li>Tiene una conferencia propia: <strong>ROSCon</strong>.</li>
+<li>El <strong>ROS-Industrial Consortium</strong> desarrolla bibliotecas ROS-I para robots industriales.</li>
+<li>Lo han adoptado BMW, ABB, 3M, Siemens, Boeing y más de <strong>910</strong> organizaciones según la presentación.</li>
+<li>ROS 2 es la nueva versión del ecosistema.</li>
+<li><em>Robot Operating System 2: Design, Architecture, and Uses in the Wild</em> se publicó en <em>Science Robotics</em> en 2022 y alcanzaba <strong>2.788 citas</strong>.</li>
+</ul>
+</section>
+<section id="64-difusión" class="level3">
+<h3>6.4. Difusión</h3>
+<ul>
+<li>Las descargas crecieron desde cifras pequeñas en 2011 hasta unos <strong>63,5 millones en 2024</strong>, con una bajada visible en 2020 y fuerte crecimiento posterior.</li>
+<li>En 2025, <strong>China</strong> y <strong>Estados Unidos</strong> aparecen como principales países usuarios según descargas de <code>packages.ros.org</code>, seguidos por Alemania, Japón, Reino Unido y otros.</li>
+<li>Existe un amplio catálogo de robots documentados, comerciales y de investigación.</li>
+</ul>
+</section>
+<section id="65-instalación-y-ayuda" class="level3">
+<h3>6.5. Instalación y ayuda</h3>
+<ul>
+<li>ROS 1: <a href="http://wiki.ros.org" class="uri">http://wiki.ros.org</a></li>
+<li>ROS 2 Jazzy: <a href="https://docs.ros.org/en/jazzy/Installation.html" class="uri">https://docs.ros.org/en/jazzy/Installation.html</a></li>
+<li>Ayuda: <a href="https://robotics.stackexchange.com" class="uri">https://robotics.stackexchange.com</a></li>
+</ul>
+</section>
+</section>
+<section id="7-ros-1-frente-a-ros-2" class="level2">
+<h2>7. ROS 1 frente a ROS 2</h2>
+<p>ROS 2 responde especialmente a necesidades empresariales de mayor seguridad y capacidad de tiempo real.</p>
+<section id="71-comunicaciones" class="level3">
+<h3>7.1. Comunicaciones</h3>
+<ul>
+<li>ROS 1 usa un protocolo propio.</li>
+<li>ROS 2 usa un protocolo estándar basado en <strong>DDS —Data Distribution Service—</strong>, con distintas implementaciones.</li>
+</ul>
+<p>DDS mejora eficiencia, seguridad, escalabilidad y <strong>QoS —Quality of Service—</strong>.</p>
+</section>
+<section id="72-descubrimiento-sin-maestro" class="level3">
+<h3>7.2. Descubrimiento sin maestro</h3>
+<p>ROS 2 no requiere un maestro central:</p>
+<ul>
+<li>Cada nodo anuncia su presencia a la red.</li>
+<li>Informa de sus publicaciones y suscripciones.</li>
+<li>Repite periódicamente el proceso para descubrir nuevos nodos.</li>
+<li>Informa al apagarse.</li>
+</ul>
+</section>
+<section id="73-lenguajes" class="level3">
+<h3>7.3. Lenguajes</h3>
+<ul>
+<li>ROS 1: C++11 y Python 2.7.</li>
+<li>ROS 2: C++14/C++17 y Python 3.5 en adelante, según distribución.</li>
+</ul>
+</section>
+</section>
+<section id="8-ecosistema-y-componentes-de-ros-2" class="level2">
+<h2>8. Ecosistema y componentes de ROS 2</h2>
+<ul>
+<li><strong>Diseño/implementación:</strong> paquetes que contienen nodos.</li>
+<li><strong>Ejecución:</strong> nodos conectados mediante topics, servicios, parámetros y acciones.</li>
+</ul>
+<p>Ejemplo:</p>
+<ul>
+<li>Paquete de navegación: campos potenciales.</li>
+<li>Paquete de mapas: EKF SLAM y Graph SLAM.</li>
+<li>Paquete de percepción: detección y asociación de <em>landmarks</em> y lecturas láser.</li>
+<li>El láser publica <code>laser_scan</code>; el navegador se suscribe y puede ofrecer servicio <code>setVel</code>, parámetro <code>vel</code> y acción <code>goTo</code>. El láser puede ofrecer servicio <code>reset</code>, parámetros y acciones.</li>
+</ul>
+</section>
+<section id="9-paquetes" class="level2">
+<h2>9. Paquetes</h2>
+<p>Todo el software ROS 2 se organiza en <strong>paquetes</strong>, colecciones coherentes de archivos y ejecutables con un propósito concreto. Pueden construirse con CMake o Python. Ambos comparten <code>package.xml</code> como manifiesto.</p>
+<section id="91-comandos" class="level3">
+<h3>9.1. Comandos</h3>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> pkg list</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> pkg create</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> pkg executables</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> pkg prefix</span></code></pre></div>
+<ul>
+<li><code>list</code>: paquetes instalados.</li>
+<li><code>create</code>: crea un paquete.</li>
+<li><code>executables</code>: ejecutables del paquete.</li>
+<li><code>prefix</code>: ruta prefijo del paquete.</li>
+</ul>
+</section>
+<section id="92-ejemplo-de-packagexml" class="level3">
+<h3>9.2. Ejemplo de <code>package.xml</code></h3>
+<p>El ejemplo define <code>fake_battery</code>, versión <code>0.0.1</code>, descripción de batería simulada, mantenedor, licencia <code>GPLv3</code>, herramienta <code>ament_cmake</code>, dependencias <code>rclcpp</code> y <code>std_msgs</code>, y tipo de construcción <code>ament_cmake</code>.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">package</span> <span class="ot">format=</span><span class="st">&quot;3&quot;</span>&gt;</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">name</span>&gt;fake_battery&lt;/<span class="kw">name</span>&gt;</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">version</span>&gt;0.0.1&lt;/<span class="kw">version</span>&gt;</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">description</span>&gt;A fake battery package for simulation purposes&lt;/<span class="kw">description</span>&gt;</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">maintainer</span> <span class="ot">email=</span><span class="st">&quot;...&quot;</span>&gt;...&lt;/<span class="kw">maintainer</span>&gt;</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">license</span>&gt;GPLv3&lt;/<span class="kw">license</span>&gt;</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">buildtool_depend</span>&gt;ament_cmake&lt;/<span class="kw">buildtool_depend</span>&gt;</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">depend</span>&gt;rclcpp&lt;/<span class="kw">depend</span>&gt;</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">depend</span>&gt;std_msgs&lt;/<span class="kw">depend</span>&gt;</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">export</span>&gt;&lt;<span class="kw">build_type</span>&gt;ament_cmake&lt;/<span class="kw">build_type</span>&gt;&lt;/<span class="kw">export</span>&gt;</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">package</span>&gt;</span></code></pre></div>
+</section>
+</section>
+<section id="10-nodos" class="level2">
+<h2>10. Nodos</h2>
+<ul>
+<li>Un nodo es una <strong>instancia en ejecución de un programa ROS</strong>.</li>
+<li>Un ejecutable puede contener uno o varios nodos.</li>
+<li>Calcula y proporciona o consume datos mediante topics, servicios, acciones o parámetros.</li>
+<li>Debe tener una responsabilidad concreta: publicar láser, controlar motores, localizar, etc.</li>
+<li>Los nodos se organizan en paquetes.</li>
+<li>El <strong>grafo ROS 2</strong> representa elementos y conexiones que procesan datos simultáneamente.</li>
+</ul>
+<section id="101-ejecutar-e-inspeccionar" class="level3">
+<h3>10.1. Ejecutar e inspeccionar</h3>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> run <span class="op">&lt;</span>package<span class="op">&gt;</span> <span class="op">&lt;</span>executable<span class="op">&gt;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> node list</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> node info <span class="op">&lt;</span>node_name<span class="op">&gt;</span></span></code></pre></div>
+<p><code>ros2 run</code> ejecuta un nodo; <code>turtlesim</code> contiene <code>turtlesim_node</code>. <code>node list</code> enumera nodos activos y <code>node info</code> muestra publicadores, suscriptores, servicios y acciones.</p>
+</section>
+<section id="102-archivos-launch" class="level3">
+<h3>10.2. Archivos <em>launch</em></h3>
+<p>Inician varios nodos y especifican programas, ubicación, argumentos y espacios de nombres. Pueden escribirse en Python, XML o YAML y suelen estar en <code>launch</code>.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> launch <span class="op">&lt;</span>package_name<span class="op">&gt;</span> <span class="op">&lt;</span>launch_file_name<span class="op">&gt;</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> launch <span class="op">&lt;</span>launch_file_name<span class="op">&gt;</span></span></code></pre></div>
+<p>En <code>turtlesim</code>, el namespace prefija topics y servicios, por ejemplo <code>/turtlesim1/turtle1/pose</code>. Un nodo <code>mimic</code> escucha la primera tortuga y replica sus movimientos enviando velocidad a la segunda.</p>
+</section>
+</section>
+<section id="11-topics-y-mensajes" class="level2">
+<h2>11. Topics y mensajes</h2>
+<p>Los nodos se comunican principalmente enviando <strong>mensajes</strong> por <strong>topics</strong> nombrados. Los publicadores envían y los suscriptores reciben. La comunicación puede ser uno-a-uno, uno-a-muchos, muchos-a-uno o muchos-a-muchos.</p>
+<section id="111-comandos" class="level3">
+<h3>11.1. Comandos</h3>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> topic list</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> topic info <span class="op">&lt;</span>topic_name<span class="op">&gt;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> topic echo <span class="op">&lt;</span>topic_name<span class="op">&gt;</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> topic pub <span class="at">-r</span> <span class="op">&lt;</span>rate_hz<span class="op">&gt;</span> <span class="op">&lt;</span>topic_name<span class="op">&gt;</span> <span class="op">&lt;</span>message_type<span class="op">&gt;</span> <span class="op">&lt;</span>message_content<span class="op">&gt;</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> interface show <span class="op">&lt;</span>topic_type<span class="op">&gt;</span></span></code></pre></div>
+<p>El ejemplo usa <code>geometry_msgs/msg/Twist</code>, con campos <code>linear</code> y <code>angular</code>, ambos <code>Vector3</code>. Se publica en <code>/turtle1/cmd_vel</code> un mensaje único o mensajes periódicos a 1 Hz. <code>ros2 topic hz</code> mide frecuencia y <code>ros2 topic echo</code> muestra valores.</p>
+</section>
+<section id="112-grafo" class="level3">
+<h3>11.2. Grafo</h3>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> run rqt_graph rqt_graph</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co"># o</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="ex">rqt_graph</span></span></code></pre></div>
+<p><code>rqt_graph</code> muestra gráficamente nodos y conexiones por topics.</p>
+</section>
+</section>
+<section id="12-servicios" class="level2">
+<h2>12. Servicios</h2>
+<p>Un <strong>servicio</strong> permite que un cliente solicite una operación a un servidor, que contesta con una respuesta estructurada. Es petición–respuesta, frente al publicador–suscriptor de topics. Ejemplo: el navegador solicita al láser cambiar frecuencia con <code>setFrec</code>.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> service list</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> service type <span class="op">&lt;</span>service<span class="op">&gt;</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> service find <span class="op">&lt;</span>service_type<span class="op">&gt;</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> service call <span class="op">&lt;</span>service<span class="op">&gt;</span> <span class="op">&lt;</span>service_type<span class="op">&gt;</span> <span class="op">&lt;</span>request<span class="op">&gt;</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> interface show <span class="op">&lt;</span>service_type<span class="op">&gt;</span></span></code></pre></div>
+<p>La interfaz <code>.srv</code> tiene <code>Request</code> y <code>Response</code>. El ejemplo de <code>turtlesim</code> crea una tortuga y devuelve su nombre.</p>
+</section>
+<section id="13-parámetros" class="level2">
+<h2>13. Parámetros</h2>
+<p>Un <strong>parámetro</strong> configura un nodo al arrancar o durante la ejecución. Puede ser entero, flotante, booleano, cadena o lista, y se asocia con tipo, valor y descripción. En ROS 2 cada nodo mantiene sus parámetros; ROS 1 usaba un servidor global.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> param list</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> param get <span class="op">&lt;</span>node_name<span class="op">&gt;</span> <span class="op">&lt;</span>parameter<span class="op">&gt;</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> param set <span class="op">&lt;</span>node_name<span class="op">&gt;</span> <span class="op">&lt;</span>parameter<span class="op">&gt;</span> <span class="op">&lt;</span>new_value<span class="op">&gt;</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> param describe <span class="op">&lt;</span>node_name<span class="op">&gt;</span> <span class="op">&lt;</span>parameter<span class="op">&gt;</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> param dump <span class="op">&lt;</span>node_name<span class="op">&gt;</span> --output-dir <span class="op">&lt;</span>file_or_directory<span class="op">&gt;</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> param load <span class="op">&lt;</span>node_name<span class="op">&gt;</span> <span class="op">&lt;</span>file<span class="op">&gt;</span></span></code></pre></div>
+<p>Permiten listar, leer, cambiar, describir, guardar y cargar parámetros.</p>
+</section>
+<section id="14-acciones" class="level2">
+<h2>14. Acciones</h2>
+<p>Las <strong>acciones</strong> se destinan a tareas largas:</p>
+<ul>
+<li>Esquema cliente–servidor.</li>
+<li>Pueden cancelarse durante la ejecución.</li>
+<li>Proporcionan feedback periódico.</li>
+<li>Entregan un resultado final.</li>
+</ul>
+<p>Una acción contiene objetivo/petición, resultado y feedback. Se define en <code>.action</code> —la diapositiva lo abrevia <code>.act</code>— y se inspecciona con <code>ros2 interface show</code>.</p>
+</section>
+<section id="15-comparación-de-mecanismos" class="level2">
+<h2>15. Comparación de mecanismos</h2>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>Aspecto</th>
+<th>Topics</th>
+<th>Servicios</th>
+<th>Acciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Modelo</td>
+<td>Publicador–suscriptor</td>
+<td>Petición–respuesta</td>
+<td>Tarea larga con progreso</td>
+</tr>
+<tr>
+<td>Herramienta</td>
+<td><code>ros2 topic</code></td>
+<td><code>ros2 service</code></td>
+<td><code>ros2 action</code></td>
+</tr>
+<tr>
+<td>Datos</td>
+<td>Mensajes</td>
+<td>Servicios</td>
+<td>Acciones</td>
+</tr>
+<tr>
+<td>Archivo</td>
+<td><code>.msg</code></td>
+<td><code>.srv</code></td>
+<td><code>.action</code></td>
+</tr>
+<tr>
+<td>Respuesta</td>
+<td>Flujo asíncrono</td>
+<td>Única</td>
+<td>Feedback y resultado</td>
+</tr>
+<tr>
+<td>Cancelación</td>
+<td>No aplica</td>
+<td>No apropiada</td>
+<td>Sí</td>
+</tr>
+</tbody>
+</table>
+<p><code>ros2 node info &lt;node&gt;</code> muestra subscribers, publishers, service servers, service clients y action servers/clients.</p>
+<p>Debe distinguirse entre herramientas activas (<code>ros2 topic</code>, <code>ros2 service</code>, <code>ros2 action</code>), tipos de datos —mensajes, servicios, acciones— y archivos <code>.msg</code>, <code>.srv</code>, <code>.action</code>.</p>
+</section>
+<section id="16-desarrollo-con-colcon" class="level2">
+<h2>16. Desarrollo con <code>colcon</code></h2>
+<p>Los nuevos nodos se organizan en paquetes. <code>colcon</code> es la herramienta oficial de construcción de ROS 2 basada en CMake y Python. Gestiona dependencias, organiza y hace accesibles paquetes, y genera ejecutables.</p>
+<pre class="text"><code>Crear workspace → Crear paquete → Crear nodo → Construir paquete → Ejecutar nodo</code></pre>
+</section>
+<section id="17-workspace-de-colcon" class="level2">
+<h2>17. Workspace de <code>colcon</code></h2>
+<p>Contiene:</p>
+<ul>
+<li><code>src/</code>: fuentes.</li>
+<li><code>build/</code>: intermedios.</li>
+<li><code>install/</code>: instalación de paquetes.</li>
+<li><code>log/</code>: registros.</li>
+</ul>
+<section id="171-creación" class="level3">
+<h3>17.1. Creación</h3>
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> ~/dev_ws/src</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/dev_ws</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="ex">colcon</span> build</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> /opt/ros/jazzy/setup.bash</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;source ~/dev_ws/install/setup.bash&quot;</span> <span class="op">&gt;&gt;</span> ~/.bashrc</span></code></pre></div>
+<p>Las líneas que configuran ROS 2 y el workspace en la shell deben añadirse <strong>una sola vez</strong>; incorporan rutas para localizar ejecutables.</p>
+</section>
+</section>
+<section id="18-estructura-y-creación-de-paquetes" class="level2">
+<h2>18. Estructura y creación de paquetes</h2>
+<pre class="text"><code>workspace_folder/
+└── src/
+    ├── package_1/
+    │   ├── CMakeLists.txt
+    │   └── package.xml
+    ├── package_2/
+    │   ├── setup.py
+    │   ├── package.xml
+    │   └── resource/package_2
+    └── package_n/
+        ├── CMakeLists.txt
+        └── package.xml</code></pre>
+<ul>
+<li>Un workspace puede contener muchos paquetes.</li>
+<li>Pueden coexistir CMake y Python.</li>
+<li>No se permiten paquetes anidados.</li>
+<li><code>colcon build</code> construye todo desde la raíz.</li>
+<li>Para uno solo:</li>
+</ul>
+<div class="sourceCode" id="cb13"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">colcon</span> build <span class="at">--packages-select</span> package_1</span></code></pre></div>
+<section id="181-paquete-cmakec" class="level3">
+<h3>18.1. Paquete CMake/C++</h3>
+<p>Dentro de <code>src</code>:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> pkg create <span class="at">--build-type</span> ament_cmake <span class="dt">\</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--node-name</span> my_node my_package_cmake</span></code></pre></div>
+<p>Es apropiado para C++. Con <code>--node-name</code> crea <code>my_node</code> como “Hello World”.</p>
+</section>
+<section id="182-paquete-python" class="level3">
+<h3>18.2. Paquete Python</h3>
+<div class="sourceCode" id="cb15"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> pkg create <span class="at">--build-type</span> ament_python <span class="dt">\</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--node-name</span> my_node my_package_python</span></code></pre></div>
+<p>Es la opción conveniente para Python y crea la estructura inicial correspondiente.</p>
+</section>
+</section>
+<section id="19-implementar-un-nodo-cmakec" class="level2">
+<h2>19. Implementar un nodo CMake/C++</h2>
+<ol type="1">
+<li>Crear <code>my_node.cpp</code> en <code>src</code> del paquete.</li>
+<li>Modificar <code>CMakeLists.txt</code> para registrar el ejecutable.</li>
+<li>Implementar el nodo, por ejemplo con Visual Studio Code.</li>
+<li>Compilar desde la raíz:</li>
+</ol>
+<div class="sourceCode" id="cb16"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/ros2_ws</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="ex">colcon</span> build</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> install/setup.bash</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> run my_package_cmake my_node</span></code></pre></div>
+</section>
+<section id="20-implementar-un-nodo-python" class="level2">
+<h2>20. Implementar un nodo Python</h2>
+<ol type="1">
+<li>Crear <code>my_node.py</code> dentro del módulo Python.</li>
+<li>Modificar <code>setup.py</code>: mantenedor, correo, descripción, licencia igual a <code>package.xml</code> y entrada <code>console_scripts</code>.</li>
+<li>Implementar el nodo.</li>
+<li>Construir, cargar entorno y ejecutar:</li>
+</ol>
+<div class="sourceCode" id="cb17"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/ros2_ws</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="ex">colcon</span> build</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> install/setup.bash</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> run my_package_python my_node</span></code></pre></div>
+</section>
+<section id="21-referencias" class="level2">
+<h2>21. Referencias</h2>
+<ol type="1">
+<li>ROS 2 Documentation, Jazzy: <a href="https://docs.ros.org/en/jazzy/" class="uri">https://docs.ros.org/en/jazzy/</a></li>
+<li>Quigley, M. et al. (2009). “ROS: an open-source Robot Operating System”. <em>ICRA Workshop on Open Source Software</em>, vol. 3, n.º 3.2.</li>
+<li>Macenski, S.; Foote, T.; Gerkey, B.; Lalancette, C.; Woodall, W. (2022). “Robot Operating System 2: Design, Architecture, and Uses in the Wild”. <em>Science Robotics</em>, vol. 7.</li>
+</ol>
+</section>
+</section>
+</article><section class="related"><span class="overline">APLICA LO APRENDIDO</span><h2>Guías de prácticas</h2><p>El test incluye preguntas de estas prácticas. Aquí puedes estudiar el procedimiento completo.</p><div class="related-grid"><a class="related-card" href="Guia_de_estudio_ROS2_y_practicas.html"><span>P2.1 · PRÁCTICA</span><strong>ROS 2 y MVSim</strong><small>Leer guía web <span aria-hidden="true">↗</span></small></a></div></section><div class="end-link"><span>Fin de esta guía</span><a href="../L3-Robot%20motion/Practica_Parcial1.html?lesson=L2#filters">Ahora, ponte a prueba <span aria-hidden="true">→</span></a></div></div></div>
+    </div>
+  </main>
+  <footer><div class="wrap"><span>ROBO<span>TEST</span> / L2</span><span>Apuntes completos · Fórmulas en MathML · Funcionamiento sin conexión</span></div></footer>
+  <a class="back-top" href="#hero-title" aria-label="Volver arriba">↑</a>
+</body>
+</html>

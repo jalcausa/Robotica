@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>L1 · Introducción a la robótica autónoma | RoboTest</title>
+  <link rel="stylesheet" href="../L3-Robot%20motion/Practica_Parcial1.css">
+  <link rel="stylesheet" href="../L3-Robot%20motion/Resumenes_Web.css">
+  <script src="../L3-Robot%20motion/Resumenes_Web.js" defer></script>
+</head>
+<body>
+  <div id="reading-progress" aria-hidden="true"></div>
+  <header class="topbar">
+    <a class="brand" href="../L3-Robot%20motion/Practica_Parcial1.html" aria-label="RoboTest, volver al inicio"><span class="brand-mark">R<span></span></span> ROBO<span>TEST</span></a>
+    <nav aria-label="Navegación principal"><a href="Resumen_L1_Introduccion_Robotica_Autonoma.html" aria-current=page>L1</a><a href="../L2-Robot-Control-Architecture-and-ROS/Resumen_L2_Arquitecturas_Control_ROS2.html">L2</a><a href="../L3-Robot%20motion/Resumen_L3_Movimiento_Robot.html">L3</a><a href="../L3-Robot%20motion/Practica_Parcial1.html">Test <span aria-hidden="true">↗</span></a></nav>
+  </header>
+  <main>
+    <section class="hero lesson-hero" aria-labelledby="hero-title">
+      <div class="hero-inner">
+        <div class="eyebrow"><span class="status-dot"></span> L1 · RESUMEN DE LA LECCIÓN</div>
+        <h1 id="hero-title">Introducción a la robótica autónoma<span class="hero-period">.</span></h1>
+        <p>La idea de robot autónomo, las arquitecturas y las preguntas que guían la robótica móvil.</p>
+        <div class="hero-actions"><a class="button primary" href="#apuntes">Empezar a leer <span aria-hidden="true">↘</span></a><a class="button subtle" href="../L3-Robot%20motion/Practica_Parcial1.html?lesson=L1#filters">Practicar el tema</a></div>
+        <div class="lesson-facts"><span>10 bloques de lectura</span><span>Apartados navegables</span><span>Sin conexión</span></div>
+      </div>
+      <div class="hero-art" aria-hidden="true"><div class="grid-plane"></div><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="robot-icon"><span class="eye"></span><span class="eye"></span></div><div class="beacon beacon-a"></div><div class="beacon beacon-b"></div><span class="art-label label-a">SENSE</span><span class="art-label label-b">PLAN</span><span class="art-label label-c">ACT</span></div>
+    </section>
+    <div class="reading-wrap" id="apuntes">
+      <div class="reading-intro"><div><span class="overline">L1 / LECTURA</span><h2>Todo el contenido, mejor organizado.</h2><p>Índice navegable, secciones cortas y fórmulas legibles. El contenido del apunte original se mantiene íntegro.</p></div><a class="original-link" href="Resumen_L1_Introduccion_Robotica_Autonoma.md">Ver Markdown original ↗</a></div>
+      <details class="mobile-toc"><summary>Índice de contenidos <span aria-hidden="true">⌄</span></summary><nav class="toc-items" aria-label="Apartados de la página"><details class="toc-chapter" open><summary><span class="toc-number">01</span><span>Concepto de robot y alcance de la asignatura</span></summary><div class="toc-links"><a href="#1-concepto-de-robot-y-alcance-de-la-asignatura">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">02</span><span>Tipos de robots autónomos según su locomoción</span></summary><div class="toc-links"><a href="#2-tipos-de-robots-autónomos-según-su-locomoción">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">03</span><span>Paradigmas de la robótica</span></summary><div class="toc-links"><a href="#3-paradigmas-de-la-robótica">Ir al bloque</a><a href="#31-paradigma-deliberativo-senseplanact">3.1. Paradigma deliberativo: Sense–Plan–Act</a><a href="#32-paradigma-reactivo">3.2. Paradigma reactivo</a><a href="#33-paradigma-híbrido">3.3. Paradigma híbrido</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">04</span><span>Robótica probabilística</span></summary><div class="toc-links"><a href="#4-robótica-probabilística">Ir al bloque</a><a href="#41-razones-para-usar-métodos-probabilísticos">4.1. Razones para usar métodos probabilísticos</a><a href="#42-limitaciones">4.2. Limitaciones</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">05</span><span>Preguntas fundamentales de la robótica móvil</span></summary><div class="toc-links"><a href="#5-preguntas-fundamentales-de-la-robótica-móvil">Ir al bloque</a><a href="#51-dónde-estoy">5.1. ¿Dónde estoy?</a><a href="#52-cómo-llego-de-forma-segura">5.2. ¿Cómo llego de forma segura?</a><a href="#53-cómo-resuelvo-mi-misión">5.3. ¿Cómo resuelvo mi misión?</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">06</span><span>Inteligencia Artificial y robótica</span></summary><div class="toc-links"><a href="#6-inteligencia-artificial-y-robótica">Ir al bloque</a><a href="#61-núcleo-cognitivo-percepción-y-acción">6.1. Núcleo cognitivo, percepción y acción</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">07</span><span>Disciplinas relacionadas</span></summary><div class="toc-links"><a href="#7-disciplinas-relacionadas">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">08</span><span>Aplicaciones de los robots móviles</span></summary><div class="toc-links"><a href="#8-aplicaciones-de-los-robots-móviles">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">09</span><span>Programa de la asignatura</span></summary><div class="toc-links"><a href="#9-programa-de-la-asignatura">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">10</span><span>Evaluación</span></summary><div class="toc-links"><a href="#10-evaluación">Ir al bloque</a><a href="#101-evaluación-continua-primera-convocatoria-ordinaria">10.1. Evaluación continua: primera convocatoria ordinaria</a><a href="#102-evaluación-no-continua-segunda-convocatoria-ordinaria">10.2. Evaluación no continua: segunda convocatoria ordinaria</a></div></details></nav></details>
+      <div class="reading-columns"><aside class="toc-sidebar"><div class="toc-box"><span class="overline">EN ESTA PÁGINA</span><p>L1 · 10 bloques</p><nav class="toc-items" aria-label="Apartados de la página"><details class="toc-chapter" open><summary><span class="toc-number">01</span><span>Concepto de robot y alcance de la asignatura</span></summary><div class="toc-links"><a href="#1-concepto-de-robot-y-alcance-de-la-asignatura">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">02</span><span>Tipos de robots autónomos según su locomoción</span></summary><div class="toc-links"><a href="#2-tipos-de-robots-autónomos-según-su-locomoción">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">03</span><span>Paradigmas de la robótica</span></summary><div class="toc-links"><a href="#3-paradigmas-de-la-robótica">Ir al bloque</a><a href="#31-paradigma-deliberativo-senseplanact">3.1. Paradigma deliberativo: Sense–Plan–Act</a><a href="#32-paradigma-reactivo">3.2. Paradigma reactivo</a><a href="#33-paradigma-híbrido">3.3. Paradigma híbrido</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">04</span><span>Robótica probabilística</span></summary><div class="toc-links"><a href="#4-robótica-probabilística">Ir al bloque</a><a href="#41-razones-para-usar-métodos-probabilísticos">4.1. Razones para usar métodos probabilísticos</a><a href="#42-limitaciones">4.2. Limitaciones</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">05</span><span>Preguntas fundamentales de la robótica móvil</span></summary><div class="toc-links"><a href="#5-preguntas-fundamentales-de-la-robótica-móvil">Ir al bloque</a><a href="#51-dónde-estoy">5.1. ¿Dónde estoy?</a><a href="#52-cómo-llego-de-forma-segura">5.2. ¿Cómo llego de forma segura?</a><a href="#53-cómo-resuelvo-mi-misión">5.3. ¿Cómo resuelvo mi misión?</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">06</span><span>Inteligencia Artificial y robótica</span></summary><div class="toc-links"><a href="#6-inteligencia-artificial-y-robótica">Ir al bloque</a><a href="#61-núcleo-cognitivo-percepción-y-acción">6.1. Núcleo cognitivo, percepción y acción</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">07</span><span>Disciplinas relacionadas</span></summary><div class="toc-links"><a href="#7-disciplinas-relacionadas">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">08</span><span>Aplicaciones de los robots móviles</span></summary><div class="toc-links"><a href="#8-aplicaciones-de-los-robots-móviles">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">09</span><span>Programa de la asignatura</span></summary><div class="toc-links"><a href="#9-programa-de-la-asignatura">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">10</span><span>Evaluación</span></summary><div class="toc-links"><a href="#10-evaluación">Ir al bloque</a><a href="#101-evaluación-continua-primera-convocatoria-ordinaria">10.1. Evaluación continua: primera convocatoria ordinaria</a><a href="#102-evaluación-no-continua-segunda-convocatoria-ordinaria">10.2. Evaluación no continua: segunda convocatoria ordinaria</a></div></details></nav><a class="toc-practice" href="../L3-Robot%20motion/Practica_Parcial1.html?lesson=L1&amp;kind=Pr%C3%A1ctica#filters">Practicar preguntas ↗</a></div></aside><div class="reading-main"><article class="notes-body"><section id="l1--introducción-a-la-robótica-autónoma" class="level1">
+<h1>L1 — Introducción a la robótica autónoma</h1>
+<section id="1-concepto-de-robot-y-alcance-de-la-asignatura" class="level2">
+<h2>1. Concepto de robot y alcance de la asignatura</h2>
+<p>El <strong>Robot Institute of America</strong> define un robot como:</p>
+<blockquote>
+<p>Un manipulador reprogramable y multifuncional, diseñado para mover materiales, piezas, herramientas o dispositivos especializados mediante movimientos programados para realizar una variedad de tareas.</p>
+</blockquote>
+<p>Esta definición se ajusta sobre todo a los <strong>robots industriales</strong>, que suelen presentar estas características:</p>
+<ul>
+<li>Están fijados al suelo, por lo que no pueden cambiar su ubicación y su posición es conocida.</li>
+<li>Ejecutan movimientos muy precisos y rápidos.</li>
+<li>Repiten principalmente las mismas tareas.</li>
+<li>Trabajan en un espacio sencillo, estructurado y perfectamente conocido.</li>
+</ul>
+<p>La asignatura <strong>no se centra en este tipo de robot</strong>, sino en una perspectiva de la robótica más relacionada con la <strong>Inteligencia Artificial</strong>, concretamente en los <strong>robots móviles autónomos</strong>.</p>
+<p>Un robot móvil autónomo debería ser capaz de:</p>
+<ul>
+<li>Cambiar de posición dentro de un entorno del que no se conoce todo <em>a priori</em>.</li>
+<li>Tomar decisiones inteligentes a partir de datos sensoriales.</li>
+</ul>
+</section>
+<section id="2-tipos-de-robots-autónomos-según-su-locomoción" class="level2">
+<h2>2. Tipos de robots autónomos según su locomoción</h2>
+<p>Los robots autónomos pueden clasificarse de acuerdo con su sistema de locomoción. Las diapositivas muestran distintas familias y configuraciones mecánicas —robots terrestres con ruedas o patas, robots aéreos, acuáticos y otras plataformas móviles—, aunque el curso se concentra principalmente en la <strong>locomoción terrestre mediante ruedas</strong>.</p>
+<p>La elección de la locomoción condiciona:</p>
+<ul>
+<li>El modelo de movimiento del robot.</li>
+<li>Los actuadores necesarios.</li>
+<li>El tipo de terreno accesible.</li>
+<li>La estabilidad, velocidad y maniobrabilidad.</li>
+<li>Los sensores y estrategias de control apropiados.</li>
+</ul>
+</section>
+<section id="3-paradigmas-de-la-robótica" class="level2">
+<h2>3. Paradigmas de la robótica</h2>
+<section id="31-paradigma-deliberativo-senseplanact" class="level3">
+<h3>3.1. Paradigma deliberativo: Sense–Plan–Act</h3>
+<p>El paradigma deliberativo sigue el ciclo <strong>percibir–planificar–actuar</strong>:</p>
+<ol type="1">
+<li>El robot usa sus sensores para construir un modelo explícito del mundo.</li>
+<li>Emplea algoritmos de planificación para calcular acciones, idealmente óptimas.</li>
+<li>Ejecuta el plan resultante.</li>
+</ol>
+<p><strong>Ventaja principal:</strong> permite razonar globalmente y buscar soluciones planificadas.</p>
+<p><strong>Limitaciones:</strong></p>
+<ul>
+<li>Requiere mucha computación.</li>
+<li>Puede responder lentamente.</li>
+<li>Su desempeño se degrada en entornos dinámicos, porque el mundo puede cambiar mientras se calcula el plan.</li>
+</ul>
+</section>
+<section id="32-paradigma-reactivo" class="level3">
+<h3>3.2. Paradigma reactivo</h3>
+<p>En el paradigma reactivo se conectan directamente las entradas de los sensores con acciones, reglas o comportamientos. Tiene inspiración biológica y evita depender de una planificación global compleja.</p>
+<p><strong>Ventajas:</strong></p>
+<ul>
+<li>Respuesta rápida.</li>
+<li>Robustez ante entornos dinámicos e inciertos.</li>
+</ul>
+<p><strong>Limitaciones:</strong></p>
+<ul>
+<li>Capacidad reducida de planificación a largo plazo.</li>
+<li>Dificultad para resolver tareas complejas que exigen coordinación global o anticipación.</li>
+</ul>
+</section>
+<section id="33-paradigma-híbrido" class="level3">
+<h3>3.3. Paradigma híbrido</h3>
+<p>El paradigma híbrido combina los dos enfoques anteriores:</p>
+<ul>
+<li>Una capa deliberativa fija objetivos, planifica y toma decisiones a largo plazo.</li>
+<li>Una capa reactiva se ocupa de respuestas rápidas y en tiempo real.</li>
+</ul>
+<p>Así se busca equilibrar <strong>eficiencia, capacidad de planificación y adaptabilidad</strong>. Es el enfoque más utilizado en la robótica moderna y el principal foco del curso.</p>
+</section>
+</section>
+<section id="4-robótica-probabilística" class="level2">
+<h2>4. Robótica probabilística</h2>
+<p>El curso adopta el enfoque híbrido, pero incorpora explícitamente la <strong>incertidumbre</strong> en los modelos, la percepción y el movimiento. Esta perspectiva recibe el nombre de <strong>robótica probabilística</strong>.</p>
+<p>La idea fundamental es tratar matemáticamente la incertidumbre inevitable de:</p>
+<ul>
+<li>La percepción mediante sensores.</li>
+<li>La ejecución de movimientos.</li>
+<li>Los modelos del robot y del entorno.</li>
+</ul>
+<p>Dicha incertidumbre se propaga hacia:</p>
+<ul>
+<li>El <strong>estado del robot</strong>, por ejemplo, su localización.</li>
+<li>La <strong>representación del mundo</strong>, por ejemplo, los mapas.</li>
+<li>La <strong>planificación y la toma de decisiones</strong>.</li>
+</ul>
+<section id="41-razones-para-usar-métodos-probabilísticos" class="level3">
+<h3>4.1. Razones para usar métodos probabilísticos</h3>
+<ul>
+<li>Los modelos del mundo y de las acciones del robot son inexactos.</li>
+<li>Los sensores cometen errores y producen medidas ruidosas.</li>
+<li>El mundo real cambia: aparecen objetos móviles, perturbaciones y sucesos no previstos.</li>
+<li>Una representación probabilística permite obtener sistemas más robustos ante esas variaciones.</li>
+</ul>
+</section>
+<section id="42-limitaciones" class="level3">
+<h3>4.2. Limitaciones</h3>
+<ul>
+<li>Elevado coste computacional.</li>
+<li>Posibilidad de asumir distribuciones de probabilidad que no representan bien la realidad.</li>
+<li>Frecuentemente se deben emplear soluciones aproximadas.</li>
+</ul>
+</section>
+</section>
+<section id="5-preguntas-fundamentales-de-la-robótica-móvil" class="level2">
+<h2>5. Preguntas fundamentales de la robótica móvil</h2>
+<section id="51-dónde-estoy" class="level3">
+<h3>5.1. ¿Dónde estoy?</h3>
+<p>Esta pregunta reúne dos problemas relacionados:</p>
+<ul>
+<li><strong>Localización:</strong> determinar la posición del robot dentro de lugares ya conocidos.</li>
+<li><strong>Mapping/SLAM:</strong> identificar qué hay en el espacio de trabajo —objetos, puntos de referencia y espacio libre— y construir un mapa. En SLAM se localiza el robot mientras se crea el mapa.</li>
+</ul>
+</section>
+<section id="52-cómo-llego-de-forma-segura" class="level3">
+<h3>5.2. ¿Cómo llego de forma segura?</h3>
+<p>Incluye:</p>
+<ul>
+<li><strong>Evitación de obstáculos:</strong> decidir cómo conducir sin colisionar.</li>
+<li><strong>Planificación de caminos:</strong> calcular la mejor ruta para alcanzar un objetivo.</li>
+</ul>
+</section>
+<section id="53-cómo-resuelvo-mi-misión" class="level3">
+<h3>5.3. ¿Cómo resuelvo mi misión?</h3>
+<p>Corresponde a la <strong>planificación de tareas</strong>, es decir, descomponer la misión en objetivos y acciones coordinadas, establecer su orden y gestionar condiciones o dependencias.</p>
+</section>
+</section>
+<section id="6-inteligencia-artificial-y-robótica" class="level2">
+<h2>6. Inteligencia Artificial y robótica</h2>
+<p>Un sistema inteligente necesita <strong>encarnación física (<em>embodiment</em>)</strong>: el software por sí solo no basta para alcanzar una inteligencia verdaderamente conectada con el mundo.</p>
+<p>La <strong>hipótesis de la encarnación</strong>, atribuida en las diapositivas a Linda Smith (2005), sostiene que:</p>
+<blockquote>
+<p>La inteligencia emerge de la interacción de un agente con un entorno y como resultado de la actividad sensoriomotora.</p>
+</blockquote>
+<p>El <em>embodiment</em> implica dos capacidades complementarias:</p>
+<ul>
+<li><strong>Modificar el mundo:</strong> moverse, manipular objetos, hablar, etc.</li>
+<li><strong>Percibir el mundo.</strong></li>
+</ul>
+<p>Por tanto, la robótica conecta un sistema de IA con el mundo mediante un <strong>sistema sensoriomotor</strong>.</p>
+<section id="61-núcleo-cognitivo-percepción-y-acción" class="level3">
+<h3>6.1. Núcleo cognitivo, percepción y acción</h3>
+<p>En el esquema de un robot inteligente, el <strong>núcleo cognitivo</strong> incluye:</p>
+<ul>
+<li>Representación del conocimiento.</li>
+<li>Estimación del estado.</li>
+<li>Planificación.</li>
+<li>Deducción y razonamiento.</li>
+<li>Aprendizaje.</li>
+<li>Creatividad y lenguaje natural, entre otras capacidades.</li>
+</ul>
+<p>En esta asignatura se presta especial atención a:</p>
+<ul>
+<li>Comprensión de escenas y autolocalización.</li>
+<li>Planificación de caminos.</li>
+</ul>
+<p>El núcleo cognitivo se conecta con el mundo por dos vías:</p>
+<ul>
+<li><strong>Sense / percibir:</strong> ver, oír, oler y tocar.</li>
+<li><strong>Act / actuar:</strong> movimiento del robot, manipulación y comunicación.</li>
+</ul>
+<p>Los <strong>sensores y actuadores</strong> establecen la interacción entre la inteligencia computacional y el mundo real.</p>
+</section>
+</section>
+<section id="7-disciplinas-relacionadas" class="level2">
+<h2>7. Disciplinas relacionadas</h2>
+<p>La robótica es un campo interdisciplinar que integra:</p>
+<ul>
+<li>Aprendizaje automático.</li>
+<li>Ciencia cognitiva.</li>
+<li>Visión por computador.</li>
+<li>Ingeniería del software.</li>
+<li>Ingeniería mecánica.</li>
+<li>Teoría de control.</li>
+</ul>
+<p>Las diapositivas enfatizan especialmente la creciente importancia de la <strong>ingeniería mecánica</strong>, el <strong>aprendizaje automático</strong> y la <strong>teoría de control</strong>.</p>
+</section>
+<section id="8-aplicaciones-de-los-robots-móviles" class="level2">
+<h2>8. Aplicaciones de los robots móviles</h2>
+<p>Los robots móviles se aplican en numerosos ámbitos: transporte, logística, exploración, inspección, asistencia, servicios, entornos domésticos, industria, medicina, agricultura, rescate y otros contextos donde una plataforma debe percibir, decidir y desplazarse autónomamente.</p>
+<p>La presentación enlaza como ejemplo audiovisual: <a href="https://www.youtube.com/watch?v=QwAYJPjW2gI" class="uri">https://www.youtube.com/watch?v=QwAYJPjW2gI</a>.</p>
+</section>
+<section id="9-programa-de-la-asignatura" class="level2">
+<h2>9. Programa de la asignatura</h2>
+<ol type="1">
+<li>Introducción a la robótica autónoma.</li>
+<li>Arquitectura de control del robot.</li>
+<li>Modelos de movimiento del robot.</li>
+<li>Sensores robóticos.</li>
+<li>Localización de robots móviles.</li>
+<li>Mapping.</li>
+<li>SLAM.</li>
+<li>Planificación de movimiento.</li>
+</ol>
+</section>
+<section id="10-evaluación" class="level2">
+<h2>10. Evaluación</h2>
+<p>Existen dos modalidades.</p>
+<section id="101-evaluación-continua-primera-convocatoria-ordinaria" class="level3">
+<h3>10.1. Evaluación continua: primera convocatoria ordinaria</h3>
+<ul>
+<li><strong>Pruebas: 8 puntos.</strong>
+<ul>
+<li>Tres exámenes parciales tipo test sobre teoría y prácticas.</li>
+<li>En cada examen parcial se exige al menos <strong>3,5/10</strong>.</li>
+<li>La nota de esta parte es la media de los tres parciales y debe ser al menos <strong>5/10</strong>.</li>
+</ul></li>
+<li><strong>Prácticas: 2 puntos.</strong>
+<ul>
+<li>La asistencia y la entrega puntual de las sesiones prácticas son obligatorias.</li>
+</ul></li>
+</ul>
+</section>
+<section id="102-evaluación-no-continua-segunda-convocatoria-ordinaria" class="level3">
+<h3>10.2. Evaluación no continua: segunda convocatoria ordinaria</h3>
+<ul>
+<li>Un único examen tipo test que cubre teoría y prácticas.</li>
+<li>Entrega de las sesiones prácticas antes del examen.</li>
+</ul>
+</section>
+</section>
+</section>
+</article><div class="end-link"><span>Fin de esta guía</span><a href="../L3-Robot%20motion/Practica_Parcial1.html?lesson=L1#filters">Ahora, ponte a prueba <span aria-hidden="true">→</span></a></div></div></div>
+    </div>
+  </main>
+  <footer><div class="wrap"><span>ROBO<span>TEST</span> / L1</span><span>Apuntes completos · Fórmulas en MathML · Funcionamiento sin conexión</span></div></footer>
+  <a class="back-top" href="#hero-title" aria-label="Volver arriba">↑</a>
+</body>
+</html>
