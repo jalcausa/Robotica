@@ -81,6 +81,25 @@ Soluciones de [Preguntas_Parcial1.md](Preguntas_Parcial1.md), con la misma numer
 
 **E-1 → a, d.** Un robot autónomo toma decisiones a partir de datos sensoriales y puede operar en entornos no totalmente conocidos. b) y c) describen un **robot industrial** (brazo fijo, tareas repetitivas en un entorno estructurado).
 
+**E-21 → 1 Móvil, 2 Móvil, 3 Móvil, 4 Industrial.** El robot móvil opera sin un modelo del entorno totalmente conocido, debe construirlo y cambia su posición; el robot industrial realiza movimientos precisos en un entorno estructurado sin necesitar sensores extereoceptivos.
+
+**E-22 → 1D, 2C, 3B, 4A, 5E.**
+- **Nodo:** instancia en ejecución de un programa ROS que provee y consume información (D).
+- **Topic:** permite la publicación de información y la suscripción a la misma (C).
+- **Acción:** permite a un nodo solicitar una operación particular a otro nodo, además de comprobar su estado y cancelarla (B).
+- **Servicio:** permite a un nodo solicitar una operación particular a otro nodo (A).
+- **Paquete:** colección de ficheros, generalmente incluyendo ejecutables y ficheros auxiliares, que persiguen un propósito específico (E).
+
+**E-23 → c (es la falsa).** Un nodo pertenece a un único paquete (aunque un paquete puede contener varios nodos). Las afirmaciones a), b) y d) son verdaderas.
+
+**E-24 → c.** `rviz` permite visualizar en un entorno 3D mapas, datos sensoriales y otros topics de la arquitectura ROS.
+
+**E-25 → c.** En el grafo de `rqt_graph` hay control de velocidad de la base (`/keyboard_control` → `/cmd_vel` → `/stage_ros`), construcción de mapa (`/gmapping` → `/map`) y visualización (`rviz`), pero ningún nodo publica comandos para mover un brazo articulado.
+
+**E-26 → e (`geometry_msgs/Twist`).** Es el mensaje estándar para comandos de velocidad lineal y angular.
+
+**E-27 → `ros2 run navigation navigation_node`.** Sintaxis: `ros2 run <paquete> <ejecutable>`.
+
 **T-1 → b.** *Embodiment* significa que la inteligencia necesita un cuerpo que **perciba** el entorno y **actúe** sobre él (sistema sensoriomotor). La idea clave es «percibir y actuar».
 
 ## A.2. Cinemática de robots con ruedas
@@ -89,12 +108,28 @@ Soluciones de [Preguntas_Parcial1.md](Preguntas_Parcial1.md), con la misma numer
 
 **E-9 → c.** Un chasis rígido rueda sin deslizar solo si las prolongaciones de los ejes de **todas** sus ruedas se cortan en **un único ICR**. En (c) las rectas se cortan en puntos distintos: no hay un ICR común y las ruedas deslizan. En (a) (Ackermann) y en (b) (diferencial) existe un único ICR. En (d) los ejes son paralelos, así que el ICR está en el infinito y el vehículo solo puede ir recto sin deslizar.
 
+**E-31 → c.** La odometría diferencial requiere un encoder en cada una de las dos ruedas motrices (controladas); las ruedas locas (*castor wheels*) giran libremente solo como apoyo.
+
+**E-32 → d (es la incorrecta).** La velocidad del centro $P$ es la semisuma $v_P = (v_r + v_l)/2$, no $(v_r - v_l)/2$. Las expresiones a), b) y c) son correctas.
+
+**E-35 → b, d.** El diferencial se controla con las velocidades de sus dos ruedas motrices (solo tiene 2 grados de libertad de control, no 3, y no puede desplazarse lateralmente en cualquier dirección) y sus trayectorias instantáneas alrededor del ICR son siempre circulares (la recta es el caso límite $R \to \infty$).
+
 ## A.3. Poses y transformaciones
 
 **E-7 → a.** Es la composición $\mathbf{x}_t = \mathbf{x}_{t-1} \oplus \Delta\mathbf{x}_t$: se rota el incremento local con $\theta_{t-1}$, se suma la posición anterior y los ángulos se suman.
 - b) da solo el incremento rotado: le falta sumar $[x_{t-1}, y_{t-1}]$.
 - c) no aplica la matriz de rotación completa.
 - d) no tiene sentido.
+
+**E-33 → a.** La pose de $p_1$ en el sistema de referencia de $p_2$ es la pose inversa del incremento $\Delta p = p_{12}$, es decir, $\ominus\Delta p = [-\Delta x\cos\Delta\theta - \Delta y\sin\Delta\theta,\; \Delta x\sin\Delta\theta - \Delta y\cos\Delta\theta,\; -\Delta\theta]^T$ (o $p_1 \ominus p_2 = \ominus p_2 \oplus p_1$).
+
+**E-34 → a ($x_t = x_{t-1} \oplus \Delta x_t$).** La nueva pose se compone con el incremento de pose $\Delta x_t$ (3D), nunca directamente con el vector de velocidades $u_t = (v_t, \omega_t)^T$ (2D) ni mediante suma ordinaria $+$.
+
+**E-36 → d (`pf = [1, 1]'` y «mirando hacia abajo»).**
+- Inicio: $p_0 = [0, 0, 0]^T$ (mira hacia $+x$).
+- Paso 1: $u_1 = [1, 0, \pi/2]^T \implies p_1 = [1, 0, \pi/2]^T$ (mira hacia arriba, $+y$).
+- Paso 2: $u_2 = [-1, 0, 0]^T \implies$ retrocede $1$ m respecto a $+y$, quedando en $p_2 = [1, -1, \pi/2]^T$ (sigue mirando hacia arriba, $+y$).
+- Paso 3: $u_3 = [2, 0, \pi]^T \implies$ avanza $2$ m en $+y$ (pasa de $y=-1$ a $y=1$) y gira $\pi$ rad, quedando en $p_3 = [1, 1, 3\pi/2]^T \equiv [1, 1, -\pi/2]^T$ («mirando hacia abajo»).
 
 **E-11 → a, b.** $p$ es una **pose** y $a$, $a'$ son **puntos**. $a'$ son las coordenadas del punto vistas desde $p$.
 - a) ✔ Un punto local se pasa a global componiéndolo con la pose: $a = p \oplus a'$.
@@ -143,6 +178,14 @@ Soluciones de [Preguntas_Parcial1.md](Preguntas_Parcial1.md), con la misma numer
 **T-3 → b (1/3).** $P(\text{col } 4) = 0{,}1 + 0{,}1 + 0{,}1 = 0{,}3$. Por la definición de probabilidad condicionada, $P((3,4) \mid \text{col } 4) = P(3,4)/P(\text{col } 4) = 0{,}1/0{,}3 = 1/3$.
 
 **T-4 → a, c, d.** Las elipses están inclinadas, luego hay covarianza cruzada distinta de cero: las variables están correlacionadas (dependientes) y la covarianza **no** es diagonal (b falsa). La media es el vector $[\mu_1, \mu_2]^T$ (centro de las elipses). Las elipses son curvas de igual densidad.
+
+**E-28 → a ($p(x_1, x_2)$).** Las elipses de nivel en el plano $(x_1, x_2)$ representan la densidad de probabilidad conjunta $p(x_1, x_2)$.
+
+**E-29 / T-6 → b (4.4).** $E[X] = \sum_{i=1}^{10} i\,P(X=i) = 2(0{,}2) + 3(0{,}2) + 4(0{,}1) + 5(0{,}3) + 7(0{,}1) + 8(0{,}1) = 0{,}4 + 0{,}6 + 0{,}4 + 1{,}5 + 0{,}7 + 0{,}8 = 4{,}4$.
+
+**E-30 → a.** Si dos gaussianas $a$ y $b$ son independientes, su covarianza cruzada es cero ($\Sigma$ diagonal) y las elipses tienen sus ejes **alineados con los ejes coordenados** (horizontales/verticales, o circunferencias si tienen igual varianza), nunca inclinadas.
+
+**E-37 →** $\Sigma = 0$: coincide con la ruta roja; solo $\sigma_x^2 > 0$: error longitudinal sin perder la orientación; solo $\sigma_y^2 > 0$: desplazamiento lateral manteniendo los triángulos paralelos a los ejes; $\sigma_\theta^2 > 0$: los giros se desvían y tuercen todos los tramos siguientes.
 
 **T-7 → b.** El producto $\prod_k p(z_k \mid x, m)$ solo es válido si las observaciones son **condicionalmente independientes** dadas la pose (y el mapa): $p(z_1, z_2 \mid x) = p(z_1 \mid x)\,p(z_2 \mid x)$. Los apuntes avisan de no confundirlo con «i.i.d.» (que además supone la misma distribución para todas las medidas).
 

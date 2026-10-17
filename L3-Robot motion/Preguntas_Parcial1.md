@@ -28,9 +28,8 @@ Las soluciones explicadas están en [Soluciones_Parcial1.md](Soluciones_Parcial1
 
 - **E-16** (histogramas construidos con distinto número de muestras): L3 no trata los histogramas.
 - **T-5** (distribución conjunta $p(x_t, x_{t-1} \mid z_{1:t}, u_{1:t+1})$ y sus marginales): es de filtrado bayesiano, no de L3.
-- **T-6** (valor esperado): los apuntes solo ponen «expected value????» sin enunciado, y L3 solo usa $E[\mathbf{x}]$ para definir la media de la gaussiana.
 
-## A.1. Introducción a la robótica autónoma
+## A.1. Introducción a la robótica autónoma y arquitecturas ROS 2 (L1–L2)
 
 **E-1.** Un robot autónomo... *(Una o más)*
 
@@ -38,6 +37,58 @@ Las soluciones explicadas están en [Soluciones_Parcial1.md](Soluciones_Parcial1
 - b) Consiste en un brazo articulado que mueve sus articulaciones de acuerdo con un programa informático.
 - c) Realiza tareas repetitivas y preestablecidas.
 - d) Puede operar en entornos no totalmente conocidos.
+
+**E-21.** Robot móvil vs. Robot industrial *(Emparejar cada afirmación con Robot móvil o Robot industrial)*:
+
+1. No existe un modelo del entorno totalmente conocido.
+2. El robot tiene que construir un modelo del entorno.
+3. El robot cambia su posición en el entorno.
+4. Los movimientos del robot son conocidos con bastante precisión sin necesidad de sensores extereoceptivos.
+
+**E-22.** Empareja cada uno de los componentes de ROS con su definición/utilidad:
+
+1. **Nodo**
+2. **Topic**
+3. **Acción**
+4. **Servicio**
+5. **Paquete**
+
+- A) Permite a un nodo solicitar una operación particular a otro nodo.
+- B) Permite a un nodo solicitar una operación particular a otro nodo, además de comprobar su estado y cancelarla.
+- C) Permite la publicación de información y la suscripción a la misma.
+- D) Una instancia en ejecución de un programa ROS que provee y consume información.
+- E) Colección de ficheros, generalmente incluyendo ejecutables y ficheros auxiliares, que persiguen un propósito específico.
+
+**E-23.** Indica cuál de las siguientes afirmaciones sobre los nodos en ROS 2 es **FALSA**: *(Una)*
+
+- a) En ejecución, son instancias de programas ROS 2.
+- b) Deben implementar una capacidad o funcionalidad concreta dentro de la arquitectura de control.
+- c) Pueden pertenecer a un número arbitrario de paquetes.
+- d) Pueden suscribirse y/o publicar en un número arbitrario de topics.
+
+**E-24.** La herramienta `rviz` se emplea para: *(Una)*
+
+- a) `rviz` no es un comando de ROS.
+- b) Analizar diversas variables internas de ROS.
+- c) Visualizar en un entorno 3D: mapas, datos sensoriales y otros topics de la arquitectura ROS.
+- d) Visualizar la lista de ROS topics con una interfaz más agradable.
+
+**E-25.** De acuerdo con el grafo mostrado por `rqt_graph` tras la ejecución de un archivo de misión (`/keyboard_control` → `/cmd_vel` → `/stage_ros` → `/odom`, `/base_pose_ground_truth`, `/laser_scan`, `/tf`; `/joint_states` → `/robot_state_publisher` → `/tf`; `/laser_scan` y `/tf` → `/gmapping` → `/map`; `/tf` → `n___rviz`), ¿qué acción **NO** se podría realizar? *(Una)*
+
+- a) Mover al robot en su entorno.
+- b) Construir un mapa.
+- c) Mover el brazo del robot.
+- d) Visualizar distintos elementos como la posición del robot, las observaciones del láser, etc.
+
+**E-26.** En ROS 2, ¿qué tipo de mensaje se emplea para trabajar con comandos de velocidad? *(Una)*
+
+- a) `nav_msgs/Path`
+- b) `nav_msgs/Odometry`
+- c) `geometry_msgs/Accel`
+- d) `geometry_msgs/Vector3`
+- e) `geometry_msgs/Twist`
+
+**E-27.** Introduce el comando ROS 2 necesario para ejecutar un nodo llamado `navigation_node` que se encuentra dentro del paquete `navigation`.
 
 **T-1.** *(Reconstruida)* El concepto de *embodiment* (encarnación) se refiere a... *(Una)*
 
@@ -57,6 +108,27 @@ Las soluciones explicadas están en [Soluciones_Parcial1.md](Soluciones_Parcial1
 ![Vehículos E-9](img/preguntas/ex_q09_vehiculos_icr.png)
 
 - a) (a) — b) (b) — c) (c) — d) (d)
+
+**E-31.** Para calcular la odometría de un vehículo a ruedas de cinemática diferencial se necesita: *(Una)*
+
+- a) Un único codificador (*encoder*) por vehículo.
+- b) Un codificador para cada una de las ruedas que tenga, tanto las motrices como las ruedas locas (*castor wheels*).
+- c) Un codificador para cada una de las ruedas motrices (controladas).
+- d) Un codificador para todas las ruedas locas (*castor wheels*) que tenga.
+
+**E-32.** ¿Cuáles de las siguientes expresiones de la cinemática diferencial son **incorrectas**? *(Nota: puede ser una sola)*
+
+- a) $v_r = \omega(R + l/2)$
+- b) $v_r = v_P + \omega(l/2)$
+- c) $\omega = (v_r - v_l)/l$
+- d) $v_P = (v_r - v_l)/2$
+
+**E-35.** Un robot que se mueve con un sistema de conducción diferencial (*differential drive*): *(Una o más)*
+
+- a) Tiene 3 grados de libertad para controlar su movimiento.
+- b) El control de movimiento se hace con la velocidad de dos ruedas motrices.
+- c) Puede moverse en cualquier dirección en el plano.
+- d) Sólo puede moverse siguiendo trayectorias instantáneas que son circulares.
 
 ## A.3. Poses y transformaciones
 
@@ -87,6 +159,41 @@ Las soluciones explicadas están en [Soluciones_Parcial1.md](Soluciones_Parcial1
 - b) $p_{23} = p_{13} \oplus (\ominus p_{12})$
 - c) $p_2 = p_1 \oplus p_{12}$
 - d) $p_{13} = p_{12} + p_{23}$
+
+**E-33.** En referencia al desplazamiento incremental de un robot en el plano entre $p_1$ y $p_2$ con incremento local $\Delta p = [\Delta x, \Delta y, \Delta\theta]^T$, ¿cuál es la pose del robot $p_1$ en el sistema de referencia $p_2$? *(Una)*
+
+- a) $\ominus\Delta p = \begin{bmatrix} -\Delta x\cos\Delta\theta - \Delta y\sin\Delta\theta \\ \Delta x\sin\Delta\theta - \Delta y\cos\Delta\theta \\ -\Delta\theta \end{bmatrix}$ (equivalente a $p_1 \ominus p_2 = \ominus p_2 \oplus p_1$)
+- b) $\begin{bmatrix} -\Delta x \\ -\Delta y \\ -\Delta\theta \end{bmatrix}$
+- c) $\begin{bmatrix} \Delta x\cos\Delta\theta - \Delta y\sin\Delta\theta \\ \Delta x\sin\Delta\theta + \Delta y\cos\Delta\theta \\ -\Delta\theta \end{bmatrix}$
+- d) $p_2 \oplus p_1$
+
+**E-34.** En relación al movimiento general de un robot desde una pose $x_{t-1}$ a otra $x_t$, con una velocidad $u_t = (v_t, \omega_t)^T$, en la que se desplaza $\Delta x_t$, ¿cuáles de las siguientes expresiones son correctas? *(Una o más)*
+
+- a) $x_t = x_{t-1} \oplus \Delta x_t$
+- b) $x_t = x_{t-1} \oplus u_t$
+- c) $\Delta x_t = x_{t-1} \oplus u_t$
+- d) $x_t = x_{t-1} + \Delta x_t$
+
+**E-36.** Considere la siguiente posición inicial para un robot y la sucesión de acciones de control odométricas (`u = [inc_x, inc_y, inc_theta]'`):
+
+```python
+initial_pose = np.vstack([0., 0., 0])
+robot = Robot(initial_pose)
+
+u = np.vstack([1., 0., np.pi/2])
+robot.step(u)
+u = np.vstack([-1., 0., 0.])
+robot.step(u)
+u = np.vstack([2., 0., np.pi])
+robot.step(u)
+```
+
+¿Cuál sería la pose final (`pf`) del robot tras aplicar dichas acciones de control? *(Una)*
+
+- a) `pf = [1, -1]'` y «mirando hacia arriba».
+- b) `pf = [0, 2]'` y «mirando hacia abajo».
+- c) Ninguna de las anteriores.
+- d) `pf = [1, 1]'` y «mirando hacia abajo».
 
 ## A.4. Modelos de movimiento deterministas
 
@@ -194,6 +301,32 @@ def next_pose(x, u, dt, cov=None):
 - b) Su matriz de covarianza es diagonal.
 - c) La media de la distribución es el vector $[\mu_1, \mu_2]^T$, no solo $\mu_1$.
 - d) Las elipses son curvas de igual densidad de probabilidad.
+
+**E-28.** La gráfica anterior (elipses concéntricas en el plano $x_1, x_2$) representa... *(Una)*
+
+- a) La probabilidad conjunta (*joint*): $p(x_1, x_2)$
+- b) La probabilidad condicionada: $p(x_1 \mid x_2)$
+- c) La probabilidad condicionada: $p(x_2 \mid x_1)$
+- d) Las probabilidades marginales: $p(x_1), p(x_2)$
+
+**E-29 / T-6.** ¿Cuál es la posición esperada (*Expected Value*) de un robot que está en un pasillo con 10 celdas (índices $1, \dots, 10$), con la distribución de probabilidad $[0,\; 0.2,\; 0.2,\; 0.1,\; 0.3,\; 0,\; 0.1,\; 0.1,\; 0.0,\; 0]$? *(Una)*
+
+- a) 4.1
+- b) 4.4
+- c) Ninguna de las otras
+- d) 3.1
+
+**E-30.** Si $a$ y $b$ son dos variables aleatorias independientes de distribución gaussiana, ¿cuáles de los gráficos son posibles para estas variables? (las elipses representan las gaussianas) *(Una o más)*
+
+- a) Elipses con sus semiejes alineados con los ejes coordenados (incluyendo el caso circular cuando $\sigma_a = \sigma_b$).
+- b) Elipses inclinadas/rotadas respecto a los ejes coordenados.
+
+**E-37.** En el experimento del recorrido cuadrado (rojo = acciones ideales, azul = ruta seguida con ruido $\Sigma = \mathrm{diag}(\sigma_x^2, \sigma_y^2, \sigma_\theta^2)$), empareja cada comportamiento con su matriz de covarianza:
+
+1. La ruta azul coincide con la roja.
+2. Los tramos mantienen giros exactos de $90^\circ$ pero avanzan más o menos distancia longitudinalmente.
+3. Los triángulos azules mantienen la orientación correcta paralela a los ejes pero sufren desplazamientos laterales.
+4. La orientación de los triángulos azules se desvía y tuerce toda la trayectoria posterior.
 
 **T-7.** *(Reconstruida)* Un robot en un pasillo tiene un sensor que mide la distancia al origen y toma las observaciones $z = [z_1, z_2, \ldots, z_k]$. ¿Cuándo se cumple $p(z \mid x, m) = \prod_k p(z_k \mid x, m)$? *(Una)*
 
