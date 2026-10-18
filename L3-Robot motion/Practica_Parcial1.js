@@ -242,9 +242,11 @@ function updateStats() {
   $("#mastered-count").textContent = `${mastered} / ${core.length}`;
   $("#progress-fill").style.width = `${(mastered / core.length) * 100}%`;
   for (const lesson of ["L1", "L2", "L3", "Extra"]) {
+    const el = $(`#count-${lesson}`);
+    if (!el) continue;
     const items = questions.filter((q) => q.lesson === lesson);
     const masteredCount = items.filter((q) => progress[q.id]?.lastCorrect).length;
-    $(`#count-${lesson}`).textContent = `${masteredCount}/${items.length} dominadas`;
+    el.textContent = `${masteredCount}/${items.length} dominadas`;
   }
   updateAvailable();
 }
@@ -308,6 +310,7 @@ function showQuestion() {
   }
   const q = session[current];
   const saved = responses[q.id];
+  $("#choice-error").textContent = "";
   $("#question-number").textContent = `Pregunta ${current + 1} de ${session.length}`;
   $("#quiz-progress").style.width = `${((current + 1) / session.length) * 100}%`;
   $("#question-meta").textContent = `${lessonNames[q.lesson]} · ${q.topic} · ${q.kind} · ${q.source}${q.source.startsWith("T-") || q.source.startsWith("P-") ? " (reconstruida/adaptada cuando se indica)" : ""}`;
@@ -382,8 +385,12 @@ function showResult() {
 
 $("#start-button").addEventListener("click", buildSession);
 $("#check-button").addEventListener("click", checkAnswer);
-$("#next-button").addEventListener("click", () => { current++; showQuestion(); });
-$("#prev-button").addEventListener("click", () => { current--; $("#choice-error").textContent = ""; showQuestion(); });
+$("#next-button").addEventListener("click", () => {
+  current++;
+  showQuestion();
+  if (current < session.length) $("#quiz").scrollIntoView({ behavior: "smooth", block: "start" });
+});
+$("#prev-button").addEventListener("click", () => { current--; showQuestion(); });
 $("#exit-button").addEventListener("click", () => { $("#quiz").hidden = true; $("#filters").scrollIntoView({ behavior: "smooth" }); });
 $("#repeat-button").addEventListener("click", () => {
   session = shuffle(session.filter((q) => !responses[q.id]?.correct));
