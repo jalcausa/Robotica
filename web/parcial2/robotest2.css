@@ -1,0 +1,31 @@
+/* Solo lo nuevo del Parcial 2: preguntas numéricas, de huecos en código y de encontrar el error. */
+.study-card .study-label.p2{color:#b0742f}
+.numeric-wrap{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.numeric-input,.cloze-input{font:inherit;color:#1d2939;background:#fbfcfa;border:1px solid #cfdcd5;border-radius:9px;transition:border-color .2s,background .2s}
+.numeric-input{width:min(260px,100%);min-height:50px;padding:0 14px;font-size:18px;font-weight:700;font-variant-numeric:tabular-nums}
+.numeric-input:focus,.cloze-input:focus{outline:3px solid #fbba6d;outline-offset:2px;border-color:#199478}
+.unit{font-size:15px;font-weight:750;color:#52615f}
+.is-right{border-color:#65bd99!important;background:#eaf9ef!important}
+.is-wrong{border-color:#e2a7a0!important;background:#fff3f0!important}
+.code-block{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;font-size:13px;line-height:1.7;background:#10272a;color:#d9efe7;border-radius:12px;margin:0;overflow-x:auto;-webkit-overflow-scrolling:touch}
+pre.code-block{padding:16px 18px;white-space:pre}
+.cloze-input{font-family:inherit;font-size:13px;color:#10272a;background:#fff8ec;border-color:#f5a958;border-radius:6px;padding:2px 6px;margin:1px 2px;min-width:4ch;max-width:100%}
+.cloze-input:disabled{color:#10272a;opacity:1}
+.bug-lines{list-style:none;padding:8px 0;counter-reset:none}
+.bug-line{display:flex;align-items:baseline;gap:14px;width:100%;text-align:left;border:0;border-left:4px solid transparent;background:transparent;color:inherit;font:inherit;padding:5px 16px 5px 12px;cursor:pointer;white-space:pre}
+.bug-line code{font:inherit;white-space:pre}
+.bug-line:hover:not(:disabled){background:#ffffff12}
+.bug-line[aria-pressed=true]{background:#f5a95830;border-left-color:#f5a958}
+.bug-line:disabled{cursor:default}
+.bug-line.correct-line{background:#65bd9940;border-left-color:#65bd99}
+.bug-line.wrong-line{background:#d9645a55;border-left-color:#ef8a7f;text-decoration:line-through;text-decoration-color:#e2a7a0aa}
+.line-number{min-width:2ch;text-align:right;color:#7fa69a;user-select:none;flex:none}
+.fix-label{font-weight:760;color:#236448!important;margin-bottom:4px!important}
+.feedback pre.fix-block{margin:4px 0 12px;white-space:pre}
+.feedback .explanation{white-space:pre-line}
+@media(max-width:620px){
+  .numeric-input,.cloze-input{font-size:16px}
+  .code-block{font-size:12px}
+  pre.code-block{padding:14px 12px}
+  .bug-line{padding:6px 10px 6px 8px;gap:10px}
+}

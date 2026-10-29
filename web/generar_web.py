@@ -73,8 +73,30 @@ PARCIALES = [
     {
         "key": "parcial2",
         "label": "Parcial 2",
-        "lessons": [],
-        "guides": [],
+        "lessons": [
+            {
+                "key": "L4",
+                "source": TEORIA / "Parcial-2/L4-Robot-sensing/Resumen_L4_Percepcion_Robot.md",
+                "title": "Percepción del robot",
+                "subtitle": "Sensores, modelos de observación de landmarks y láser, e incertidumbre, con ejemplos numéricos resueltos.",
+            },
+        ],
+        "guides": [
+            {
+                "key": "P4.1",
+                "lesson": "L4",
+                "source": TEORIA / "Parcial-2/Guias_practicas/P4.1_Landmarks.md",
+                "title": "Modelos basados en landmarks",
+                "subtitle": "Práctica 4.1: observaciones rango-bearing, cambio de coordenadas e incertidumbre, línea a línea.",
+            },
+            {
+                "key": "P4.2",
+                "lesson": "L4",
+                "source": TEORIA / "Parcial-2/Guias_practicas/P4.2_Laser_scanner.md",
+                "title": "Escáner láser",
+                "subtitle": "Práctica 4.2: simulación de un láser 2D, del barrido polar a puntos en el mapa.",
+            },
+        ],
     },
 ]
 
@@ -259,6 +281,12 @@ def build(page):
 
 if __name__ == "__main__":
     for parcial in PARCIALES:
+        # Las páginas cuyo .md aún no existe se omiten (y no se enlazan) hasta que se escriba.
+        for group in ("lessons", "guides"):
+            for item in parcial[group]:
+                if not item["source"].exists():
+                    print(f"Omitida (falta {item['source'].relative_to(ROOT)})")
+            parcial[group] = [item for item in parcial[group] if item["source"].exists()]
         pages = parcial["lessons"] + parcial["guides"]
         for item in pages:
             item["parcial"] = parcial
