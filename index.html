@@ -3,11 +3,43 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>RoboTest · L1–L3 · Primer parcial</title>
-  <meta http-equiv="refresh" content="0; url=L3-Robot%20motion/Practica_Parcial1.html">
-  <script>window.location.replace("L3-Robot%20motion/Practica_Parcial1.html");</script>
+  <meta name="color-scheme" content="light">
+  <title>RoboTest · Robótica UMA</title>
+  <link rel="stylesheet" href="web/assets/robotest.css">
+  <style>
+    .parciales{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .parciales .study-list a{color:#168b72;font-weight:700;text-decoration:none}
+    .parciales .study-list a:hover{color:#008468}
+    .soon{color:#9aa8a3}
+    @media(max-width:620px){.parciales{grid-template-columns:1fr}}
+  </style>
 </head>
 <body>
-  <p>Redirigiendo a <a href="L3-Robot%20motion/Practica_Parcial1.html">RoboTest</a>…</p>
+  <header class="topbar">
+    <a class="brand" href="#inicio" aria-label="RoboTest, ir al inicio"><span class="brand-mark">R<span></span></span> ROBO<span>TEST</span></a>
+    <nav aria-label="Navegación principal"><a href="web/parcial1/index.html">Parcial 1</a><a href="#parciales">Parcial 2</a></nav>
+  </header>
+  <main id="inicio">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-inner">
+        <div class="eyebrow"><span class="status-dot"></span> ROBÓTICA · UMA 2026–2027</div>
+        <h1 id="hero-title">Apuntes y tests<br><em>por parcial.</em></h1>
+        <p>Resúmenes de teoría, guías de las prácticas y un test con corrección inmediata para cada parcial. Elige por dónde quieres empezar.</p>
+        <div class="hero-actions"><a class="button primary" href="#parciales">Elegir parcial <span aria-hidden="true">↘</span></a></div>
+      </div>
+      <div class="hero-art" aria-hidden="true"><div class="grid-plane"></div><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="robot-icon"><span class="eye"></span><span class="eye"></span></div><div class="beacon beacon-a"></div><div class="beacon beacon-b"></div><span class="art-label label-a">SENSE</span><span class="art-label label-b">PLAN</span><span class="art-label label-c">ACT</span></div>
+    </section>
+
+    <div class="wrap">
+      <section id="parciales" class="study-section practice-section" aria-labelledby="parciales-title">
+        <div class="section-heading"><div><span class="overline">MATERIAL DE ESTUDIO</span><h2 id="parciales-title">Parciales</h2></div></div>
+        <div class="study-grid parciales">
+          <article class="study-card l1"><div class="study-top"><span class="pill">TEMAS 1–3</span><span class="study-label">Aprobado</span></div><h3>Parcial 1</h3><p class="card-intro">Introducción, arquitecturas de control y ROS 2, movimiento del robot.</p><div class="study-list"><h4>Resúmenes</h4><ul><li><a href="web/parcial1/Resumen_L1_Introduccion_Robotica_Autonoma.html">L1 · Introducción a la robótica autónoma</a></li><li><a href="web/parcial1/Resumen_L2_Arquitecturas_Control_ROS2.html">L2 · Arquitecturas de control y ROS 2</a></li><li><a href="web/parcial1/Resumen_L3_Movimiento_Robot.html">L3 · Movimiento del robot</a></li></ul><h4>Prácticas</h4><ul><li><a href="web/parcial1/P2.1_ROS2_guia_rapida.html">2.1 · ROS 2 y MVSim</a></li><li><a href="web/parcial1/P3.1_Composicion_poses.html">3.1 · Composición de poses</a></li><li><a href="web/parcial1/P3.2_Modelo_velocidad.html">3.2 · Modelo basado en velocidad</a></li><li><a href="web/parcial1/P3.3_Modelo_odometria.html">3.3 · Modelo basado en odometría</a></li></ul></div><a href="web/parcial1/index.html">Abrir test del Parcial 1 <span aria-hidden="true">↗</span></a></article>
+          <article class="study-card l2"><div class="study-top"><span class="pill">TEMA 4 →</span><span class="study-label">En preparación</span></div><h3>Parcial 2</h3><p class="card-intro">Percepción del robot y los temas que vengan. Cálculos con fórmulas y preguntas sobre el código de las prácticas.</p><div class="study-list"><h4>Resúmenes</h4><ul><li class="soon">L4 · Robot sensing (próximamente)</li></ul><h4>Prácticas</h4><ul><li class="soon">4.1 · Landmark-based models</li><li class="soon">4.2 · Laser Scanner</li><li class="soon">4.3 · Playing with ROS 2</li></ul></div><a class="soon" aria-disabled="true">Test del Parcial 2 (próximamente)</a></article>
+        </div>
+      </section>
+    </div>
+  </main>
+  <footer><div class="wrap"><span>ROBO<span>TEST</span> / Robótica</span><span>Sin dependencias · Funciona sin conexión · Progreso local</span></div></footer>
 </body>
 </html>

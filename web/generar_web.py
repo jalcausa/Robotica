@@ -1,67 +1,81 @@
-from html import escape
+from html import escape, unescape
 from html.parser import HTMLParser
 from pathlib import Path
-from urllib.parse import quote
+from urllib.parse import quote, unquote
 import os
 import re
 import subprocess
 
 ROOT = Path(__file__).resolve().parent.parent
-L3 = ROOT / "L3-Robot motion"
-QUIZ = L3 / "Practica_Parcial1.html"
-BASE_CSS = L3 / "Practica_Parcial1.css"
-STYLE = L3 / "Resumenes_Web.css"
-SCRIPT = L3 / "Resumenes_Web.js"
+WEB = ROOT / "web"
+PORTAL = ROOT / "index.html"
+BASE_CSS = WEB / "assets/robotest.css"
+STYLE = WEB / "assets/resumenes.css"
+SCRIPT = WEB / "assets/resumenes.js"
+TEORIA = ROOT / "Teoria"
+GUIAS = ROOT / "Guias_practicas"
 
-LESSONS = [
+# Cada parcial se publica en web/<key>/: su test es index.html y los resúmenes y guías van al lado.
+PARCIALES = [
     {
-        "key": "L1",
-        "source": ROOT / "L1-Introduction-to-Autonomous-Robotics/Resumen_L1_Introduccion_Robotica_Autonoma.md",
-        "title": "Introducción a la robótica autónoma",
-        "subtitle": "La idea de robot autónomo, las arquitecturas y las preguntas que guían la robótica móvil.",
+        "key": "parcial1",
+        "label": "Parcial 1",
+        "lessons": [
+            {
+                "key": "L1",
+                "source": TEORIA / "L1-Introduction-to-Autonomous-Robotics/Resumen_L1_Introduccion_Robotica_Autonoma.md",
+                "title": "Introducción a la robótica autónoma",
+                "subtitle": "La idea de robot autónomo, las arquitecturas y las preguntas que guían la robótica móvil.",
+            },
+            {
+                "key": "L2",
+                "source": TEORIA / "L2-Robot-Control-Architecture-and-ROS/Resumen_L2_Arquitecturas_Control_ROS2.md",
+                "title": "Arquitecturas de control y ROS 2",
+                "subtitle": "De los paradigmas y los árboles de comportamiento a los nodos, topics y herramientas ROS 2.",
+            },
+            {
+                "key": "L3",
+                "source": TEORIA / "L3-Robot-motion/Resumen_L3_Movimiento_Robot.md",
+                "title": "Movimiento del robot",
+                "subtitle": "Cinemática, composición de poses, odometría y modelos probabilísticos explicados por bloques.",
+            },
+        ],
+        "guides": [
+            {
+                "key": "P2.1",
+                "lesson": "L2",
+                "source": GUIAS / "P2.1_ROS2_guia_rapida.md",
+                "title": "ROS 2 y MVSim",
+                "subtitle": "Guía de la práctica 2.1: mundo simulado, nodos, topics, TF y control por teclado.",
+            },
+            {
+                "key": "P3.1",
+                "lesson": "L3",
+                "source": GUIAS / "P3.1_Composicion_poses.md",
+                "title": "Composición de poses",
+                "subtitle": "Práctica 3.1: marcos locales, tcomp, transformaciones y el recorrido cuadrado.",
+            },
+            {
+                "key": "P3.2",
+                "lesson": "L3",
+                "source": GUIAS / "P3.2_Modelo_velocidad.md",
+                "title": "Modelo basado en velocidad",
+                "subtitle": "Práctica 3.2: arcos, caso recto, next_pose y límites del modelo.",
+            },
+            {
+                "key": "P3.3",
+                "lesson": "L3",
+                "source": GUIAS / "P3.3_Modelo_odometria.md",
+                "title": "Modelo basado en odometría",
+                "subtitle": "Práctica 3.3: encoders, jacobianos, propagación gaussiana y partículas.",
+            },
+        ],
     },
     {
-        "key": "L2",
-        "source": ROOT / "L2-Robot-Control-Architecture-and-ROS/Resumen_L2_Arquitecturas_Control_ROS2.md",
-        "title": "Arquitecturas de control y ROS 2",
-        "subtitle": "De los paradigmas y los árboles de comportamiento a los nodos, topics y herramientas ROS 2.",
-    },
-    {
-        "key": "L3",
-        "source": L3 / "Resumen_L3_Movimiento_Robot.md",
-        "title": "Movimiento del robot",
-        "subtitle": "Cinemática, composición de poses, odometría y modelos probabilísticos explicados por bloques.",
-    },
-]
-
-GUIDES = [
-    {
-        "key": "P2.1",
-        "lesson": "L2",
-        "source": ROOT / "L2-Robot-Control-Architecture-and-ROS/Guia_de_estudio_ROS2_y_practicas.md",
-        "title": "ROS 2 y MVSim",
-        "subtitle": "Guía de la práctica 2.1: mundo simulado, nodos, topics, TF y control por teclado.",
-    },
-    {
-        "key": "P3.1",
-        "lesson": "L3",
-        "source": ROOT / "Practicas/uma_robotics_2027/Chapter 03. Robot Motion/3.1-Motion through pose composition/3.1 Motion through pose composition.md",
-        "title": "Composición de poses",
-        "subtitle": "Práctica 3.1: marcos locales, tcomp, transformaciones y el recorrido cuadrado.",
-    },
-    {
-        "key": "P3.2",
-        "lesson": "L3",
-        "source": ROOT / "Practicas/uma_robotics_2027/Chapter 03. Robot Motion/3.2 Velocity-based motion model/3.2 Velocity-based motion model.md",
-        "title": "Modelo basado en velocidad",
-        "subtitle": "Práctica 3.2: arcos, caso recto, next_pose y límites del modelo.",
-    },
-    {
-        "key": "P3.3",
-        "lesson": "L3",
-        "source": ROOT / "Practicas/uma_robotics_2027/Chapter 03. Robot Motion/3.3 Odometry-based motion model/3.3 Odometry-based motion model.md",
-        "title": "Modelo basado en odometría",
-        "subtitle": "Práctica 3.3: encoders, jacobianos, propagación gaussiana y partículas.",
+        "key": "parcial2",
+        "label": "Parcial 2",
+        "lessons": [],
+        "guides": [],
     },
 ]
 
@@ -104,10 +118,27 @@ def link(source, target):
 
 
 def page_output(page):
-    source = page["source"]
-    if page["key"].startswith("P3."):
-        return source.with_name(source.stem + "_Guia_web.html")
-    return source.with_suffix(".html")
+    return WEB / page["parcial"]["key"] / (page["source"].stem + ".html")
+
+
+def quiz_page(parcial):
+    quiz = WEB / parcial["key"] / "index.html"
+    return quiz if quiz.exists() else PORTAL
+
+
+def relink(rendered, source, output):
+    # Los enlaces relativos del Markdown (imágenes, otros .md, notebooks) apuntan desde la carpeta
+    # del .md; en la web se recalculan desde la carpeta de salida.
+    def fix(match):
+        attribute, value = match.groups()
+        target = unescape(value)
+        if target.startswith(("#", "/", "data:", "mailto:")) or "://" in target:
+            return match.group(0)
+        path, _, fragment = target.partition("#")
+        url = link(output, source.parent / unquote(path))
+        return f'{attribute}="{url}{"#" + escape(fragment, quote=True) if fragment else ""}"'
+
+    return re.sub(r'\b(src|href)="([^"]*)"', fix, rendered)
 
 
 def toc_html(headings):
@@ -133,8 +164,9 @@ def toc_html(headings):
 
 
 def related_html(page, output):
-    if page in LESSONS:
-        guides = [item for item in GUIDES if item["lesson"] == page["key"]]
+    parcial = page["parcial"]
+    if page in parcial["lessons"]:
+        guides = [item for item in parcial["guides"] if item["lesson"] == page["key"]]
         if not guides:
             return ""
         cards = "".join(
@@ -144,9 +176,9 @@ def related_html(page, output):
             for item in guides
         )
         return f'<section class="related"><span class="overline">APLICA LO APRENDIDO</span><h2>Guías de prácticas</h2><p>El test incluye preguntas de estas prácticas. Aquí puedes estudiar el procedimiento completo.</p><div class="related-grid">{cards}</div></section>'
-    lesson = next(item for item in LESSONS if item["key"] == page["lesson"])
-    companions = [item for item in GUIDES if item["lesson"] == page["lesson"] and item != page]
-    cards = [f'<a class="related-card" href="{link(output, lesson["source"].with_suffix(".html"))}"><span>{escape(lesson["key"])} · TEORÍA</span><strong>{escape(lesson["title"])}</strong><small>Volver al resumen ↗</small></a>']
+    lesson = next(item for item in parcial["lessons"] if item["key"] == page["lesson"])
+    companions = [item for item in parcial["guides"] if item["lesson"] == page["lesson"] and item != page]
+    cards = [f'<a class="related-card" href="{link(output, page_output(lesson))}"><span>{escape(lesson["key"])} · TEORÍA</span><strong>{escape(lesson["title"])}</strong><small>Volver al resumen ↗</small></a>']
     cards.extend(
         f'<a class="related-card" href="{link(output, page_output(item))}">'
         f'<span>{escape(item["key"])} · PRÁCTICA</span><strong>{escape(item["title"])}</strong><small>Leer guía ↗</small></a>'
@@ -162,22 +194,24 @@ def build(page):
         ["pandoc", "--from=markdown+gfm_auto_identifiers+pipe_tables+tex_math_dollars+yaml_metadata_block-raw_html", "--to=html5", "--mathml", "--section-divs", "--wrap=none", str(source)],
         capture_output=True, text=True, check=True,
     ).stdout
+    rendered = relink(rendered, source, output)
     outline = Outline()
     outline.feed(rendered)
     chapters, total = toc_html(outline.headings)
     formulas = rendered.count('<math display="')
     content_feature = f"{formulas} fórmulas renderizadas" if formulas else "Apartados navegables"
+    parcial = page["parcial"]
     active = page.get("lesson", page["key"])
-    menu = "".join(
-        f'<a href="{link(output, lesson["source"].with_suffix(".html"))}"'
+    menu = f'<a href="{link(output, PORTAL)}">Inicio</a>' + "".join(
+        f'<a href="{link(output, page_output(lesson))}"'
         f'{" aria-current=page" if lesson["key"] == active else ""}>{lesson["key"]}</a>'
-        for lesson in LESSONS
+        for lesson in parcial["lessons"]
     )
-    quiz_link = link(output, QUIZ)
+    quiz_link = link(output, quiz_page(parcial))
     quiz_url = f'{quiz_link}?lesson={active}#filters'
     practice_url = f'{quiz_link}?lesson={active}&amp;kind=Pr%C3%A1ctica#filters'
-    label = "GUÍA DE PRÁCTICAS" if page in GUIDES else "RESUMEN DE LA LECCIÓN"
-    summary_label = next(item for item in LESSONS if item["key"] == active)
+    label = "GUÍA DE PRÁCTICAS" if page in parcial["guides"] else "RESUMEN DE LA LECCIÓN"
+    summary_label = next(item for item in parcial["lessons"] if item["key"] == active)
     source_link = link(output, source)
     toc = f'<nav class="toc-items" aria-label="Apartados de la página">{chapters}</nav>'
     page_html = f'''<!doctype html>
@@ -200,7 +234,7 @@ def build(page):
   <main>
     <section class="hero lesson-hero" aria-labelledby="hero-title">
       <div class="hero-inner">
-        <div class="eyebrow"><span class="status-dot"></span> {escape(active)} · {label}</div>
+        <div class="eyebrow"><span class="status-dot"></span> {escape(parcial["label"].upper())} · {escape(active)} · {label}</div>
         <h1 id="hero-title">{escape(page["title"])}<span class="hero-period">.</span></h1>
         <p>{escape(page["subtitle"])}</p>
         <div class="hero-actions"><a class="button primary" href="#apuntes">Empezar a leer <span aria-hidden="true">↘</span></a><a class="button subtle" href="{quiz_url}">Practicar el tema</a></div>
@@ -219,11 +253,16 @@ def build(page):
 </body>
 </html>
 '''
+    output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(page_html, encoding="utf-8")
     return output, total, rendered.count('<math display="')
 
 
 if __name__ == "__main__":
-    for item in LESSONS + GUIDES:
-        result, sections, formulas = build(item)
-        print(f"{result.relative_to(ROOT)}: {sections} bloques, {formulas} fórmulas")
+    for parcial in PARCIALES:
+        pages = parcial["lessons"] + parcial["guides"]
+        for item in pages:
+            item["parcial"] = parcial
+        for item in pages:
+            result, sections, formulas = build(item)
+            print(f"{result.relative_to(ROOT)}: {sections} bloques, {formulas} fórmulas")

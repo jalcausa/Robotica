@@ -101,11 +101,11 @@ Las soluciones explicadas están en [Soluciones_Parcial1.md](Soluciones_Parcial1
 
 **E-6.** ¿Cuál de estos vehículos es holonómico? *(Una)*
 
-![Vehículos E-6](img/preguntas/ex_q06_vehiculos.png)
+![Vehículos E-6](img/ex_q06_vehiculos.png)
 
 **E-9.** ¿Cuál de estos vehículos tendrá un movimiento con deslizamiento de las ruedas? *(Una)*
 
-![Vehículos E-9](img/preguntas/ex_q09_vehiculos_icr.png)
+![Vehículos E-9](img/ex_q09_vehiculos_icr.png)
 
 - a) (a) — b) (b) — c) (c) — d) (d)
 
@@ -134,7 +134,7 @@ Las soluciones explicadas están en [Soluciones_Parcial1.md](Soluciones_Parcial1
 
 **E-7.** En referencia a la figura siguiente, que muestra el desplazamiento incremental de un robot en el plano entre dos instantes $t-1$ y $t$, ¿cuál es la pose del robot en el instante $t$ en el sistema de referencia del mundo (*World*)? *(Una)*
 
-![Figura E-7](img/preguntas/ex_q07_incremento_pose.png)
+![Figura E-7](img/ex_q07_incremento_pose.png)
 
 - a) $\begin{bmatrix} x_{t-1} + \Delta x_t\cos\theta_{t-1} - \Delta y_t\sin\theta_{t-1} \\ y_{t-1} + \Delta x_t\sin\theta_{t-1} + \Delta y_t\cos\theta_{t-1} \\ \theta_{t-1} + \Delta\theta_t \end{bmatrix}$
 - b) $\begin{bmatrix} \Delta x_t\cos\theta_{t-1} - \Delta y_t\sin\theta_{t-1} \\ \Delta x_t\sin\theta_{t-1} + \Delta y_t\cos\theta_{t-1} \\ \Delta\theta_t \end{bmatrix}$
@@ -144,7 +144,7 @@ Las soluciones explicadas están en [Soluciones_Parcial1.md](Soluciones_Parcial1
 **E-11.** Dada la configuración de la figura, ¿cuáles de las siguientes expresiones son ciertas? *(Una o más)*
 *Nota: las flechas conectan tanto poses como puntos (landmarks).*
 
-![Figura E-11](img/preguntas/ex_q11_configuracion.png)
+![Figura E-11](img/ex_q11_configuracion.png)
 
 - a) $a = p \oplus a'$
 - b) $a' = \ominus p \oplus a = a \ominus p$
@@ -153,7 +153,7 @@ Las soluciones explicadas están en [Soluciones_Parcial1.md](Soluciones_Parcial1
 
 **T-8.** *(Reconstruida; solo la opción a procede de los apuntes)* Dada la figura, elige las secuencias de transformaciones correctas. *(Una o más)*
 
-![Figura T-8](img/preguntas/te_q08_concatenacion.png)
+![Figura T-8](img/te_q08_concatenacion.png)
 
 - a) $\ominus p_{23} = \ominus p_{13} \oplus p_{12}$
 - b) $p_{23} = p_{13} \oplus (\ominus p_{12})$
@@ -263,7 +263,7 @@ def next_pose(x, u, dt, cov=None):
 
 **E-2.** Dadas las pdf conjuntas de las variables $x$ e $y$, indica si son dependientes o independientes. *(Emparejar: A, B, C, D → Dependiente / Independiente)*
 
-![Figura E-2](img/preguntas/ex_q02_pdfs_conjuntas.png)
+![Figura E-2](img/ex_q02_pdfs_conjuntas.png)
 
 **E-3.** ¿Cuáles de las siguientes expresiones son correctas? *(Una o más)*
 
@@ -295,7 +295,7 @@ def next_pose(x, u, dt, cov=None):
 
 **T-4.** *(Reconstruida)* La figura muestra las curvas de igual densidad de una distribución gaussiana $p(x_1, x_2)$. Señala las afirmaciones correctas. *(Una o más)*
 
-![Figura T-4](img/preguntas/te_q04_gaussiana_2d.png)
+![Figura T-4](img/te_q04_gaussiana_2d.png)
 
 - a) $x_1$ y $x_2$ son dependientes (están correlacionadas).
 - b) Su matriz de covarianza es diagonal.
@@ -365,7 +365,7 @@ def next_pose(x, u, dt, cov=None):
 
 **E-17.** La siguiente gráfica es el resultado de ejecutar comandos de movimiento basados en odometría (forma analítica), como en las sesiones prácticas. ¿Qué significan los puntos que aparecen? *(Una)*
 
-![Figura E-17](img/preguntas/ex_q17_odometria.png)
+![Figura E-17](img/ex_q17_odometria.png)
 
 - a) Cada punto es una posible posición del robot, fruto de componer una acción de control ruidosa con la posición ruidosa anterior.
 - b) Cada punto es una posible posición del robot, fruto de componer una acción de control ruidosa con la posición ideal anterior.
@@ -374,7 +374,7 @@ def next_pose(x, u, dt, cov=None):
 
 **P-1.** La siguiente celda evalúa una pdf gaussiana y la dibuja. Tras ejecutarla se obtiene la gráfica:
 
-![Figura P-1](img/preguntas/pr_q01_pdf_gaussiana.png)
+![Figura P-1](img/pr_q01_pdf_gaussiana.png)
 
 ```python
 # Create the array of values where the gaussian distribution is going to be evaluated
@@ -562,7 +562,7 @@ las variables de la función $p(z_t \mid x_t, m)$ son... *(Una)*
 
 **E-14.** En un problema de localización por emparejamiento (*matching*) de marcas $x_i$ observadas por un robot de pose $p$ con las marcas $m_i$ de un mapa 2D (ver figura), ¿cuál es una definición **INCORRECTA** de la función a minimizar? *(Una)*
 
-![Figura E-14](img/preguntas/ex_q14_matching.png)
+![Figura E-14](img/ex_q14_matching.png)
 
 - a) $E_i(R, t) = m_i - p \oplus x_i$
 - b) $E_i(R, t) = \lVert m_i - p \oplus x_i \rVert^2$
@@ -844,7 +844,7 @@ las variables de la función $p(z_t \mid x_t, m)$ son... *(Una)*
 
 **N-30.** Con la figura de la pregunta T-8, señala las expresiones correctas. *(Una o más)*
 
-![Figura N-30](img/preguntas/te_q08_concatenacion.png)
+![Figura N-30](img/te_q08_concatenacion.png)
 
 - a) $p_3 = p_1 \oplus p_{13}$
 - b) $p_{12} = \ominus p_1 \oplus p_2$
