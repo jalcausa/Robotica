@@ -14,7 +14,7 @@ En la raíz solo están `Teoria/`, `Practicas/`, `web/` e `index.html`.
   - `Lx-…/`: PDF de clase, `Resumen_Lx_….md` e `img/` de cada lección (Parcial-1 = L1–L3, Parcial-2 = L4 en adelante).
   - `Guias_practicas/`: guías de estudio de cada práctica (`P<n.m>_<tema>.md`).
   - `Examen/`: banco de preguntas, soluciones, `examenes_anteriores/` e `img/` de las preguntas.
-- `Practicas/uma_robotics_2027/`: repositorio del profesor con los notebooks **sin resolver**; el usuario los va subiendo y se resuelven aquí, en el propio notebook. **No cambiar su estructura**: los notebooks importan `utils` con `sys.path.append("..")` / `("../..")`. Junto al notebook van solo la `Resolución y guía de entrega.md` y sus capturas en `img/`.
+- `Practicas/uma_robotics_2027/`: repositorio del profesor con los notebooks **sin resolver**; el usuario los va subiendo y se resuelven aquí, en el propio notebook. **No cambiar su estructura**: los notebooks importan `utils` con `sys.path.append("..")` / `("../..")`. Junto al notebook van solo la `Resolución y guía de entrega.md` y sus capturas en `img/`. Las prácticas que se hacen en la VM de ROS (sin copiar y pegar con el host) llevan además una carpeta `4.x_VM/` con un `LEEME` de pasos y un script que guarda las salidas; su `.tgz` se publica en `web/vm/` para descargarlo con `wget` desde la VM.
 - `web/`: todo lo publicado en GitHub Pages. `web/assets/` (CSS/JS comunes), `web/parcialN/` (test en `index.html` + resúmenes y guías generados). `index.html` de la raíz es la portada que enlaza a cada parcial.
 
 ## Versiones web de los apuntes
