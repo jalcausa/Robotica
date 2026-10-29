@@ -12,8 +12,7 @@ PORTAL = ROOT / "index.html"
 BASE_CSS = WEB / "assets/robotest.css"
 STYLE = WEB / "assets/resumenes.css"
 SCRIPT = WEB / "assets/resumenes.js"
-TEORIA = ROOT / "Teoria"
-GUIAS = ROOT / "Guias_practicas"
+TEORIA = ROOT / "Teoria"  # Teoria/Parcial-N/: lecciones, Guias_practicas/ y Examen/
 
 # Cada parcial se publica en web/<key>/: su test es index.html y los resúmenes y guías van al lado.
 PARCIALES = [
@@ -23,19 +22,19 @@ PARCIALES = [
         "lessons": [
             {
                 "key": "L1",
-                "source": TEORIA / "L1-Introduction-to-Autonomous-Robotics/Resumen_L1_Introduccion_Robotica_Autonoma.md",
+                "source": TEORIA / "Parcial-1/L1-Introduction-to-Autonomous-Robotics/Resumen_L1_Introduccion_Robotica_Autonoma.md",
                 "title": "Introducción a la robótica autónoma",
                 "subtitle": "La idea de robot autónomo, las arquitecturas y las preguntas que guían la robótica móvil.",
             },
             {
                 "key": "L2",
-                "source": TEORIA / "L2-Robot-Control-Architecture-and-ROS/Resumen_L2_Arquitecturas_Control_ROS2.md",
+                "source": TEORIA / "Parcial-1/L2-Robot-Control-Architecture-and-ROS/Resumen_L2_Arquitecturas_Control_ROS2.md",
                 "title": "Arquitecturas de control y ROS 2",
                 "subtitle": "De los paradigmas y los árboles de comportamiento a los nodos, topics y herramientas ROS 2.",
             },
             {
                 "key": "L3",
-                "source": TEORIA / "L3-Robot-motion/Resumen_L3_Movimiento_Robot.md",
+                "source": TEORIA / "Parcial-1/L3-Robot-motion/Resumen_L3_Movimiento_Robot.md",
                 "title": "Movimiento del robot",
                 "subtitle": "Cinemática, composición de poses, odometría y modelos probabilísticos explicados por bloques.",
             },
@@ -44,28 +43,28 @@ PARCIALES = [
             {
                 "key": "P2.1",
                 "lesson": "L2",
-                "source": GUIAS / "P2.1_ROS2_guia_rapida.md",
+                "source": TEORIA / "Parcial-1/Guias_practicas/P2.1_ROS2_guia_rapida.md",
                 "title": "ROS 2 y MVSim",
                 "subtitle": "Guía de la práctica 2.1: mundo simulado, nodos, topics, TF y control por teclado.",
             },
             {
                 "key": "P3.1",
                 "lesson": "L3",
-                "source": GUIAS / "P3.1_Composicion_poses.md",
+                "source": TEORIA / "Parcial-1/Guias_practicas/P3.1_Composicion_poses.md",
                 "title": "Composición de poses",
                 "subtitle": "Práctica 3.1: marcos locales, tcomp, transformaciones y el recorrido cuadrado.",
             },
             {
                 "key": "P3.2",
                 "lesson": "L3",
-                "source": GUIAS / "P3.2_Modelo_velocidad.md",
+                "source": TEORIA / "Parcial-1/Guias_practicas/P3.2_Modelo_velocidad.md",
                 "title": "Modelo basado en velocidad",
                 "subtitle": "Práctica 3.2: arcos, caso recto, next_pose y límites del modelo.",
             },
             {
                 "key": "P3.3",
                 "lesson": "L3",
-                "source": GUIAS / "P3.3_Modelo_odometria.md",
+                "source": TEORIA / "Parcial-1/Guias_practicas/P3.3_Modelo_odometria.md",
                 "title": "Modelo basado en odometría",
                 "subtitle": "Práctica 3.3: encoders, jacobianos, propagación gaussiana y partículas.",
             },
