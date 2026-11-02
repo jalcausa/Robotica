@@ -96,6 +96,13 @@ PARCIALES = [
                 "title": "Escáner láser",
                 "subtitle": "Práctica 4.2: simulación de un láser 2D, del barrido polar a puntos en el mapa.",
             },
+            {
+                "key": "P4.3",
+                "lesson": "L4",
+                "source": TEORIA / "Parcial-2/Guias_practicas/P4.3_Playing_with_ROS2.md",
+                "title": "Sensores con ROS 2",
+                "subtitle": "Práctica 4.3: los sensores del TurtleBot3 en MVSim, el mensaje LaserScan y el árbol tf.",
+            },
         ],
     },
 ]

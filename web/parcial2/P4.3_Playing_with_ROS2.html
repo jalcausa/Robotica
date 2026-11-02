@@ -1,0 +1,823 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>P4.3 · Sensores con ROS 2 | RoboTest</title>
+  <link rel="stylesheet" href="../assets/robotest.css">
+  <link rel="stylesheet" href="../assets/resumenes.css">
+  <script src="../assets/resumenes.js" defer></script>
+</head>
+<body>
+  <div id="reading-progress" aria-hidden="true"></div>
+  <header class="topbar">
+    <a class="brand" href="index.html" aria-label="RoboTest, volver al inicio"><span class="brand-mark">R<span></span></span> ROBO<span>TEST</span></a>
+    <nav aria-label="Navegación principal"><a href="../../index.html">Inicio</a><a href="Resumen_L4_Percepcion_Robot.html" aria-current=page>L4</a><a href="index.html">Test <span aria-hidden="true">↗</span></a></nav>
+  </header>
+  <main>
+    <section class="hero lesson-hero" aria-labelledby="hero-title">
+      <div class="hero-inner">
+        <div class="eyebrow"><span class="status-dot"></span> PARCIAL 2 · L4 · GUÍA DE PRÁCTICAS</div>
+        <h1 id="hero-title">Sensores con ROS 2<span class="hero-period">.</span></h1>
+        <p>Práctica 4.3: los sensores del TurtleBot3 en MVSim, el mensaje LaserScan y el árbol tf.</p>
+        <div class="hero-actions"><a class="button primary" href="#apuntes">Empezar a leer <span aria-hidden="true">↘</span></a><a class="button subtle" href="index.html?lesson=L4#filters">Practicar el tema</a></div>
+        <div class="lesson-facts"><span>15 bloques de lectura</span><span>130 fórmulas renderizadas</span><span>Sin conexión</span></div>
+      </div>
+      <div class="hero-art" aria-hidden="true"><div class="grid-plane"></div><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="robot-icon"><span class="eye"></span><span class="eye"></span></div><div class="beacon beacon-a"></div><div class="beacon beacon-b"></div><span class="art-label label-a">SENSE</span><span class="art-label label-b">PLAN</span><span class="art-label label-c">ACT</span></div>
+    </section>
+    <div class="reading-wrap" id="apuntes">
+      <div class="reading-intro"><div><span class="overline">P4.3 / LECTURA</span><h2>Todo el contenido, mejor organizado.</h2><p>Índice navegable, secciones cortas y fórmulas legibles. El contenido del apunte original se mantiene íntegro.</p></div><a class="original-link" href="../../Teoria/Parcial-2/Guias_practicas/P4.3_Playing_with_ROS2.md">Ver Markdown original ↗</a></div>
+      <details class="mobile-toc"><summary>Índice de contenidos <span aria-hidden="true">⌄</span></summary><nav class="toc-items" aria-label="Apartados de la página"><details class="toc-chapter" open><summary><span class="toc-number">·</span><span>Índice</span></summary><div class="toc-links"><a href="#índice">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">01</span><span>Objetivo y lugar en el temario</span></summary><div class="toc-links"><a href="#1-objetivo-y-lugar-en-el-temario">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">02</span><span>El montaje: ROS 2, MVSim y RViz2</span></summary><div class="toc-links"><a href="#2-el-montaje-ros-2-mvsim-y-rviz2">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">03</span><span>El mundo XML y cómo configurar los sensores</span></summary><div class="toc-links"><a href="#3-el-mundo-xml-y-cómo-configurar-los-sensores">Ir al bloque</a><a href="#31-dónde-está-el-archivo">3.1. Dónde está el archivo</a><a href="#32-clases-de-vehículo-include-y-argumentos">3.2. Clases de vehículo, &lt;include&gt; y argumentos</a><a href="#33-cambiar-el-láser-assignment-5">3.3. Cambiar el láser (Assignment 5)</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">04</span><span>Los comandos de ROS 2 que hay que saber</span></summary><div class="toc-links"><a href="#4-los-comandos-de-ros-2-que-hay-que-saber">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">05</span><span>Los sensores del TurtleBot3 en ROS 2</span></summary><div class="toc-links"><a href="#5-los-sensores-del-turtlebot3-en-ros-2">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">06</span><span>El mensaje LaserScan</span></summary><div class="toc-links"><a href="#6-el-mensaje-laserscan">Ir al bloque</a><a href="#61-campos">6.1. Campos</a><a href="#62-solo-se-guardan-los-alcances">6.2. Solo se guardan los alcances</a><a href="#63-de-dónde-salen-los-800-haces">6.3. De dónde salen los 800 haces</a><a href="#64-qué-devuelve-un-haz-que-no-choca-con-nada">6.4. Qué devuelve un haz que no choca con nada</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">07</span><span>Ruido y configuración del láser</span></summary><div class="toc-links"><a href="#7-ruido-y-configuración-del-láser">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">08</span><span>Marcos de referencia y tf2</span></summary><div class="toc-links"><a href="#8-marcos-de-referencia-y-tf2">Ir al bloque</a><a href="#81-por-qué-hacen-falta">8.1. Por qué hacen falta</a><a href="#82-las-ideas-de-tf2">8.2. Las ideas de tf2</a><a href="#83-marcos-estándar-rep-105">8.3. Marcos estándar (REP 105)</a><a href="#84-el-árbol-del-turtlebot3">8.4. El árbol del TurtleBot3</a><a href="#85-lo-que-mide-cada-tf2_echo">8.5. Lo que mide cada tf2_echo</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">09</span><span>Los apartados opcionales</span></summary><div class="toc-links"><a href="#9-los-apartados-opcionales">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">10</span><span>Cálculos resueltos</span></summary><div class="toc-links"><a href="#10-cálculos-resueltos">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">11</span><span>Errores típicos</span></summary><div class="toc-links"><a href="#11-errores-típicos">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">12</span><span>Rellena el hueco</span></summary><div class="toc-links"><a href="#12-rellena-el-hueco">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">13</span><span>Preguntas de repaso (con solución)</span></summary><div class="toc-links"><a href="#13-preguntas-de-repaso-con-solución">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">14</span><span>Ideas esenciales para recordar</span></summary><div class="toc-links"><a href="#14-ideas-esenciales-para-recordar">Ir al bloque</a></div></details></nav></details>
+      <div class="reading-columns"><aside class="toc-sidebar"><div class="toc-box"><span class="overline">EN ESTA PÁGINA</span><p>L4 · 15 bloques</p><nav class="toc-items" aria-label="Apartados de la página"><details class="toc-chapter" open><summary><span class="toc-number">·</span><span>Índice</span></summary><div class="toc-links"><a href="#índice">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">01</span><span>Objetivo y lugar en el temario</span></summary><div class="toc-links"><a href="#1-objetivo-y-lugar-en-el-temario">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">02</span><span>El montaje: ROS 2, MVSim y RViz2</span></summary><div class="toc-links"><a href="#2-el-montaje-ros-2-mvsim-y-rviz2">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">03</span><span>El mundo XML y cómo configurar los sensores</span></summary><div class="toc-links"><a href="#3-el-mundo-xml-y-cómo-configurar-los-sensores">Ir al bloque</a><a href="#31-dónde-está-el-archivo">3.1. Dónde está el archivo</a><a href="#32-clases-de-vehículo-include-y-argumentos">3.2. Clases de vehículo, &lt;include&gt; y argumentos</a><a href="#33-cambiar-el-láser-assignment-5">3.3. Cambiar el láser (Assignment 5)</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">04</span><span>Los comandos de ROS 2 que hay que saber</span></summary><div class="toc-links"><a href="#4-los-comandos-de-ros-2-que-hay-que-saber">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">05</span><span>Los sensores del TurtleBot3 en ROS 2</span></summary><div class="toc-links"><a href="#5-los-sensores-del-turtlebot3-en-ros-2">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">06</span><span>El mensaje LaserScan</span></summary><div class="toc-links"><a href="#6-el-mensaje-laserscan">Ir al bloque</a><a href="#61-campos">6.1. Campos</a><a href="#62-solo-se-guardan-los-alcances">6.2. Solo se guardan los alcances</a><a href="#63-de-dónde-salen-los-800-haces">6.3. De dónde salen los 800 haces</a><a href="#64-qué-devuelve-un-haz-que-no-choca-con-nada">6.4. Qué devuelve un haz que no choca con nada</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">07</span><span>Ruido y configuración del láser</span></summary><div class="toc-links"><a href="#7-ruido-y-configuración-del-láser">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">08</span><span>Marcos de referencia y tf2</span></summary><div class="toc-links"><a href="#8-marcos-de-referencia-y-tf2">Ir al bloque</a><a href="#81-por-qué-hacen-falta">8.1. Por qué hacen falta</a><a href="#82-las-ideas-de-tf2">8.2. Las ideas de tf2</a><a href="#83-marcos-estándar-rep-105">8.3. Marcos estándar (REP 105)</a><a href="#84-el-árbol-del-turtlebot3">8.4. El árbol del TurtleBot3</a><a href="#85-lo-que-mide-cada-tf2_echo">8.5. Lo que mide cada tf2_echo</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">09</span><span>Los apartados opcionales</span></summary><div class="toc-links"><a href="#9-los-apartados-opcionales">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">10</span><span>Cálculos resueltos</span></summary><div class="toc-links"><a href="#10-cálculos-resueltos">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">11</span><span>Errores típicos</span></summary><div class="toc-links"><a href="#11-errores-típicos">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">12</span><span>Rellena el hueco</span></summary><div class="toc-links"><a href="#12-rellena-el-hueco">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">13</span><span>Preguntas de repaso (con solución)</span></summary><div class="toc-links"><a href="#13-preguntas-de-repaso-con-solución">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">14</span><span>Ideas esenciales para recordar</span></summary><div class="toc-links"><a href="#14-ideas-esenciales-para-recordar">Ir al bloque</a></div></details></nav><a class="toc-practice" href="index.html?lesson=L4&amp;kind=Pr%C3%A1ctica#filters">Practicar preguntas ↗</a></div></aside><div class="reading-main"><article class="notes-body"><section id="43-sensores-reales-con-ros-2-y-mvsim" class="level1">
+<h1>4.3 Sensores reales con ROS 2 y MVSim</h1>
+<p>Guía de estudio del notebook <a href="../../Practicas/uma_robotics_2027/Chapter%2004.Robot%20sensing/4.3%20Playing%20with%20ROS2.ipynb">4.3 Playing with ROS2</a>. Lo que se hizo en la máquina virtual y los resultados obtenidos están en <a href="../../Practicas/uma_robotics_2027/Chapter%2004.Robot%20sensing/4.3%20Resoluci%C3%B3n%20y%20gu%C3%ADa%20de%20entrega.md">4.3 Resolución y guía de entrega.md</a>. La teoría del tema está en el <a href="../../Teoria/Parcial-2/L4-Robot-sensing/Resumen_L4_Percepcion_Robot.md">resumen de L4</a>.</p>
+<p><strong>Enfoque de examen.</strong> Este notebook no tiene código Python: se trabaja con <strong>comandos de ROS 2</strong> en la terminal y con el <strong>XML del mundo</strong> de MVSim. Por eso las preguntas de examen probables son de tres tipos:</p>
+<ul>
+<li><strong>Qué comando</strong> hace algo, o <strong>qué opción</strong> falta en él.</li>
+<li><strong>Qué línea está mal</strong> en una secuencia de comandos o en un bloque XML.</li>
+<li><strong>Pequeños cálculos</strong> con los campos del mensaje <code>LaserScan</code> (índice de un haz, ángulo, número de haces) y con las transformaciones de tf (composición de poses).</li>
+</ul>
+<p>Al final hay cálculos resueltos, errores típicos, huecos para rellenar y preguntas de repaso.</p>
+<section id="índice" class="level2">
+<h2>Índice</h2>
+<ol type="1">
+<li><a href="#1-objetivo-y-lugar-en-el-temario">Objetivo y lugar en el temario</a></li>
+<li><a href="#2-el-montaje-ros-2-mvsim-y-rviz2">El montaje: ROS 2, MVSim y RViz2</a></li>
+<li><a href="#3-el-mundo-xml-y-cómo-configurar-los-sensores">El mundo XML y cómo configurar los sensores</a></li>
+<li><a href="#4-los-comandos-de-ros-2-que-hay-que-saber">Los comandos de ROS 2 que hay que saber</a></li>
+<li><a href="#5-los-sensores-del-turtlebot3-en-ros-2">Los sensores del TurtleBot3 en ROS 2</a></li>
+<li><a href="#6-el-mensaje-laserscan">El mensaje <code>LaserScan</code></a></li>
+<li><a href="#7-ruido-y-configuración-del-láser">Ruido y configuración del láser</a></li>
+<li><a href="#8-marcos-de-referencia-y-tf2">Marcos de referencia y tf2</a></li>
+<li><a href="#9-los-apartados-opcionales">Los apartados opcionales</a></li>
+<li><a href="#10-cálculos-resueltos">Cálculos resueltos</a></li>
+<li><a href="#11-errores-típicos">Errores típicos</a></li>
+<li><a href="#12-rellena-el-hueco">Rellena el hueco</a></li>
+<li><a href="#13-preguntas-de-repaso-con-solución">Preguntas de repaso (con solución)</a></li>
+<li><a href="#14-ideas-esenciales-para-recordar">Ideas esenciales para recordar</a></li>
+</ol>
+</section>
+<section id="1-objetivo-y-lugar-en-el-temario" class="level2">
+<h2>1. Objetivo y lugar en el temario</h2>
+<p>En las prácticas 4.1 y 4.2 los sensores eran <strong>modelos nuestros</strong>: un sensor de rango y rumbo para landmarks y una clase <code>Laser2D</code> hecha en Python. En la 4.3 se trabaja con los sensores de un robot simulado de forma realista, el <strong>TurtleBot3 Burger</strong> del simulador <strong>MVSim</strong>, a través de <strong>ROS 2</strong>.</p>
+<p>El notebook enseña cuatro cosas:</p>
+<ol type="1">
+<li><strong>Configurar los sensores</strong> de un robot desde el archivo del mundo (Assignment 1).</li>
+<li><strong>Inspeccionar</strong> qué publica cada sensor: topic, tipo de mensaje, marco y frecuencia (Assignment 2).</li>
+<li><strong>Entender el mensaje del láser</strong>, <code>sensor_msgs/msg/LaserScan</code>, y relacionarlo con la clase <code>Laser2D</code> de la 4.2 (Assignments 3 a 5): campos, ruido y alcance máximo.</li>
+<li><strong>Situar los sensores con tf2</strong>: el árbol de marcos del robot y cómo tf2 compone poses igual que el operador ⊕ del tema 3 (Assignment 6).</li>
+</ol>
+</section>
+<section id="2-el-montaje-ros-2-mvsim-y-rviz2" class="level2">
+<h2>2. El montaje: ROS 2, MVSim y RViz2</h2>
+<p><strong>Intuición.</strong> ROS 2 es un conjunto de programas (<strong>nodos</strong>) que se ejecutan a la vez y se pasan <strong>mensajes</strong> por canales con nombre (<strong>topics</strong>). En esta práctica hay dos nodos principales:</p>
+<ul>
+<li><strong><code>mvsim</code></strong>: el simulador. Mueve el robot y genera las lecturas de sus sensores, que publica en topics (<code>/laser1</code>, <code>/imu1</code>, <code>/odom</code>…). También publica las transformaciones entre marcos en <code>/tf</code>.</li>
+<li><strong><code>rviz2</code></strong>: el visualizador. Se <strong>suscribe</strong> a esos topics y los dibuja: el robot, sus ejes de tf y los puntos del láser.</li>
+</ul>
+<p>Los dos se arrancan juntos con un único <strong>launch</strong>:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> launch mvsim demo_turtlebot_world.launch.py</span></code></pre></div>
+<p><code>ros2 launch &lt;paquete&gt; &lt;archivo&gt;</code> ejecuta un archivo de lanzamiento, que arranca varios nodos con sus parámetros. Para moverlo, se publica la velocidad deseada en <code>/cmd_vel</code> (mensaje <code>geometry_msgs/msg/Twist</code>).</p>
+<p><strong>Por qué el notebook «no se ejecuta».</strong> ROS 2 corre en la terminal de la máquina con ROS (la VM), no dentro de Jupyter. El notebook es una guía y un informe: se pegan los comandos, sus salidas y capturas.</p>
+<p><strong>Mensajes de la consola que son normales:</strong></p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Mensaje</th>
+<th>Qué significa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Stereo is NOT SUPPORTED</code></td>
+<td>RViz2 no tiene modo de visión 3D estéreo. No afecta.</td>
+</tr>
+<tr>
+<td><code>Subscribing to: /camera1_points</code> y panel <em>Image</em> con «No Image»</td>
+<td>La configuración de RViz2 espera una cámara, pero se ha quitado. RViz2 se suscribe, pero nadie publica.</td>
+</tr>
+<tr>
+<td><code>rviz_plugin_tutorials/Teleop failed to load</code></td>
+<td>Falta un panel de un paquete de tutoriales. Solo falta ese panel.</td>
+</tr>
+<tr>
+<td><code>World file load done.</code></td>
+<td>El mundo (con nuestros cambios) se ha cargado bien.</td>
+</tr>
+<tr>
+<td><code>Physics simulation timestep ... 5.00 ms</code></td>
+<td>La física avanza en pasos de 5 ms (200 Hz).</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="3-el-mundo-xml-y-cómo-configurar-los-sensores" class="level2">
+<h2>3. El mundo XML y cómo configurar los sensores</h2>
+<section id="31-dónde-está-el-archivo" class="level3">
+<h3>3.1. Dónde está el archivo</h3>
+<p>El mundo <code>demo_turtlebot_world.world.xml</code> es parte del paquete <code>mvsim</code> instalado. Para encontrarlo:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> pkg prefix mvsim                                  <span class="co"># -&gt; /opt/ros/jazzy</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="va">$(</span><span class="ex">ros2</span> pkg prefix mvsim<span class="va">)</span>/share/mvsim/mvsim_tutorial</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="kw">|</span> <span class="fu">grep</span> turtlebot</span></code></pre></div>
+<ul>
+<li><code>ros2 pkg prefix &lt;paquete&gt;</code> dice <strong>dónde está instalado</strong> un paquete. Los archivos de datos de un paquete están en <code>&lt;prefix&gt;/share/&lt;paquete&gt;/</code>.</li>
+<li>Está bajo <code>/opt</code>, que es del sistema, así que hace falta <strong><code>sudo</code></strong> para guardar cambios (<code>sudo nano archivo</code>). Conviene guardar antes una copia: <code>sudo cp archivo archivo.bak</code>.</li>
+</ul>
+</section>
+<section id="32-clases-de-vehículo-include-y-argumentos" class="level3">
+<h3>3.2. Clases de vehículo, <code>&lt;include&gt;</code> y argumentos</h3>
+<p>El robot no se define entero en el mundo: se define en una <strong>clase de vehículo</strong> (<code>definitions/turtlebot3_burger.vehicle.xml</code>), que el mundo carga con un <code>&lt;include&gt;</code>, y después se crea un vehículo de esa clase:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">include</span> <span class="ot">file=</span><span class="st">&quot;../definitions/turtlebot3_burger.vehicle.xml&quot;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="ot">default_sensors=</span><span class="st">&quot;false&quot;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>/&gt;</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">vehicle</span> <span class="ot">name=</span><span class="st">&quot;r1&quot;</span> <span class="ot">class=</span><span class="st">&quot;turtlebot3_burger&quot;</span>&gt;</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">init_pose</span>&gt;-2 -0.5 0&lt;/<span class="kw">init_pose</span>&gt;  <span class="co">&lt;!-- x, y, yaw(deg) en el mundo --&gt;</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">include</span> <span class="ot">file=</span><span class="st">&quot;../definitions/rplidar-a2.sensor.xml&quot;</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>      <span class="ot">raytrace_3d=</span><span class="st">&quot;true&quot;</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>      <span class="ot">sensor_x=</span><span class="st">&quot;-0.032&quot;</span> <span class="ot">sensor_z=</span><span class="st">&quot;0.171&quot;</span> <span class="ot">sensor_yaw=</span><span class="st">&quot;0&quot;</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>      <span class="ot">sensor_hz=</span><span class="st">&quot;10.0&quot;</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>      <span class="ot">sensor_name=</span><span class="st">&quot;laser1&quot;</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    /&gt;</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">include</span> <span class="ot">file=</span><span class="st">&quot;../definitions/imu.sensor.xml&quot;</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>      <span class="ot">sensor_x=</span><span class="st">&quot;0.0&quot;</span> <span class="ot">sensor_y=</span><span class="st">&quot;0.05&quot;</span> <span class="ot">sensor_z=</span><span class="st">&quot;0.145&quot;</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>      <span class="ot">sensor_period_sec=</span><span class="st">&quot;$f{1/200.0}&quot;</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>      <span class="ot">sensor_name=</span><span class="st">&quot;imu1&quot;</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    /&gt;</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">vehicle</span>&gt;</span></code></pre></div>
+<ul>
+<li><p><strong>Los atributos de un <code>&lt;include&gt;</code> son argumentos</strong> que se pasan al archivo incluido. Dentro de él aparecen como <code>${nombre|valor_por_defecto}</code>. Por ejemplo, en <code>rplidar-a2.sensor.xml</code>:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">range_std_noise</span>&gt;${sensor_std_noise|0.01}&lt;/<span class="kw">range_std_noise</span>&gt;</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">max_range</span>&gt;${max_range|16.0}&lt;/<span class="kw">max_range</span>&gt;</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">nrays</span>&gt;$f{(1/${sensor_hz|10})/125e-6}&lt;/<span class="kw">nrays</span>&gt;</span></code></pre></div>
+<p>Si no se pasa <code>sensor_std_noise</code>, vale 0.01; si no se pasa <code>max_range</code>, vale 16.0. <code>$f{...}</code> evalúa una fórmula.</p></li>
+<li><p><strong><code>default_sensors="false"</code></strong> en el <code>&lt;include&gt;</code> de la <strong>clase</strong> hace que el robot llegue sin sensores (la clase traía láser, cámara RGB e IMU). Se hizo para quitar la cámara Full HD, que en una VM sin GPU ralentiza mucho la simulación.</p></li>
+<li><p><strong>Los sensores propios</strong> se montan dentro de <code>&lt;vehicle name="r1"&gt;</code>, justo después de <code>&lt;init_pose&gt;</code>. Su pose sobre el robot se da con <code>sensor_x</code>, <code>sensor_y</code>, <code>sensor_z</code> y <code>sensor_yaw</code>. Sus nombres (<code>laser1</code>, <code>imu1</code>) son los de los topics y los frames.</p></li>
+<li><p>La clase de vehículo <strong>es compartida</strong> por todos los mundos, así que no se toca: todo se cambia desde el mundo.</p></li>
+</ul>
+</section>
+<section id="33-cambiar-el-láser-assignment-5" class="level3">
+<h3>3.3. Cambiar el láser (Assignment 5)</h3>
+<p>Se añaden dos argumentos al <code>&lt;include&gt;</code> <strong>del láser</strong> (no al de la clase):</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">include</span> <span class="ot">file=</span><span class="st">&quot;../definitions/rplidar-a2.sensor.xml&quot;</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="ot">sensor_std_noise=</span><span class="st">&quot;0.10&quot;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="ot">max_range=</span><span class="st">&quot;3.0&quot;</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="ot">raytrace_3d=</span><span class="st">&quot;true&quot;</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="er">...</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>/&gt;</span></code></pre></div>
+<ul>
+<li><code>sensor_std_noise="0.10"</code>: σ del ruido en distancia, de 0.01 a 0.10 m.</li>
+<li><code>max_range="3.0"</code>: alcance máximo, de 16 a 3 m.</li>
+<li><strong>Hay que relanzar la simulación</strong>: el mundo solo se lee al arrancar. Si <code>range_max</code> sigue en 16.0 tras el cambio, o el cambio no se guardó o no se relanzó.</li>
+<li>Al terminar, se restauran los valores quitando las dos líneas.</li>
+</ul>
+</section>
+</section>
+<section id="4-los-comandos-de-ros-2-que-hay-que-saber" class="level2">
+<h2>4. Los comandos de ROS 2 que hay que saber</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Comando</th>
+<th>Qué hace</th>
+<th>Se usó para</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ros2 topic list -t</code></td>
+<td>Lista los topics <strong>con su tipo</strong> de mensaje (<code>-t</code>)</td>
+<td>Tabla del Assignment 2</td>
+</tr>
+<tr>
+<td><code>ros2 topic echo &lt;topic&gt; --once</code></td>
+<td>Imprime <strong>un solo</strong> mensaje y termina</td>
+<td>Ver un mensaje</td>
+</tr>
+<tr>
+<td><code>... --no-arr</code></td>
+<td>Oculta los arrays largos (muestra <code>&lt;sequence ..., length: 800&gt;</code>)</td>
+<td>Leer <code>frame_id</code> y parámetros del láser</td>
+</tr>
+<tr>
+<td><code>... --field ranges</code></td>
+<td>Imprime solo ese campo (admite anidados: <code>header.stamp</code>)</td>
+<td>Ver los alcances</td>
+</tr>
+<tr>
+<td><code>ros2 topic hz &lt;topic&gt;</code></td>
+<td>Mide la <strong>frecuencia</strong> de publicación (Ctrl+C para parar)</td>
+<td>Columna <em>Rate</em></td>
+</tr>
+<tr>
+<td><code>ros2 topic info &lt;topic&gt;</code></td>
+<td>Tipo y <strong>número de publicadores y suscriptores</strong></td>
+<td>Ver que nadie publica la cámara</td>
+</tr>
+<tr>
+<td><code>ros2 interface show &lt;tipo&gt;</code></td>
+<td>Definición de un tipo de mensaje con sus comentarios</td>
+<td>Campos de <code>LaserScan</code></td>
+</tr>
+<tr>
+<td><code>ros2 param dump &lt;nodo&gt;</code></td>
+<td>Todos los parámetros de un nodo</td>
+<td><code>period_ms_publish_tf</code>, <code>simul_rate</code>…</td>
+</tr>
+<tr>
+<td><code>ros2 topic pub -r 10 /cmd_vel geometry_msgs/msg/Twist "{linear: {x: 0.1}, angular: {z: 0.3}}"</code></td>
+<td>Publica un mensaje 10 veces por segundo (<code>-r</code>)</td>
+<td>Mover el robot</td>
+</tr>
+<tr>
+<td><code>ros2 run tf2_tools view_frames</code></td>
+<td>Escucha <code>/tf</code> 5 s y guarda el árbol en un PDF</td>
+<td>Árbol tf (Assignment 6.1)</td>
+</tr>
+<tr>
+<td><code>ros2 run tf2_ros tf2_echo &lt;origen&gt; &lt;destino&gt;</code></td>
+<td>Imprime la transformación: la <strong>pose de <code>destino</code> en el marco <code>origen</code></strong></td>
+<td>Assignments 6.2–6.4</td>
+</tr>
+<tr>
+<td><code>ros2 run tf2_ros static_transform_publisher --x 0.9 --y 0.5 --frame-id odom --child-frame-id landmark</code></td>
+<td>Publica un marco fijo nuevo</td>
+<td>Opcional del landmark</td>
+</tr>
+<tr>
+<td><code>ros2 bag record &lt;topics…&gt;</code> / <code>ros2 bag info</code> / <code>ros2 bag play</code></td>
+<td>Graba, describe y reproduce datos</td>
+<td>Opcional del rosbag</td>
+</tr>
+</tbody>
+</table>
+<p>Patrones que conviene tener claros:</p>
+<ul>
+<li><strong><code>ros2 run &lt;paquete&gt; &lt;ejecutable&gt;</code></strong> ejecuta un nodo suelto; <strong><code>ros2 launch &lt;paquete&gt; &lt;archivo.launch.py&gt;</code></strong> arranca varios.</li>
+<li><strong><code>topic</code></strong> trabaja con datos en vivo (<code>list</code>, <code>echo</code>, <code>hz</code>, <code>info</code>, <code>pub</code>); <strong><code>interface</code></strong> con <strong>tipos</strong> de mensaje (<code>show</code>).</li>
+<li>Con <code>tf2_echo</code>, <strong>el orden importa</strong>: <code>tf2_echo base_link laser1</code> da la pose del láser en el robot, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">[</mo><mi>−</mi><mn>0.032</mn><mo>,</mo><mn>0</mn><mo>,</mo><mn>0.171</mn><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">[-0.032, 0, 0.171]</annotation></semantics></math>; <code>tf2_echo laser1 base_link</code> da la inversa, la pose del robot vista desde el láser, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">[</mo><mn>0.032</mn><mo>,</mo><mn>0</mn><mo>,</mo><mi>−</mi><mn>0.171</mn><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">[0.032, 0, -0.171]</annotation></semantics></math>.</li>
+</ul>
+</section>
+<section id="5-los-sensores-del-turtlebot3-en-ros-2" class="level2">
+<h2>5. Los sensores del TurtleBot3 en ROS 2</h2>
+<p>Todo mensaje de un sensor empieza con un <strong><code>header</code></strong> (<code>std_msgs/msg/Header</code>) con:</p>
+<ul>
+<li><code>stamp</code>: <strong>cuándo</strong> se tomó la medida.</li>
+<li><code>frame_id</code>: <strong>dónde</strong>, es decir, el marco de referencia en el que están expresados los datos.</li>
+</ul>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+</colgroup>
+<thead>
+<tr>
+<th>Sensor</th>
+<th>Topic</th>
+<th>Tipo</th>
+<th><code>frame_id</code></th>
+<th>Configurado</th>
+<th>Medido</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Láser 2D</td>
+<td><code>/laser1</code></td>
+<td><code>sensor_msgs/msg/LaserScan</code></td>
+<td><code>laser1</code></td>
+<td><code>sensor_hz="10.0"</code> → 10 Hz</td>
+<td>~9.7 Hz</td>
+</tr>
+<tr>
+<td>IMU</td>
+<td><code>/imu1</code></td>
+<td><code>sensor_msgs/msg/Imu</code></td>
+<td><code>imu1</code></td>
+<td><code>sensor_period_sec="$f{1/200.0}"</code> → 200 Hz</td>
+<td>~147 Hz</td>
+</tr>
+<tr>
+<td>Odometría</td>
+<td><code>/odom</code></td>
+<td><code>nav_msgs/msg/Odometry</code></td>
+<td><code>odom</code> (<code>child_frame_id: base_link</code>)</td>
+<td><code>period_ms_publish_tf: 20.0</code> → 50 Hz</td>
+<td>~36 Hz</td>
+</tr>
+</tbody>
+</table>
+<p>Detalles que se vieron en la práctica:</p>
+<ul>
+<li><strong>La IMU</strong> en reposo mide <code>linear_acceleration.z</code> ≈ 9.83 m/s²: la gravedad. La velocidad angular es casi cero, con algo de ruido.</li>
+<li><strong>La odometría</strong> empieza en (0, 0, 0) aunque el robot esté en (−2, −0.5) en el mundo: su origen es la pose inicial del robot.</li>
+<li><strong>Por qué la IMU y la odometría salen por debajo de lo configurado:</strong> el bucle de MVSim corre a <code>simul_rate: 100</code> Hz (una vuelta cada 10 ms). Para dar 200 Hz, la IMU tiene que generar <strong>dos lecturas por vuelta</strong>. Sus sellos de tiempo llegan por parejas casi iguales cada ~10 ms, pero no siempre hay dos, y en la VM salen ~150–165 por segundo. La odometría se publica «cuando han pasado 20 ms», comprobado en cada vuelta de 10 ms, así que a veces sale a los 20 ms y a veces a los 30 ms (~36 Hz de media). El láser, a 10 Hz, no tiene ese problema.</li>
+<li><strong>Topics sin publicador.</strong> <code>ros2 topic list</code> muestra todo topic que tenga publicadores <strong>o suscriptores</strong>. <code>/camera1/image_raw</code> aparece aunque se quitó la cámara, porque RViz2 está suscrito: <code>ros2 topic info</code> da <code>Publisher count: 0</code>, <code>Subscription count: 1</code>.</li>
+</ul>
+</section>
+<section id="6-el-mensaje-laserscan" class="level2">
+<h2>6. El mensaje <code>LaserScan</code></h2>
+<section id="61-campos" class="level3">
+<h3>6.1. Campos</h3>
+<pre class="text"><code>std_msgs/Header header
+float32 angle_min        # ángulo del primer haz [rad]
+float32 angle_max        # ángulo del último haz [rad]
+float32 angle_increment  # separación entre haces [rad]
+float32 time_increment   # tiempo entre medidas [s]
+float32 scan_time        # tiempo entre scans [s]
+float32 range_min        # alcance mínimo [m]
+float32 range_max        # alcance máximo [m]
+float32[] ranges         # alcances [m] (descartar &lt; range_min o &gt; range_max)
+float32[] intensities    # intensidades (vacío si el sensor no las da)</code></pre>
+<p>Valores del TurtleBot3 en la práctica:</p>
+<table>
+<thead>
+<tr>
+<th>Parámetro de <code>Laser2D</code> (4.2)</th>
+<th>Campo(s) de <code>LaserScan</code></th>
+<th>Valor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>FOV</code></td>
+<td><code>angle_max − angle_min</code></td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>π</mi><mo>−</mo><mo stretchy="false" form="prefix">(</mo><mi>−</mi><mi>π</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>2</mn><mi>π</mi></mrow><annotation encoding="application/x-tex">\pi - (-\pi) = 2\pi</annotation></semantics></math> rad = 360°</td>
+</tr>
+<tr>
+<td><code>resolution</code></td>
+<td><code>angle_increment</code></td>
+<td>0.0078638 rad = 0.4506°</td>
+</tr>
+<tr>
+<td><code>max_distance</code></td>
+<td><code>range_max</code></td>
+<td>16.0 m (y <code>range_min</code> = 0.02 m)</td>
+</tr>
+<tr>
+<td>Número de haces</td>
+<td>longitud de <code>ranges</code></td>
+<td>800</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="62-solo-se-guardan-los-alcances" class="level3">
+<h3>6.2. Solo se guardan los alcances</h3>
+<p>La 4.2 devolvía pares <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">[</mo><msub><mi>r</mi><mi>k</mi></msub><mo>,</mo><msub><mi>α</mi><mi>k</mi></msub><msup><mo stretchy="false" form="postfix">]</mo><mi>T</mi></msup></mrow><annotation encoding="application/x-tex">[r_k, \alpha_k]^T</annotation></semantics></math>. <code>LaserScan</code> <strong>no guarda los ángulos</strong>, porque los haces siempre salen a los mismos ángulos, equiespaciados. Guarda <code>angle_min</code> y <code>angle_increment</code>, y el ángulo de cada alcance se deduce de su <strong>posición <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math></strong> en <code>ranges</code> (empezando en <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">k = 0</annotation></semantics></math>):</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><menclose notation="box"><mrow><msub><mi>α</mi><mi>k</mi></msub><mo>=</mo><mtext mathvariant="monospace">𝚊𝚗𝚐𝚕𝚎_𝚖𝚒𝚗</mtext><mo>+</mo><mi>k</mi><mo>⋅</mo><mtext mathvariant="monospace">𝚊𝚗𝚐𝚕𝚎_𝚒𝚗𝚌𝚛𝚎𝚖𝚎𝚗𝚝</mtext></mrow></menclose><mspace width="2.0em"></mspace><mo>⇔</mo><mspace width="2.0em"></mspace><mi>k</mi><mo>=</mo><mfrac><mrow><mi>α</mi><mo>−</mo><mtext mathvariant="monospace">𝚊𝚗𝚐𝚕𝚎_𝚖𝚒𝚗</mtext></mrow><mtext mathvariant="monospace">𝚊𝚗𝚐𝚕𝚎_𝚒𝚗𝚌𝚛𝚎𝚖𝚎𝚗𝚝</mtext></mfrac></mrow><annotation encoding="application/x-tex">
+\boxed{\alpha_k = \texttt{angle\_min} + k \cdot \texttt{angle\_increment}}
+\qquad\Longleftrightarrow\qquad
+k = \frac{\alpha - \texttt{angle\_min}}{\texttt{angle\_increment}}
+</annotation></semantics></math></p>
+<p>Así se envía la mitad de datos: 800 <code>float32</code> por scan (3.2 kB) en lugar de 1600.</p>
+<p>Los ángulos van <strong>en sentido antihorario</strong> alrededor del eje Z, con <strong>0 hacia delante</strong> (el eje <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>x</mi><annotation encoding="application/x-tex">x</annotation></semantics></math> del láser):</p>
+<table>
+<thead>
+<tr>
+<th><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math></th>
+<th>Ángulo</th>
+<th>Dirección</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>−180°</td>
+<td>atrás</td>
+</tr>
+<tr>
+<td>200</td>
+<td>≈ −90°</td>
+<td>derecha</td>
+</tr>
+<tr>
+<td>399–400</td>
+<td>≈ 0° (−0.225° y +0.225°)</td>
+<td><strong>delante</strong></td>
+</tr>
+<tr>
+<td>600</td>
+<td>≈ +90°</td>
+<td>izquierda</td>
+</tr>
+<tr>
+<td>799</td>
+<td>+180°</td>
+<td>atrás</td>
+</tr>
+</tbody>
+</table>
+<p><strong>El primer y el último haz apuntan a la misma dirección.</strong> Con 360° y los dos extremos incluidos, el haz 0 (−180°) y el 799 (+180°) se solapan. Por eso hay 800 haces pero 799 intervalos: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mi>π</mi><mi>/</mi><mn>799</mn><mo>=</mo><mn>0.0078638</mn></mrow><annotation encoding="application/x-tex">2\pi / 799 = 0.0078638</annotation></semantics></math> rad.</p>
+</section>
+<section id="63-de-dónde-salen-los-800-haces" class="level3">
+<h3>6.3. De dónde salen los 800 haces</h3>
+<p>El RPLIDAR A2 gira y dispara a ritmo fijo, un disparo cada 125 µs (8 kHz). El archivo del sensor calcula:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>n</mi><mtext mathvariant="normal">rays</mtext></msub><mo>=</mo><mfrac><mrow><mn>1</mn><mi>/</mi><mtext mathvariant="monospace">𝚜𝚎𝚗𝚜𝚘𝚛_𝚑𝚣</mtext></mrow><mrow><mn>125</mn><mo>⋅</mo><msup><mn>10</mn><mrow><mi>−</mi><mn>6</mn></mrow></msup></mrow></mfrac><mo>=</mo><mfrac><mn>0.1</mn><mn>0.000125</mn></mfrac><mo>=</mo><mn>800</mn></mrow><annotation encoding="application/x-tex">
+n_\text{rays} = \frac{1/\texttt{sensor\_hz}}{125\cdot10^{-6}} = \frac{0.1}{0.000125} = 800
+</annotation></semantics></math></p>
+<p>Por eso hay un compromiso: más haces por vuelta solo se consiguen girando más despacio (menos scans por segundo).</p>
+</section>
+<section id="64-qué-devuelve-un-haz-que-no-choca-con-nada" class="level3">
+<h3>6.4. Qué devuelve un haz que no choca con nada</h3>
+<p>Con <code>max_range="3.0"</code>, <code>range_max</code> pasa a 3.0, y <strong>los haces sin obstáculo dentro del alcance valen exactamente <code>range_max</code> = 3.0</strong> (en la práctica, 144 de 800). No son <code>inf</code> ni <code>nan</code>. Una lectura igual a <code>range_max</code> significa «no hay nada hasta 3 m», <strong>no</strong> «hay un obstáculo a 3 m». RViz2 no dibuja esas lecturas.</p>
+<p>Si un algoritmo de mapeo las tratara como obstáculos, pondría <strong>paredes fantasma</strong> en un arco de 3 m alrededor del robot en todas las zonas libres.</p>
+</section>
+</section>
+<section id="7-ruido-y-configuración-del-láser" class="level2">
+<h2>7. Ruido y configuración del láser</h2>
+<p>En <code>rplidar-a2.sensor.xml</code> hay dos ruidos gaussianos de media cero:</p>
+<ul>
+<li><strong>En distancia:</strong> <code>range_std_noise</code> = <code>${sensor_std_noise|0.01}</code> → σ_r = 0.01 m por defecto.</li>
+<li><strong>En ángulo:</strong> <code>angle_std_noise_deg</code> = <code>${sensor_std_noise_deg|0.01}</code> → 0.01°.</li>
+</ul>
+<p><strong>Cómo se mide (Assignment 4).</strong> Con el robot <strong>quieto</strong> (sin publicar en <code>/cmd_vel</code>), se toman varios scans (<code>ros2 topic echo /laser1 --once --field ranges</code>) y se compara <strong>el mismo haz</strong> <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math> en todos. Si el robot no se mueve, el valor real es el mismo, y lo que cambia es el ruido.</p>
+<p>Resultado de 10 scans: el mismo haz varía ±1–2 cm, con desviación típica mediana de 0.013 m sobre los 800 haces, del orden de σ_r = 0.01 m. Es igual a 1.6 m que a 4.3 m: un ruido de σ fija, como el de la 4.2. Unos pocos haces varían más (hasta 4 cm), por efectos de la simulación con <code>raytrace_3d</code>.</p>
+<p><strong>Con <code>sensor_std_noise="0.10"</code></strong> (Assignment 5), los puntos de RViz2 forman nubes «gruesas» en lugar de líneas finas, y haces vecinos a 1.6 m dan entre 1.52 y 1.75 m.</p>
+</section>
+<section id="8-marcos-de-referencia-y-tf2" class="level2">
+<h2>8. Marcos de referencia y tf2</h2>
+<section id="81-por-qué-hacen-falta" class="level3">
+<h3>8.1. Por qué hacen falta</h3>
+<p>Los alcances del láser están en el marco <strong>del láser</strong> (<code>laser1</code>). Para llevar un punto al mundo hacen falta la pose del láser sobre el robot, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>𝐱</mi><mi>s</mi></msub><annotation encoding="application/x-tex">\mathbf{x}_s</annotation></semantics></math>, y la pose del robot, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>𝐱</mi><annotation encoding="application/x-tex">\mathbf{x}</annotation></semantics></math>, y componerlas: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝐱</mi><mo>⊕</mo><msub><mi>𝐱</mi><mi>s</mi></msub><mo>⊕</mo><msub><mi>𝐳</mi><mi>c</mi></msub></mrow><annotation encoding="application/x-tex">\mathbf{x} \oplus \mathbf{x}_s \oplus \mathbf{z}_c</annotation></semantics></math>. En la 4.2 se tomó el atajo <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>𝐱</mi><mi>s</mi></msub><mo>=</mo><mo stretchy="false" form="prefix">[</mo><mn>0</mn><mo>,</mo><mn>0</mn><mo>,</mo><mn>0</mn><msup><mo stretchy="false" form="postfix">]</mo><mi>T</mi></msup></mrow><annotation encoding="application/x-tex">\mathbf{x}_s = [0, 0, 0]^T</annotation></semantics></math>; aquí el láser está 3.2 cm detrás del centro y a 17.1 cm de altura.</p>
+</section>
+<section id="82-las-ideas-de-tf2" class="level3">
+<h3>8.2. Las ideas de tf2</h3>
+<ul>
+<li><strong>Frame y transformación.</strong> Un <em>frame</em> es un sistema de referencia con nombre. Una transformación padre → hijo es <strong>la pose del hijo expresada en el padre</strong> (traslación y rotación; ROS guarda la rotación como cuaternión, pero la muestra también como roll, pitch, yaw).</li>
+<li><strong>Árbol.</strong> Cada frame tiene <strong>un solo padre</strong>, así que hay un único camino entre dos frames. Para obtener la transformación entre dos, tf2 <strong>compone</strong> las del camino, igual que ⊕.</li>
+<li><strong><code>/tf</code> y <code>/tf_static</code>.</strong> Las transformaciones que cambian (la pose del robot) van en <code>/tf</code>; las fijas (la pose de un sensor), en <code>/tf_static</code>, aunque algunos nodos publican también las fijas en <code>/tf</code>.</li>
+<li><strong>Sello de tiempo.</strong> Cada transformación lleva su <code>stamp</code>, así que tf2 puede dar la transformación en el instante de cada medida.</li>
+</ul>
+</section>
+<section id="83-marcos-estándar-rep-105" class="level3">
+<h3>8.3. Marcos estándar (REP 105)</h3>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Frame</th>
+<th>Qué es</th>
+<th>Propiedad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>map</code></td>
+<td>Fijo en el mundo</td>
+<td>La pose en él no deriva, pero puede <strong>saltar</strong> al corregirse</td>
+</tr>
+<tr>
+<td><code>odom</code></td>
+<td>Fijo en el mundo; la odometría da la pose del robot en él</td>
+<td><strong>Continua</strong> (sin saltos), pero <strong>deriva</strong> con el tiempo</td>
+</tr>
+<tr>
+<td><code>base_link</code></td>
+<td>Unido al robot</td>
+<td><code>odom → base_link</code> = pose del robot según la odometría</td>
+</tr>
+<tr>
+<td><code>base_footprint</code></td>
+<td>Proyección de <code>base_link</code> en el suelo</td>
+<td>En el TurtleBot3 coincide con <code>base_link</code></td>
+</tr>
+<tr>
+<td><code>laser1</code>, <code>imu1</code></td>
+<td>Unidos a cada sensor</td>
+<td>Cuelgan de <code>base_link</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>map → odom</code> lo publica un nodo de localización para corregir la deriva. En MVSim no hay localización (<code>do_fake_localization: true</code>) y se publica como la identidad.</p>
+</section>
+<section id="84-el-árbol-del-turtlebot3" class="level3">
+<h3>8.4. El árbol del TurtleBot3</h3>
+<pre class="text"><code>map ─► odom ─► base_link ─┬─► base_footprint   (estática: rate 10000, stamp 0)
+                          ├─► laser1           (~10 Hz, con cada scan)
+                          └─► imu1             (~160 Hz, con cada lectura)</code></pre>
+<ul>
+<li>Frames de sensores: <code>laser1</code> e <code>imu1</code>, hijos de <code>base_link</code>.</li>
+<li>El que no sale en la figura del notebook: <code>base_footprint</code>.</li>
+<li><code>view_frames</code> muestra las transformaciones estáticas con <em>rate</em> 10000 y <em>most recent transform</em> 0: valen para cualquier instante.</li>
+<li>MVSim publica las poses de los sensores en <code>/tf</code> con cada lectura, aunque sean fijas.</li>
+</ul>
+</section>
+<section id="85-lo-que-mide-cada-tf2_echo" class="level3">
+<h3>8.5. Lo que mide cada <code>tf2_echo</code></h3>
+<ul>
+<li><strong><code>tf2_echo base_link laser1</code></strong> → traslación <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">[</mo><mi>−</mi><mn>0.032</mn><mo>,</mo><mn>0</mn><mo>,</mo><mn>0.171</mn><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">[-0.032, 0, 0.171]</annotation></semantics></math>, rotación nula: exactamente el <code>&lt;include&gt;</code> (<code>sensor_x="-0.032"</code>, <code>sensor_z="0.171"</code>, <code>sensor_yaw="0"</code>; <code>sensor_y</code> no se da y vale 0).</li>
+<li><strong><code>tf2_echo odom base_link</code></strong> mientras el robot se mueve → la pose del robot según la odometría. Con <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi><mo>=</mo><mn>0.1</mn></mrow><annotation encoding="application/x-tex">v = 0.1</annotation></semantics></math> m/s y <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ω</mi><mo>=</mo><mn>0.3</mn></mrow><annotation encoding="application/x-tex">\omega = 0.3</annotation></semantics></math> rad/s describe un arco de radio ≈ <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi><mi>/</mi><mi>ω</mi></mrow><annotation encoding="application/x-tex">v/\omega</annotation></semantics></math>.</li>
+<li><strong><code>tf2_echo odom laser1</code></strong> con el robot parado → la pose del láser en <code>odom</code>, que coincide con <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝐱</mi><mo>⊕</mo><msub><mi>𝐱</mi><mi>s</mi></msub></mrow><annotation encoding="application/x-tex">\mathbf{x} \oplus \mathbf{x}_s</annotation></semantics></math> calculado a mano (cálculo C7).</li>
+</ul>
+<p>En la salida, el yaw es <strong>el último valor de <code>Rotation: in RPY (radian)</code></strong>.</p>
+</section>
+</section>
+<section id="9-los-apartados-opcionales" class="level2">
+<h2>9. Los apartados opcionales</h2>
+<p>No se hicieron en la práctica, pero las ideas pueden caer:</p>
+<ul>
+<li><strong>Observar un landmark con tf.</strong> Se publica un frame fijo <code>landmark</code> con <code>static_transform_publisher</code> (padre <code>odom</code>) y se pide <code>tf2_echo laser1 landmark</code>: su traslación <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><msub><mi>x</mi><mi>l</mi></msub><mo>,</mo><msub><mi>y</mi><mi>l</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(x_l, y_l)</annotation></semantics></math> es el landmark visto desde el láser. De ahí, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>r</mi><mo>=</mo><msqrt><mrow><msubsup><mi>x</mi><mi>l</mi><mn>2</mn></msubsup><mo>+</mo><msubsup><mi>y</mi><mi>l</mi><mn>2</mn></msubsup></mrow></msqrt></mrow><annotation encoding="application/x-tex">r = \sqrt{x_l^2 + y_l^2}</annotation></semantics></math> y <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>=</mo><mrow><mi mathvariant="normal">atan2</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><msub><mi>y</mi><mi>l</mi></msub><mo>,</mo><msub><mi>x</mi><mi>l</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\alpha = \operatorname{atan2}(y_l, x_l)</annotation></semantics></math>: la <strong>observación predicha</strong> <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>𝐳</mi><mo accent="true">̂</mo></mover><mo>=</mo><mi>𝐡</mi><mo stretchy="false" form="prefix">(</mo><mi>𝐱</mi><mo>,</mo><mi>𝐦</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\hat{\mathbf{z}} = \mathbf{h}(\mathbf{x}, \mathbf{m})</annotation></semantics></math> de la 4.1. El haz que apunta ahí es <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mi>α</mi><mo>−</mo><mtext mathvariant="monospace">𝚊𝚗𝚐𝚕𝚎_𝚖𝚒𝚗</mtext><mo stretchy="false" form="postfix">)</mo><mi>/</mi><mtext mathvariant="monospace">𝚊𝚗𝚐𝚕𝚎_𝚒𝚗𝚌𝚛𝚎𝚖𝚎𝚗𝚝</mtext></mrow><annotation encoding="application/x-tex">k = (\alpha - \texttt{angle\_min})/\texttt{angle\_increment}</annotation></semantics></math>. Su lectura es <strong>menor que <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>r</mi><annotation encoding="application/x-tex">r</annotation></semantics></math></strong>, porque el láser mide la superficie de la columna, no su centro (cálculo C8).</li>
+<li><strong>Rosbag.</strong> <code>ros2 bag record /laser1 /imu1 /odom /tf /tf_static</code> graba los mensajes; <code>ros2 bag info &lt;carpeta&gt;</code> muestra duración, topics y número de mensajes; <code>ros2 bag play &lt;carpeta&gt;</code> los vuelve a publicar <strong>sin el simulador</strong>. Así se crean los datasets de robótica. Sin <code>/tf</code> y <code>/tf_static</code>, los datos reproducidos no se podrían situar en el mundo.</li>
+</ul>
+</section>
+<section id="10-cálculos-resueltos" class="level2">
+<h2>10. Cálculos resueltos</h2>
+<p>Todos siguen la misma estructura: <strong>qué buscamos</strong> → <strong>fórmula</strong> → <strong>pasos</strong> → <strong>resultado e interpretación</strong>.</p>
+<p><strong>C1. Cuántos haces tiene el RPLIDAR A2.</strong></p>
+<ul>
+<li><strong>Qué buscamos.</strong> El número de haces por vuelta del láser simulado, sabiendo que gira a 10 Hz y dispara cada 125 µs.</li>
+<li><strong>Fórmula.</strong> Haces = tiempo de una vuelta / tiempo entre disparos: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>=</mo><mstyle displaystyle="true"><mfrac><mrow><mn>1</mn><mi>/</mi><mi>f</mi></mrow><msub><mi>t</mi><mtext mathvariant="normal">disparo</mtext></msub></mfrac></mstyle></mrow><annotation encoding="application/x-tex">n = \dfrac{1/f}{t_\text{disparo}}</annotation></semantics></math>.</li>
+<li><strong>Pasos.</strong>
+<ol type="1">
+<li>Una vuelta dura <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi>/</mi><mi>f</mi><mo>=</mo><mn>1</mn><mi>/</mi><mn>10</mn><mo>=</mo><mn>0.1</mn></mrow><annotation encoding="application/x-tex">1/f = 1/10 = 0.1</annotation></semantics></math> s.</li>
+<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>=</mo><mn>0.1</mn><mi>/</mi><mn>0.000125</mn><mo>=</mo><mn>800</mn></mrow><annotation encoding="application/x-tex">n = 0.1 / 0.000125 = 800</annotation></semantics></math>.</li>
+</ol></li>
+<li><strong>Resultado.</strong> 800 haces, la longitud de <code>ranges</code>. A 5 Hz serían <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.2</mn><mi>/</mi><mn>0.000125</mn><mo>=</mo><mn>1600</mn></mrow><annotation encoding="application/x-tex">0.2/0.000125 = 1600</annotation></semantics></math>: el doble de haces, pero la mitad de scans por segundo.</li>
+</ul>
+<p><strong>C2. <code>angle_increment</code> a partir del FOV y del número de haces.</strong></p>
+<ul>
+<li><strong>Qué buscamos.</strong> La separación entre haces de un láser de 360° con 800 haces, incluidos los dos extremos.</li>
+<li><strong>Fórmula.</strong> Con <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math> haces hay <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">n - 1</annotation></semantics></math> intervalos: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><mi>α</mi><mo>=</mo><mstyle displaystyle="true"><mfrac><mrow><mtext mathvariant="monospace">𝚊𝚗𝚐𝚕𝚎_𝚖𝚊𝚡</mtext><mo>−</mo><mtext mathvariant="monospace">𝚊𝚗𝚐𝚕𝚎_𝚖𝚒𝚗</mtext></mrow><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow></mfrac></mstyle></mrow><annotation encoding="application/x-tex">\Delta\alpha = \dfrac{\texttt{angle\_max} - \texttt{angle\_min}}{n - 1}</annotation></semantics></math>.</li>
+<li><strong>Pasos.</strong> <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><mi>α</mi><mo>=</mo><mstyle displaystyle="true"><mfrac><mrow><mi>π</mi><mo>−</mo><mo stretchy="false" form="prefix">(</mo><mi>−</mi><mi>π</mi><mo stretchy="false" form="postfix">)</mo></mrow><mrow><mn>800</mn><mo>−</mo><mn>1</mn></mrow></mfrac></mstyle><mo>=</mo><mstyle displaystyle="true"><mfrac><mn>6.28319</mn><mn>799</mn></mfrac></mstyle><mo>=</mo><mn>0.0078638</mn></mrow><annotation encoding="application/x-tex">\Delta\alpha = \dfrac{\pi - (-\pi)}{800 - 1} = \dfrac{6.28319}{799} = 0.0078638</annotation></semantics></math> rad. En grados: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.0078638</mn><mo>⋅</mo><mn>180</mn><mi>/</mi><mi>π</mi><mo>=</mo><mn>0.4506</mn><mi>°</mi></mrow><annotation encoding="application/x-tex">0.0078638 \cdot 180/\pi = 0.4506°</annotation></semantics></math>.</li>
+<li><strong>Resultado.</strong> 0.4506°, el valor que da <code>ros2 topic echo /laser1 --once --no-arr</code>. Si se dividiera entre 800 saldría 0.45°, que no coincide: el error de contar haces en vez de intervalos.</li>
+</ul>
+<p><strong>C3. Qué haz apunta a una dirección.</strong></p>
+<ul>
+<li><strong>Qué buscamos.</strong> El índice <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math> de <code>ranges</code> del haz que apunta al frente (0°), a la izquierda (+90°) y a la derecha (−90°).</li>
+<li><strong>Fórmula.</strong> Despejando <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math> de <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mi>k</mi></msub><mo>=</mo><mtext mathvariant="monospace">𝚊𝚗𝚐𝚕𝚎_𝚖𝚒𝚗</mtext><mo>+</mo><mi>k</mi><mo>⋅</mo><mtext mathvariant="monospace">𝚊𝚗𝚐𝚕𝚎_𝚒𝚗𝚌𝚛𝚎𝚖𝚎𝚗𝚝</mtext></mrow><annotation encoding="application/x-tex">\alpha_k = \texttt{angle\_min} + k\cdot\texttt{angle\_increment}</annotation></semantics></math>: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi><mo>=</mo><mstyle displaystyle="true"><mfrac><mrow><mi>α</mi><mo>−</mo><mtext mathvariant="monospace">𝚊𝚗𝚐𝚕𝚎_𝚖𝚒𝚗</mtext></mrow><mtext mathvariant="monospace">𝚊𝚗𝚐𝚕𝚎_𝚒𝚗𝚌𝚛𝚎𝚖𝚎𝚗𝚝</mtext></mfrac></mstyle></mrow><annotation encoding="application/x-tex">k = \dfrac{\alpha - \texttt{angle\_min}}{\texttt{angle\_increment}}</annotation></semantics></math>.</li>
+<li><strong>Pasos</strong> (con <code>angle_min</code> = −3.14159 y <code>angle_increment</code> = 0.0078638):
+<ol type="1">
+<li>Frente: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi><mo>=</mo><mstyle displaystyle="true"><mfrac><mrow><mn>0</mn><mo>+</mo><mn>3.14159</mn></mrow><mn>0.0078638</mn></mfrac></mstyle><mo>=</mo><mn>399.5</mn></mrow><annotation encoding="application/x-tex">k = \dfrac{0 + 3.14159}{0.0078638} = 399.5</annotation></semantics></math>.</li>
+<li>Izquierda: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi><mo>=</mo><mstyle displaystyle="true"><mfrac><mrow><mn>1.5708</mn><mo>+</mo><mn>3.14159</mn></mrow><mn>0.0078638</mn></mfrac></mstyle><mo>=</mo><mstyle displaystyle="true"><mfrac><mn>4.71239</mn><mn>0.0078638</mn></mfrac></mstyle><mo>=</mo><mn>599.25</mn></mrow><annotation encoding="application/x-tex">k = \dfrac{1.5708 + 3.14159}{0.0078638} = \dfrac{4.71239}{0.0078638} = 599.25</annotation></semantics></math>.</li>
+<li>Derecha: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi><mo>=</mo><mstyle displaystyle="true"><mfrac><mrow><mi>−</mi><mn>1.5708</mn><mo>+</mo><mn>3.14159</mn></mrow><mn>0.0078638</mn></mfrac></mstyle><mo>=</mo><mstyle displaystyle="true"><mfrac><mn>1.5708</mn><mn>0.0078638</mn></mfrac></mstyle><mo>=</mo><mn>199.75</mn></mrow><annotation encoding="application/x-tex">k = \dfrac{-1.5708 + 3.14159}{0.0078638} = \dfrac{1.5708}{0.0078638} = 199.75</annotation></semantics></math>.</li>
+</ol></li>
+<li><strong>Resultado.</strong> Frente entre 399 y 400 (ninguno cae justo en 0°: −0.225° y +0.225°); izquierda ≈ 599; derecha ≈ 200. El índice es un entero: se redondea al más cercano.</li>
+</ul>
+<p><strong>C4. Hacia dónde apunta un haz concreto.</strong></p>
+<ul>
+<li><strong>Qué buscamos.</strong> El ángulo del haz <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi><mo>=</mo><mn>100</mn></mrow><annotation encoding="application/x-tex">k = 100</annotation></semantics></math>.</li>
+<li><strong>Fórmula.</strong> <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mi>k</mi></msub><mo>=</mo><mtext mathvariant="monospace">𝚊𝚗𝚐𝚕𝚎_𝚖𝚒𝚗</mtext><mo>+</mo><mi>k</mi><mo>⋅</mo><mtext mathvariant="monospace">𝚊𝚗𝚐𝚕𝚎_𝚒𝚗𝚌𝚛𝚎𝚖𝚎𝚗𝚝</mtext></mrow><annotation encoding="application/x-tex">\alpha_k = \texttt{angle\_min} + k\cdot\texttt{angle\_increment}</annotation></semantics></math>.</li>
+<li><strong>Pasos.</strong> <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mn>100</mn></msub><mo>=</mo><mi>−</mi><mn>3.14159</mn><mo>+</mo><mn>100</mn><mo>⋅</mo><mn>0.0078638</mn><mo>=</mo><mi>−</mi><mn>3.14159</mn><mo>+</mo><mn>0.78638</mn><mo>=</mo><mi>−</mi><mn>2.35521</mn></mrow><annotation encoding="application/x-tex">\alpha_{100} = -3.14159 + 100 \cdot 0.0078638 = -3.14159 + 0.78638 = -2.35521</annotation></semantics></math> rad; en grados, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>2.35521</mn><mo>⋅</mo><mn>180</mn><mi>/</mi><mi>π</mi><mo>=</mo><mi>−</mi><mn>134.94</mn><mi>°</mi></mrow><annotation encoding="application/x-tex">-2.35521 \cdot 180/\pi = -134.94°</annotation></semantics></math>.</li>
+<li><strong>Resultado.</strong> −134.9°: detrás y a la derecha del robot. Comprobación: 100 haces de 0.45° son 45°, y −180° + 45° = −135° ✓.</li>
+</ul>
+<p><strong>C5. Cuántos datos ahorra guardar solo los alcances.</strong></p>
+<ul>
+<li><strong>Qué buscamos.</strong> Bytes por scan y por segundo con y sin ángulos.</li>
+<li><strong>Fórmula.</strong> Bytes = número de valores × 4 (un <code>float32</code> ocupa 4 bytes).</li>
+<li><strong>Pasos.</strong>
+<ol type="1">
+<li>Solo alcances: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>800</mn><mo>⋅</mo><mn>4</mn><mo>=</mo><mn>3200</mn></mrow><annotation encoding="application/x-tex">800 \cdot 4 = 3200</annotation></semantics></math> B = 3.2 kB por scan; a 10 Hz, 32 kB/s.</li>
+<li>Alcances y ángulos: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1600</mn><mo>⋅</mo><mn>4</mn><mo>=</mo><mn>6400</mn></mrow><annotation encoding="application/x-tex">1600 \cdot 4 = 6400</annotation></semantics></math> B = 6.4 kB por scan; a 10 Hz, 64 kB/s.</li>
+</ol></li>
+<li><strong>Resultado.</strong> Se envía la mitad. Los dos números extra (<code>angle_min</code> y <code>angle_increment</code>) son despreciables.</li>
+</ul>
+<p><strong>C6. Frecuencia a partir de un periodo de configuración.</strong></p>
+<ul>
+<li><strong>Qué buscamos.</strong> A qué frecuencia deberían publicarse la odometría (<code>period_ms_publish_tf: 20.0</code>) y la IMU (<code>sensor_period_sec="$f{1/200.0}"</code>), y cuántas lecturas de IMU hay por vuelta del simulador (<code>simul_rate: 100</code>).</li>
+<li><strong>Fórmula.</strong> <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo>=</mo><mn>1</mn><mi>/</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">f = 1/T</annotation></semantics></math>.</li>
+<li><strong>Pasos.</strong>
+<ol type="1">
+<li>Odometría: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>T</mi><mo>=</mo><mn>20</mn></mrow><annotation encoding="application/x-tex">T = 20</annotation></semantics></math> ms <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>=</mo><mn>0.020</mn></mrow><annotation encoding="application/x-tex">= 0.020</annotation></semantics></math> s → <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo>=</mo><mn>1</mn><mi>/</mi><mn>0.020</mn><mo>=</mo><mn>50</mn></mrow><annotation encoding="application/x-tex">f = 1/0.020 = 50</annotation></semantics></math> Hz.</li>
+<li>IMU: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>T</mi><mo>=</mo><mn>1</mn><mi>/</mi><mn>200</mn><mo>=</mo><mn>0.005</mn></mrow><annotation encoding="application/x-tex">T = 1/200 = 0.005</annotation></semantics></math> s → 200 Hz.</li>
+<li>Vuelta del simulador: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi>/</mi><mn>100</mn><mo>=</mo><mn>0.010</mn></mrow><annotation encoding="application/x-tex">1/100 = 0.010</annotation></semantics></math> s. Lecturas de IMU por vuelta: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.010</mn><mi>/</mi><mn>0.005</mn><mo>=</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">0.010 / 0.005 = 2</annotation></semantics></math>.</li>
+</ol></li>
+<li><strong>Resultado.</strong> 50 Hz y 200 Hz configurados. Como el simulador entrega las lecturas por vueltas de 10 ms, la IMU tiene que sacar 2 por vuelta; en la VM no siempre lo consigue, y se miden ~147 Hz.</li>
+</ul>
+<p><strong>C7. Pose del láser en <code>odom</code>: x ⊕ xₛ.</strong></p>
+<ul>
+<li><p><strong>Qué buscamos.</strong> La pose del láser en el marco <code>odom</code>, conocidas la pose del robot y la del láser sobre él, para comprobarla con <code>tf2_echo odom laser1</code>.</p></li>
+<li><p><strong>Fórmula.</strong> La composición de poses del tema 3:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝐱</mi><mo>⊕</mo><msub><mi>𝐱</mi><mi>s</mi></msub><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mi>x</mi><mo>+</mo><msub><mi>x</mi><mi>s</mi></msub><mrow><mi mathvariant="normal">cos</mi><mo>&#8289;</mo></mrow><mi>θ</mi><mo>−</mo><msub><mi>y</mi><mi>s</mi></msub><mrow><mi mathvariant="normal">sin</mi><mo>&#8289;</mo></mrow><mi>θ</mi></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mi>y</mi><mo>+</mo><msub><mi>x</mi><mi>s</mi></msub><mrow><mi mathvariant="normal">sin</mi><mo>&#8289;</mo></mrow><mi>θ</mi><mo>+</mo><msub><mi>y</mi><mi>s</mi></msub><mrow><mi mathvariant="normal">cos</mi><mo>&#8289;</mo></mrow><mi>θ</mi></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mi>θ</mi><mo>+</mo><msub><mi>θ</mi><mi>s</mi></msub></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow><mo>,</mo><mspace width="2.0em"></mspace><mi>z</mi><mo>=</mo><msub><mi>z</mi><mi>𝐱</mi></msub><mo>+</mo><msub><mi>z</mi><mi>s</mi></msub></mrow><annotation encoding="application/x-tex">
+\mathbf{x} \oplus \mathbf{x}_s =
+\begin{bmatrix}
+x + x_s \cos\theta - y_s \sin\theta \\
+y + x_s \sin\theta + y_s \cos\theta \\
+\theta + \theta_s
+\end{bmatrix},
+\qquad z = z_\mathbf{x} + z_s
+</annotation></semantics></math></p></li>
+<li><p><strong>Datos.</strong> <code>tf2_echo odom base_link</code>: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝐱</mi><mo>=</mo><mo stretchy="false" form="prefix">[</mo><mn>0.350</mn><mo>,</mo><mn>0.448</mn><mo>,</mo><mn>1.816</mn><msup><mo stretchy="false" form="postfix">]</mo><mi>T</mi></msup></mrow><annotation encoding="application/x-tex">\mathbf{x} = [0.350, 0.448, 1.816]^T</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>z</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">z = 0</annotation></semantics></math>. <code>tf2_echo base_link laser1</code>: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>𝐱</mi><mi>s</mi></msub><mo>=</mo><mo stretchy="false" form="prefix">[</mo><mi>−</mi><mn>0.032</mn><mo>,</mo><mn>0</mn><mo>,</mo><mn>0</mn><msup><mo stretchy="false" form="postfix">]</mo><mi>T</mi></msup></mrow><annotation encoding="application/x-tex">\mathbf{x}_s = [-0.032, 0, 0]^T</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>z</mi><mi>s</mi></msub><mo>=</mo><mn>0.171</mn></mrow><annotation encoding="application/x-tex">z_s = 0.171</annotation></semantics></math>. Además, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">cos</mi><mo>&#8289;</mo></mrow><mn>1.816</mn><mo>=</mo><mi>−</mi><mn>0.2428</mn></mrow><annotation encoding="application/x-tex">\cos 1.816 = -0.2428</annotation></semantics></math> y <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">sin</mi><mo>&#8289;</mo></mrow><mn>1.816</mn><mo>=</mo><mn>0.9701</mn></mrow><annotation encoding="application/x-tex">\sin 1.816 = 0.9701</annotation></semantics></math>.</p></li>
+<li><p><strong>Pasos.</strong></p>
+<ol type="1">
+<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>x</mi><annotation encoding="application/x-tex">x</annotation></semantics></math>: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.350</mn><mo>+</mo><mo stretchy="false" form="prefix">(</mo><mi>−</mi><mn>0.032</mn><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="prefix">(</mo><mi>−</mi><mn>0.2428</mn><mo stretchy="false" form="postfix">)</mo><mo>−</mo><mn>0</mn><mo>⋅</mo><mn>0.9701</mn><mo>=</mo><mn>0.350</mn><mo>+</mo><mn>0.0078</mn><mo>=</mo><mn>0.358</mn></mrow><annotation encoding="application/x-tex">0.350 + (-0.032)(-0.2428) - 0 \cdot 0.9701 = 0.350 + 0.0078 = 0.358</annotation></semantics></math> m.</li>
+<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>y</mi><annotation encoding="application/x-tex">y</annotation></semantics></math>: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.448</mn><mo>+</mo><mo stretchy="false" form="prefix">(</mo><mi>−</mi><mn>0.032</mn><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="prefix">(</mo><mn>0.9701</mn><mo stretchy="false" form="postfix">)</mo><mo>+</mo><mn>0</mn><mo>⋅</mo><mo stretchy="false" form="prefix">(</mo><mi>−</mi><mn>0.2428</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>0.448</mn><mo>−</mo><mn>0.0310</mn><mo>=</mo><mn>0.417</mn></mrow><annotation encoding="application/x-tex">0.448 + (-0.032)(0.9701) + 0 \cdot (-0.2428) = 0.448 - 0.0310 = 0.417</annotation></semantics></math> m.</li>
+<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>θ</mi><annotation encoding="application/x-tex">\theta</annotation></semantics></math>: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1.816</mn><mo>+</mo><mn>0</mn><mo>=</mo><mn>1.816</mn></mrow><annotation encoding="application/x-tex">1.816 + 0 = 1.816</annotation></semantics></math> rad (104.1°).</li>
+<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>z</mi><annotation encoding="application/x-tex">z</annotation></semantics></math>: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mo>+</mo><mn>0.171</mn><mo>=</mo><mn>0.171</mn></mrow><annotation encoding="application/x-tex">0 + 0.171 = 0.171</annotation></semantics></math> m.</li>
+</ol></li>
+<li><p><strong>Resultado.</strong> <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">[</mo><mn>0.358</mn><mo>,</mo><mn>0.417</mn><mo>,</mo><mn>1.816</mn><msup><mo stretchy="false" form="postfix">]</mo><mi>T</mi></msup></mrow><annotation encoding="application/x-tex">[0.358, 0.417, 1.816]^T</annotation></semantics></math> a 0.171 m de altura, igual que <code>tf2_echo odom laser1</code>. Tiene sentido: el robot mira a 104° (casi hacia +y) y el láser está 3.2 cm «detrás», es decir, hacia 284° (casi hacia −y), así que baja 3.1 cm en <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>y</mi><annotation encoding="application/x-tex">y</annotation></semantics></math> y apenas cambia en <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>x</mi><annotation encoding="application/x-tex">x</annotation></semantics></math>.</p></li>
+</ul>
+<p><strong>C8. Range, bearing e índice de un landmark (opcional).</strong></p>
+<ul>
+<li><strong>Qué buscamos.</strong> Con el robot en su pose inicial (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝐱</mi><mo>=</mo><mo stretchy="false" form="prefix">[</mo><mn>0</mn><mo>,</mo><mn>0</mn><mo>,</mo><mn>0</mn><msup><mo stretchy="false" form="postfix">]</mo><mi>T</mi></msup></mrow><annotation encoding="application/x-tex">\mathbf{x} = [0, 0, 0]^T</annotation></semantics></math> en <code>odom</code>) y un landmark en <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>0.9</mn><mo>,</mo><mn>0.5</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(0.9, 0.5)</annotation></semantics></math> m de <code>odom</code>, la observación <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">[</mo><mi>r</mi><mo>,</mo><mi>α</mi><msup><mo stretchy="false" form="postfix">]</mo><mi>T</mi></msup></mrow><annotation encoding="application/x-tex">[r, \alpha]^T</annotation></semantics></math> desde el láser y el haz que apunta a él.</li>
+<li><strong>Fórmula.</strong> Primero se expresa el landmark en el marco del láser; como el robot está en el origen y sin girar, basta restar la posición del láser, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mi>−</mi><mn>0.032</mn><mo>,</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(-0.032, 0)</annotation></semantics></math>. Después, polares: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>r</mi><mo>=</mo><msqrt><mrow><msubsup><mi>x</mi><mi>l</mi><mn>2</mn></msubsup><mo>+</mo><msubsup><mi>y</mi><mi>l</mi><mn>2</mn></msubsup></mrow></msqrt></mrow><annotation encoding="application/x-tex">r = \sqrt{x_l^2 + y_l^2}</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>=</mo><mrow><mi mathvariant="normal">atan2</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><msub><mi>y</mi><mi>l</mi></msub><mo>,</mo><msub><mi>x</mi><mi>l</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\alpha = \operatorname{atan2}(y_l, x_l)</annotation></semantics></math>, y <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mi>α</mi><mo>−</mo><mtext mathvariant="monospace">𝚊𝚗𝚐𝚕𝚎_𝚖𝚒𝚗</mtext><mo stretchy="false" form="postfix">)</mo><mi>/</mi><mtext mathvariant="monospace">𝚊𝚗𝚐𝚕𝚎_𝚒𝚗𝚌𝚛𝚎𝚖𝚎𝚗𝚝</mtext></mrow><annotation encoding="application/x-tex">k = (\alpha - \texttt{angle\_min})/\texttt{angle\_increment}</annotation></semantics></math>.</li>
+<li><strong>Pasos.</strong>
+<ol type="1">
+<li>En el láser: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mi>l</mi></msub><mo>=</mo><mn>0.9</mn><mo>−</mo><mo stretchy="false" form="prefix">(</mo><mi>−</mi><mn>0.032</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>0.932</mn></mrow><annotation encoding="application/x-tex">x_l = 0.9 - (-0.032) = 0.932</annotation></semantics></math> m, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>y</mi><mi>l</mi></msub><mo>=</mo><mn>0.5</mn><mo>−</mo><mn>0</mn><mo>=</mo><mn>0.5</mn></mrow><annotation encoding="application/x-tex">y_l = 0.5 - 0 = 0.5</annotation></semantics></math> m.</li>
+<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>r</mi><mo>=</mo><msqrt><mrow><msup><mn>0.932</mn><mn>2</mn></msup><mo>+</mo><msup><mn>0.5</mn><mn>2</mn></msup></mrow></msqrt><mo>=</mo><msqrt><mrow><mn>0.8686</mn><mo>+</mo><mn>0.25</mn></mrow></msqrt><mo>=</mo><msqrt><mn>1.1186</mn></msqrt><mo>=</mo><mn>1.058</mn></mrow><annotation encoding="application/x-tex">r = \sqrt{0.932^2 + 0.5^2} = \sqrt{0.8686 + 0.25} = \sqrt{1.1186} = 1.058</annotation></semantics></math> m.</li>
+<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>=</mo><mrow><mi mathvariant="normal">atan2</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>0.5</mn><mo>,</mo><mn>0.932</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>0.4924</mn></mrow><annotation encoding="application/x-tex">\alpha = \operatorname{atan2}(0.5, 0.932) = 0.4924</annotation></semantics></math> rad = 28.2°.</li>
+<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mn>0.4924</mn><mo>+</mo><mn>3.14159</mn><mo stretchy="false" form="postfix">)</mo><mi>/</mi><mn>0.0078638</mn><mo>=</mo><mn>3.63399</mn><mi>/</mi><mn>0.0078638</mn><mo>=</mo><mn>462.1</mn></mrow><annotation encoding="application/x-tex">k = (0.4924 + 3.14159)/0.0078638 = 3.63399/0.0078638 = 462.1</annotation></semantics></math> → <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi><mo>=</mo><mn>462</mn></mrow><annotation encoding="application/x-tex">k = 462</annotation></semantics></math>.</li>
+</ol></li>
+<li><strong>Resultado.</strong> <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>𝐳</mi><mo accent="true">̂</mo></mover><mo>=</mo><mo stretchy="false" form="prefix">[</mo><mn>1.058</mn><mrow><mspace width="0.333em"></mspace><mtext mathvariant="normal"> m</mtext></mrow><mo>,</mo><mn>28.2</mn><mi>°</mi><msup><mo stretchy="false" form="postfix">]</mo><mi>T</mi></msup></mrow><annotation encoding="application/x-tex">\hat{\mathbf{z}} = [1.058\text{ m}, 28.2°]^T</annotation></semantics></math>, en el haz 462. La lectura real de ese haz será <strong>algo menor</strong>: el centro de la columna está a 1.058 m, pero el láser choca con su superficie, a un radio menos de distancia (más el ruido).</li>
+</ul>
+<p><strong>C9. El arco que describe el robot.</strong></p>
+<ul>
+<li><strong>Qué buscamos.</strong> Dónde estará el robot (según la odometría) tras 5 s publicando <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi><mo>=</mo><mn>0.1</mn></mrow><annotation encoding="application/x-tex">v = 0.1</annotation></semantics></math> m/s y <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ω</mi><mo>=</mo><mn>0.3</mn></mrow><annotation encoding="application/x-tex">\omega = 0.3</annotation></semantics></math> rad/s desde el origen.</li>
+<li><strong>Fórmula.</strong> Con <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math> y <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ω</mi><annotation encoding="application/x-tex">\omega</annotation></semantics></math> constantes, el robot recorre un arco de radio <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mo>=</mo><mi>v</mi><mi>/</mi><mi>ω</mi></mrow><annotation encoding="application/x-tex">R = v/\omega</annotation></semantics></math>, y tras un tiempo <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math> ha girado <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>θ</mi><mo>=</mo><mi>ω</mi><mi>t</mi></mrow><annotation encoding="application/x-tex">\theta = \omega t</annotation></semantics></math>: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo>=</mo><mi>R</mi><mrow><mi mathvariant="normal">sin</mi><mo>&#8289;</mo></mrow><mi>θ</mi></mrow><annotation encoding="application/x-tex">x = R\sin\theta</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mo>=</mo><mi>R</mi><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mrow><mi mathvariant="normal">cos</mi><mo>&#8289;</mo></mrow><mi>θ</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">y = R(1 - \cos\theta)</annotation></semantics></math> (el modelo de velocidad del tema 3).</li>
+<li><strong>Pasos.</strong>
+<ol type="1">
+<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mo>=</mo><mn>0.1</mn><mi>/</mi><mn>0.3</mn><mo>=</mo><mn>0.333</mn></mrow><annotation encoding="application/x-tex">R = 0.1/0.3 = 0.333</annotation></semantics></math> m.</li>
+<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>θ</mi><mo>=</mo><mn>0.3</mn><mo>⋅</mo><mn>5</mn><mo>=</mo><mn>1.5</mn></mrow><annotation encoding="application/x-tex">\theta = 0.3 \cdot 5 = 1.5</annotation></semantics></math> rad (85.9°).</li>
+<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo>=</mo><mn>0.333</mn><mo>⋅</mo><mrow><mi mathvariant="normal">sin</mi><mo>&#8289;</mo></mrow><mn>1.5</mn><mo>=</mo><mn>0.333</mn><mo>⋅</mo><mn>0.9975</mn><mo>=</mo><mn>0.332</mn></mrow><annotation encoding="application/x-tex">x = 0.333 \cdot \sin 1.5 = 0.333 \cdot 0.9975 = 0.332</annotation></semantics></math> m.</li>
+<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mo>=</mo><mn>0.333</mn><mo>⋅</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mrow><mi mathvariant="normal">cos</mi><mo>&#8289;</mo></mrow><mn>1.5</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>0.333</mn><mo>⋅</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mn>0.0707</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>0.310</mn></mrow><annotation encoding="application/x-tex">y = 0.333 \cdot (1 - \cos 1.5) = 0.333 \cdot (1 - 0.0707) = 0.310</annotation></semantics></math> m.</li>
+</ol></li>
+<li><strong>Resultado.</strong> <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">[</mo><mn>0.332</mn><mo>,</mo><mn>0.310</mn><mo>,</mo><mn>1.5</mn><msup><mo stretchy="false" form="postfix">]</mo><mi>T</mi></msup></mrow><annotation encoding="application/x-tex">[0.332, 0.310, 1.5]^T</annotation></semantics></math>. En la práctica, los puntos de <code>tf2_echo odom base_link</code> cumplían estas relaciones con <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mo>≈</mo><mn>0.36</mn></mrow><annotation encoding="application/x-tex">R \approx 0.36</annotation></semantics></math> m, cerca de los 0.33 m teóricos.</li>
+</ul>
+<p><strong>C10. Desviación típica del ruido a partir de varios scans.</strong></p>
+<ul>
+<li><strong>Qué buscamos.</strong> Estimar σ_r con 5 lecturas del haz <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi><mo>=</mo><mn>200</mn></mrow><annotation encoding="application/x-tex">k = 200</annotation></semantics></math> con el robot quieto: 1.623, 1.608, 1.622, 1.602, 1.611 m.</li>
+<li><strong>Fórmula.</strong> Desviación típica muestral: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo>=</mo><msqrt><mstyle displaystyle="true"><mfrac><mrow><mo>∑</mo><mo stretchy="false" form="prefix">(</mo><msub><mi>r</mi><mi>i</mi></msub><mo>−</mo><mover><mi>r</mi><mo accent="true">‾</mo></mover><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup></mrow><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow></mfrac></mstyle></msqrt></mrow><annotation encoding="application/x-tex">s = \sqrt{\dfrac{\sum (r_i - \bar r)^2}{n - 1}}</annotation></semantics></math>.</li>
+<li><strong>Pasos.</strong>
+<ol type="1">
+<li>Media: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>r</mi><mo accent="true">‾</mo></mover><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mn>1.623</mn><mo>+</mo><mn>1.608</mn><mo>+</mo><mn>1.622</mn><mo>+</mo><mn>1.602</mn><mo>+</mo><mn>1.611</mn><mo stretchy="false" form="postfix">)</mo><mi>/</mi><mn>5</mn><mo>=</mo><mn>8.066</mn><mi>/</mi><mn>5</mn><mo>=</mo><mn>1.6132</mn></mrow><annotation encoding="application/x-tex">\bar r = (1.623 + 1.608 + 1.622 + 1.602 + 1.611)/5 = 8.066/5 = 1.6132</annotation></semantics></math> m.</li>
+<li>Diferencias: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.0098</mn><annotation encoding="application/x-tex">0.0098</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>0.0052</mn></mrow><annotation encoding="application/x-tex">-0.0052</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.0088</mn><annotation encoding="application/x-tex">0.0088</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>0.0112</mn></mrow><annotation encoding="application/x-tex">-0.0112</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>0.0022</mn></mrow><annotation encoding="application/x-tex">-0.0022</annotation></semantics></math>.</li>
+<li>Cuadrados: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>9.60</mn><mo>⋅</mo><msup><mn>10</mn><mrow><mi>−</mi><mn>5</mn></mrow></msup></mrow><annotation encoding="application/x-tex">9.60\cdot10^{-5}</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2.70</mn><mo>⋅</mo><msup><mn>10</mn><mrow><mi>−</mi><mn>5</mn></mrow></msup></mrow><annotation encoding="application/x-tex">2.70\cdot10^{-5}</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>7.74</mn><mo>⋅</mo><msup><mn>10</mn><mrow><mi>−</mi><mn>5</mn></mrow></msup></mrow><annotation encoding="application/x-tex">7.74\cdot10^{-5}</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1.254</mn><mo>⋅</mo><msup><mn>10</mn><mrow><mi>−</mi><mn>4</mn></mrow></msup></mrow><annotation encoding="application/x-tex">1.254\cdot10^{-4}</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>4.8</mn><mo>⋅</mo><msup><mn>10</mn><mrow><mi>−</mi><mn>6</mn></mrow></msup></mrow><annotation encoding="application/x-tex">4.8\cdot10^{-6}</annotation></semantics></math>; suma <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>=</mo><mn>3.30</mn><mo>⋅</mo><msup><mn>10</mn><mrow><mi>−</mi><mn>4</mn></mrow></msup></mrow><annotation encoding="application/x-tex">= 3.30\cdot10^{-4}</annotation></semantics></math>.</li>
+<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo>=</mo><msqrt><mrow><mn>3.30</mn><mo>⋅</mo><msup><mn>10</mn><mrow><mi>−</mi><mn>4</mn></mrow></msup><mi>/</mi><mn>4</mn></mrow></msqrt><mo>=</mo><msqrt><mrow><mn>8.24</mn><mo>⋅</mo><msup><mn>10</mn><mrow><mi>−</mi><mn>5</mn></mrow></msup></mrow></msqrt><mo>=</mo><mn>0.0091</mn></mrow><annotation encoding="application/x-tex">s = \sqrt{3.30\cdot10^{-4}/4} = \sqrt{8.24\cdot10^{-5}} = 0.0091</annotation></semantics></math> m.</li>
+</ol></li>
+<li><strong>Resultado.</strong> ≈ 0.009 m, coherente con σ_r = 0.01 m. Con tan pocas muestras la estimación es poco precisa (error relativo ≈ <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi>/</mi><msqrt><mrow><mn>2</mn><mo stretchy="false" form="prefix">(</mo><mi>n</mi><mo>−</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow></msqrt></mrow><annotation encoding="application/x-tex">1/\sqrt{2(n-1)}</annotation></semantics></math> ≈ 35 % con 5 muestras), por eso se usan muchos haces o muchos scans.</li>
+</ul>
+</section>
+<section id="11-errores-típicos" class="level2">
+<h2>11. Errores típicos</h2>
+<p>Cada fragmento tiene <strong>un</strong> error. Intenta encontrarlo antes de leer la corrección.</p>
+<p><strong>E1. Medir la frecuencia con <code>echo</code></strong></p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> topic list <span class="at">-t</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> topic echo /imu1 <span class="at">--once</span> <span class="at">--no-arr</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> topic echo /imu1          <span class="co"># para medir la frecuencia</span></span></code></pre></div>
+<blockquote>
+<p>Para la frecuencia se usa <code>ros2 topic hz /imu1</code>. <code>echo</code> imprime los mensajes, no su ritmo.</p>
+</blockquote>
+<p><strong>E2. Ver la definición de un mensaje con <code>topic</code></strong></p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> topic show sensor_msgs/msg/LaserScan</span></code></pre></div>
+<blockquote>
+<p>Los tipos de mensaje son <strong>interfaces</strong>: <code>ros2 interface show sensor_msgs/msg/LaserScan</code>. <code>ros2 topic</code> trabaja con topics en vivo, y <code>show</code> no es un subcomando suyo.</p>
+</blockquote>
+<p><strong>E3. <code>default_sensors</code> en el sitio equivocado</strong></p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">include</span> <span class="ot">file=</span><span class="st">&quot;../definitions/turtlebot3_burger.vehicle.xml&quot;</span> /&gt;</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">vehicle</span> <span class="ot">name=</span><span class="st">&quot;r1&quot;</span> <span class="ot">class=</span><span class="st">&quot;turtlebot3_burger&quot;</span> <span class="ot">default_sensors=</span><span class="st">&quot;false&quot;</span>&gt;</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">init_pose</span>&gt;-2 -0.5 0&lt;/<span class="kw">init_pose</span>&gt;</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">vehicle</span>&gt;</span></code></pre></div>
+<blockquote>
+<p><code>default_sensors</code> es un <strong>argumento de la clase</strong>, así que va en el <code>&lt;include&gt;</code> de <code>turtlebot3_burger.vehicle.xml</code>, no en <code>&lt;vehicle&gt;</code>.</p>
+</blockquote>
+<p><strong>E4. Los argumentos del láser en el <code>&lt;include&gt;</code> de la clase</strong></p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">include</span> <span class="ot">file=</span><span class="st">&quot;../definitions/turtlebot3_burger.vehicle.xml&quot;</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="ot">default_sensors=</span><span class="st">&quot;false&quot;</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="ot">sensor_std_noise=</span><span class="st">&quot;0.10&quot;</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="ot">max_range=</span><span class="st">&quot;3.0&quot;</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>/&gt;</span></code></pre></div>
+<blockquote>
+<p>El ruido y el alcance son argumentos del <strong>sensor</strong>: van en el <code>&lt;include&gt;</code> de <code>rplidar-a2.sensor.xml</code>, dentro de <code>&lt;vehicle name="r1"&gt;</code>.</p>
+</blockquote>
+<p><strong>E5. Cambiar el mundo sin relanzar</strong></p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> nano demo_turtlebot_world.world.xml     <span class="co"># añadir max_range=&quot;3.0&quot; y guardar</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> topic echo /laser1 <span class="at">--once</span> <span class="at">--no-arr</span>      <span class="co"># range_max: 16.0  ¿?</span></span></code></pre></div>
+<blockquote>
+<p>Falta <strong>cerrar y volver a lanzar</strong> la simulación (<code>ros2 launch mvsim demo_turtlebot_world.launch.py</code>). El mundo solo se lee al arrancar.</p>
+</blockquote>
+<p><strong>E6. Guardar el mundo sin <code>sudo</code></strong></p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="va">$(</span><span class="ex">ros2</span> pkg prefix mvsim<span class="va">)</span>/share/mvsim/mvsim_tutorial</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">nano</span> demo_turtlebot_world.world.xml</span></code></pre></div>
+<blockquote>
+<p>El archivo está en <code>/opt/ros/jazzy/...</code>, que es del sistema: sin <code>sudo</code>, nano no puede guardarlo (<em>Permission denied</em>). Es <code>sudo nano</code>.</p>
+</blockquote>
+<p><strong>E7. <code>view_frames</code> en el paquete equivocado</strong></p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> run tf2_ros view_frames</span></code></pre></div>
+<blockquote>
+<p><code>view_frames</code> está en <strong><code>tf2_tools</code></strong>: <code>ros2 run tf2_tools view_frames</code>. En <code>tf2_ros</code> están <code>tf2_echo</code> y <code>static_transform_publisher</code>.</p>
+</blockquote>
+<p><strong>E8. Orden de los frames en <code>tf2_echo</code></strong></p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Queremos la pose del láser sobre el robot, [-0.032, 0, 0.171]</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> run tf2_ros tf2_echo laser1 base_link</span></code></pre></div>
+<blockquote>
+<p>Es <code>tf2_echo base_link laser1</code>: primero el marco de referencia y después el frame cuya pose se quiere. Al revés da la transformación inversa, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">[</mo><mn>0.032</mn><mo>,</mo><mn>0</mn><mo>,</mo><mi>−</mi><mn>0.171</mn><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">[0.032, 0, -0.171]</annotation></semantics></math>.</p>
+</blockquote>
+<p><strong>E9. Medir el ruido con el robot en movimiento</strong></p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> topic pub <span class="at">-r</span> 10 /cmd_vel geometry_msgs/msg/Twist <span class="st">&quot;{linear: {x: 0.1}}&quot;</span> <span class="kw">&amp;</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> topic echo /laser1 <span class="at">--once</span> <span class="at">--field</span> ranges</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> topic echo /laser1 <span class="at">--once</span> <span class="at">--field</span> ranges</span></code></pre></div>
+<blockquote>
+<p>Para medir el ruido el robot debe estar <strong>quieto</strong>. Si se mueve, el valor real de cada haz cambia entre scans, y la variación ya no es solo ruido.</p>
+</blockquote>
+<p><strong>E10. Leer el yaw en el sitio equivocado</strong></p>
+<pre class="text"><code>- Translation: [0.350, 0.448, 0.000]
+- Rotation: in Quaternion (xyzw) [0.000, 0.000, 0.788, 0.615]
+- Rotation: in RPY (radian) [0.000, -0.000, 1.816]</code></pre>
+<blockquote>
+<p>Si se toma <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>θ</mi><mo>=</mo><mn>0.788</mn></mrow><annotation encoding="application/x-tex">\theta = 0.788</annotation></semantics></math> (la <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>z</mi><annotation encoding="application/x-tex">z</annotation></semantics></math> del cuaternión), la composición sale mal. El yaw es <strong>el último valor de RPY (radian)</strong>: 1.816. El cuaternión de un giro en Z es <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">[</mo><mn>0</mn><mo>,</mo><mn>0</mn><mo>,</mo><mrow><mi mathvariant="normal">sin</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>θ</mi><mi>/</mi><mn>2</mn><mo stretchy="false" form="postfix">)</mo><mo>,</mo><mrow><mi mathvariant="normal">cos</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>θ</mi><mi>/</mi><mn>2</mn><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">[0, 0, \sin(\theta/2), \cos(\theta/2)]</annotation></semantics></math>: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">sin</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>0.908</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>0.788</mn></mrow><annotation encoding="application/x-tex">\sin(0.908) = 0.788</annotation></semantics></math>.</p>
+</blockquote>
+</section>
+<section id="12-rellena-el-hueco" class="level2">
+<h2>12. Rellena el hueco</h2>
+<p><strong>H1.</strong> Tipos de los topics y un mensaje del láser sin arrays.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> topic list ____</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> topic echo /laser1 ____ ____</span></code></pre></div>
+<blockquote>
+<p><code>-t</code>, <code>--once</code>, <code>--no-arr</code>.</p>
+</blockquote>
+<p><strong>H2.</strong> Frecuencia y publicadores.</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> topic ____ /imu1</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> topic ____ /camera1/image_raw     <span class="co"># Publisher count: 0</span></span></code></pre></div>
+<blockquote>
+<p><code>hz</code>, <code>info</code>.</p>
+</blockquote>
+<p><strong>H3.</strong> Definición del mensaje del láser y parámetros del simulador.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> ____ show sensor_msgs/msg/LaserScan</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> param ____ /mvsim</span></code></pre></div>
+<blockquote>
+<p><code>interface</code>, <code>dump</code>.</p>
+</blockquote>
+<p><strong>H4.</strong> Quitar los sensores de la clase y configurar el láser.</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">include</span> <span class="ot">file=</span><span class="st">&quot;../definitions/turtlebot3_burger.vehicle.xml&quot;</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>    <span class="ot">____=</span><span class="st">&quot;false&quot;</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>/&gt;</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>...</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">include</span> <span class="ot">file=</span><span class="st">&quot;../definitions/rplidar-a2.sensor.xml&quot;</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  <span class="ot">____=</span><span class="st">&quot;0.10&quot;</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  <span class="ot">____=</span><span class="st">&quot;3.0&quot;</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>  <span class="er">...</span></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>/&gt;</span></code></pre></div>
+<blockquote>
+<p><code>default_sensors</code>, <code>sensor_std_noise</code>, <code>max_range</code>.</p>
+</blockquote>
+<p><strong>H5.</strong> Árbol tf y transformaciones.</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> run ____ view_frames</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> run tf2_ros ____ odom laser1</span></code></pre></div>
+<blockquote>
+<p><code>tf2_tools</code>, <code>tf2_echo</code>.</p>
+</blockquote>
+<p><strong>H6.</strong> Mover el robot.</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> topic pub <span class="at">-r</span> 10 ____ geometry_msgs/msg/____ <span class="st">&quot;{linear: {x: 0.1}, angular: {z: 0.3}}&quot;</span></span></code></pre></div>
+<blockquote>
+<p><code>/cmd_vel</code>, <code>Twist</code>.</p>
+</blockquote>
+<p><strong>H7.</strong> El ángulo de un haz.</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>alpha_k <span class="op">=</span> scan.____ <span class="op">+</span> k <span class="op">*</span> scan.____</span></code></pre></div>
+<blockquote>
+<p><code>angle_min</code>, <code>angle_increment</code>.</p>
+</blockquote>
+</section>
+<section id="13-preguntas-de-repaso-con-solución" class="level2">
+<h2>13. Preguntas de repaso (con solución)</h2>
+<ol type="1">
+<li><p><strong>¿Qué dos informaciones lleva el <code>header</code> de todo mensaje de sensor?</strong> <code>stamp</code> (cuándo se midió) y <code>frame_id</code> (en qué marco están los datos).</p></li>
+<li><p><strong>¿Por qué <code>LaserScan</code> no guarda los ángulos de los haces?</strong> Porque son fijos y equiespaciados: basta con <code>angle_min</code> y <code>angle_increment</code>, y el ángulo sale de la posición <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>. Ahorra la mitad de datos.</p></li>
+<li><p><strong>¿Por qué hay 800 haces y no 799 ni 801?</strong> El sensor calcula <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mi>/</mi><mn>10</mn><mo stretchy="false" form="postfix">)</mo><mi>/</mi><mn>125</mn><mspace width="0.167em"></mspace><mi>μ</mi><mi>s</mi><mo>=</mo><mn>800</mn></mrow><annotation encoding="application/x-tex">n = (1/10)/125\,\mu s = 800</annotation></semantics></math>. Con 360° y los extremos incluidos, el primero (−180°) y el último (+180°) se solapan: hay 799 intervalos de 0.4506°.</p></li>
+<li><p><strong>¿Qué valor da un haz que no choca con nada dentro del alcance?</strong> Exactamente <code>range_max</code>. No significa un obstáculo: hay que descartarlo.</p></li>
+<li><p><strong>¿Por qué aparece <code>/camera1/image_raw</code> en <code>topic list</code> si se quitó la cámara?</strong> Porque RViz2 está suscrito. <code>topic list</code> muestra los topics con publicadores o suscriptores; <code>topic info</code> confirma 0 publicadores.</p></li>
+<li><p><strong>¿Qué representa <code>odom → base_link</code>?</strong> La pose del robot según la odometría, en el marco <code>odom</code>: continua pero con deriva. Empieza en (0, 0, 0) aunque el robot no esté en el origen del mundo.</p></li>
+<li><p><strong>¿Qué frame del árbol es estático y cómo se nota en <code>view_frames</code>?</strong> <code>base_footprint</code>: <em>rate</em> 10000 y <em>most recent transform</em> 0.</p></li>
+<li><p><strong>¿Qué diferencia hay entre <code>map</code> y <code>odom</code>?</strong> Los dos son fijos en el mundo. En <code>odom</code> la pose es continua pero deriva; en <code>map</code> no deriva pero puede saltar. <code>map → odom</code> corrige la deriva (en MVSim es la identidad).</p></li>
+<li><p><strong>¿Qué se gana y qué se pierde con más haces?</strong> Se gana resolución angular (objetos más pequeños o lejanos, mapas más detallados). Se pierde ancho de banda y cómputo, y en un láser rotatorio de disparo fijo, frecuencia de scan.</p></li>
+<li><p><strong>¿Por qué se mide ~147 Hz en la IMU si está configurada a 200 Hz?</strong> El simulador da vueltas de 10 ms (<code>simul_rate: 100</code>) y en cada una debería generar 2 lecturas. En la VM no siempre lo consigue: los sellos de tiempo llegan por parejas, pero faltan algunas.</p></li>
+<li><p><strong>¿Para qué sirve grabar <code>/tf</code> y <code>/tf_static</code> en un rosbag?</strong> Para poder situar los datos de los sensores en el mundo al reproducirlos sin el simulador.</p></li>
+</ol>
+</section>
+<section id="14-ideas-esenciales-para-recordar" class="level2">
+<h2>14. Ideas esenciales para recordar</h2>
+<ul>
+<li><code>ros2 topic list -t</code> (tipos), <code>echo --once --no-arr</code> (un mensaje sin arrays), <code>--field ranges</code> (un campo), <code>hz</code> (frecuencia), <code>info</code> (publicadores/suscriptores); <code>ros2 interface show</code> (definición de un tipo); <code>ros2 param dump</code> (parámetros de un nodo).</li>
+<li>El mundo de MVSim se configura con <strong>argumentos de los <code>&lt;include&gt;</code></strong>, que dentro del archivo son <code>${nombre|defecto}</code>. <code>default_sensors="false"</code> en la clase quita sus sensores; los propios van dentro de <code>&lt;vehicle&gt;</code>. Hace falta <code>sudo</code> y <strong>relanzar</strong>.</li>
+<li><code>LaserScan</code>: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mi>k</mi></msub><mo>=</mo><mtext mathvariant="monospace">𝚊𝚗𝚐𝚕𝚎_𝚖𝚒𝚗</mtext><mo>+</mo><mi>k</mi><mo>⋅</mo><mtext mathvariant="monospace">𝚊𝚗𝚐𝚕𝚎_𝚒𝚗𝚌𝚛𝚎𝚖𝚎𝚗𝚝</mtext></mrow><annotation encoding="application/x-tex">\alpha_k = \texttt{angle\_min} + k\cdot\texttt{angle\_increment}</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math> desde 0, antihorario, 0 = delante. TurtleBot3: 360°, 800 haces, 0.4506°, <code>range_max</code> 16 m. Frente: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi><mo>≈</mo><mn>399.5</mn></mrow><annotation encoding="application/x-tex">k \approx 399.5</annotation></semantics></math>.</li>
+<li>Haz sin obstáculo → <code>range_max</code>. <strong>No</strong> es un obstáculo.</li>
+<li>Ruido por defecto del láser: σ_r = 0.01 m (<code>sensor_std_noise</code>). Se mide con el robot <strong>quieto</strong> comparando el mismo haz en varios scans.</li>
+<li>tf2: árbol <code>map → odom → base_link → {base_footprint, laser1, imu1}</code>. Una transformación padre → hijo es la pose del hijo en el padre. <code>tf2_echo A B</code> = pose de B en A.</li>
+<li>tf2 compone como ⊕: pose del láser en <code>odom</code> = <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝐱</mi><mo>⊕</mo><msub><mi>𝐱</mi><mi>s</mi></msub></mrow><annotation encoding="application/x-tex">\mathbf{x} \oplus \mathbf{x}_s</annotation></semantics></math>, con el yaw en el último valor de RPY (radian), y la altura sumada.</li>
+</ul>
+</section>
+</section>
+</article><section class="related"><span class="overline">SIGUE ESTUDIANDO</span><h2>Más material del bloque</h2><div class="related-grid"><a class="related-card" href="Resumen_L4_Percepcion_Robot.html"><span>L4 · TEORÍA</span><strong>Percepción del robot</strong><small>Volver al resumen ↗</small></a><a class="related-card" href="P4.1_Landmarks.html"><span>P4.1 · PRÁCTICA</span><strong>Modelos basados en landmarks</strong><small>Leer guía ↗</small></a><a class="related-card" href="P4.2_Laser_scanner.html"><span>P4.2 · PRÁCTICA</span><strong>Escáner láser</strong><small>Leer guía ↗</small></a></div></section><div class="end-link"><span>Fin de esta guía</span><a href="index.html?lesson=L4#filters">Ahora, ponte a prueba <span aria-hidden="true">→</span></a></div></div></div>
+    </div>
+  </main>
+  <footer><div class="wrap"><span>ROBO<span>TEST</span> / P4.3</span><span>Apuntes completos · Fórmulas en MathML · Funcionamiento sin conexión</span></div></footer>
+  <a class="back-top" href="#hero-title" aria-label="Volver arriba">↑</a>
+</body>
+</html>
