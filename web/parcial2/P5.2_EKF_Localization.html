@@ -1,0 +1,932 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>P5.2 · Localización con EKF | RoboTest</title>
+  <link rel="stylesheet" href="../assets/robotest.css">
+  <link rel="stylesheet" href="../assets/resumenes.css">
+  <script src="../assets/resumenes.js" defer></script>
+</head>
+<body>
+  <div id="reading-progress" aria-hidden="true"></div>
+  <header class="topbar">
+    <a class="brand" href="index.html" aria-label="RoboTest, volver al inicio"><span class="brand-mark">R<span></span></span> ROBO<span>TEST</span></a>
+    <nav aria-label="Navegación principal"><a href="../../index.html">Inicio</a><a href="Resumen_L4_Percepcion_Robot.html">L4</a><a href="index.html">Test <span aria-hidden="true">↗</span></a></nav>
+  </header>
+  <main>
+    <section class="hero lesson-hero" aria-labelledby="hero-title">
+      <div class="hero-inner">
+        <div class="eyebrow"><span class="status-dot"></span> PARCIAL 2 · P5.2 · GUÍA DE PRÁCTICAS</div>
+        <h1 id="hero-title">Localización con EKF<span class="hero-period">.</span></h1>
+        <p>Práctica 5.2: predicción y corrección del filtro de Kalman extendido, línea a línea.</p>
+        <div class="hero-actions"><a class="button primary" href="#apuntes">Empezar a leer <span aria-hidden="true">↘</span></a><a class="button subtle" href="index.html?lesson=P5.2#filters">Practicar el tema</a></div>
+        <div class="lesson-facts"><span>12 bloques de lectura</span><span>299 fórmulas renderizadas</span><span>Sin conexión</span></div>
+      </div>
+      <div class="hero-art" aria-hidden="true"><div class="grid-plane"></div><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="robot-icon"><span class="eye"></span><span class="eye"></span></div><div class="beacon beacon-a"></div><div class="beacon beacon-b"></div><span class="art-label label-a">SENSE</span><span class="art-label label-b">PLAN</span><span class="art-label label-c">ACT</span></div>
+    </section>
+    <div class="reading-wrap" id="apuntes">
+      <div class="reading-intro"><div><span class="overline">P5.2 / LECTURA</span><h2>Todo el contenido, mejor organizado.</h2><p>Índice navegable, secciones cortas y fórmulas legibles. El contenido del apunte original se mantiene íntegro.</p></div><a class="original-link" href="../../Teoria/Parcial-2/Guias_practicas/P5.2_EKF_Localization.md">Ver Markdown original ↗</a></div>
+      <details class="mobile-toc"><summary>Índice de contenidos <span aria-hidden="true">⌄</span></summary><nav class="toc-items" aria-label="Apartados de la página"><details class="toc-chapter" open><summary><span class="toc-number">·</span><span>Índice</span></summary><div class="toc-links"><a href="#índice">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">01</span><span>Objetivo y lugar en el temario</span></summary><div class="toc-links"><a href="#1-objetivo-y-lugar-en-el-temario">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">02</span><span>La idea del filtro de Kalman</span></summary><div class="toc-links"><a href="#2-la-idea-del-filtro-de-kalman">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">03</span><span>El algoritmo EKF</span></summary><div class="toc-links"><a href="#3-el-algoritmo-ekf">Ir al bloque</a><a href="#31-los-jacobianos">3.1. Los jacobianos</a><a href="#32-dimensiones">3.2. Dimensiones</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">04</span><span>De la fórmula al código: quién es quién</span></summary><div class="toc-links"><a href="#4-de-la-fórmula-al-código-quién-es-quién">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">05</span><span>El notebook, celda a celda</span></summary><div class="toc-links"><a href="#5-el-notebook-celda-a-celda">Ir al bloque</a><a href="#51-importaciones-celda-3">5.1. Importaciones (celda 3)</a><a href="#52-assignment-1-sensorobserve-celda-5">5.2. ASSIGNMENT 1: Sensor.observe() (celda 5)</a><a href="#53-assignment-1-random_observation-celda-5">5.3. ASSIGNMENT 1: random_observation() (celda 5)</a><a href="#54-assignment-2-robotstep-celda-10">5.4. ASSIGNMENT 2: Robot.step() (celda 10)</a><a href="#55-assignment-3-getobsjac-celda-15">5.5. ASSIGNMENT 3: getObsJac() (celda 15)</a><a href="#56-assignment-4-ekflocalization-celda-20">5.6. ASSIGNMENT 4: EKFLocalization() (celda 20)</a><a href="#57-main-celda-25">5.7. main() (celda 25)</a><a href="#58-assignment-5-fovsensorobserve_in_fov-celda-28">5.8. ASSIGNMENT 5: FOVSensor.observe_in_fov() (celda 28)</a><a href="#59-una-rareza-de-la-celda-22">5.9. Una rareza de la celda 22</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">06</span><span>Qué se observa al ejecutarlo</span></summary><div class="toc-links"><a href="#6-qué-se-observa-al-ejecutarlo">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">07</span><span>Cálculos resueltos</span></summary><div class="toc-links"><a href="#7-cálculos-resueltos">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">08</span><span>Errores típicos en el código</span></summary><div class="toc-links"><a href="#8-errores-típicos-en-el-código">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">09</span><span>Rellena el hueco</span></summary><div class="toc-links"><a href="#9-rellena-el-hueco">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">10</span><span>Preguntas de repaso (con solución)</span></summary><div class="toc-links"><a href="#10-preguntas-de-repaso-con-solución">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">11</span><span>Ideas esenciales para recordar</span></summary><div class="toc-links"><a href="#11-ideas-esenciales-para-recordar">Ir al bloque</a></div></details></nav></details>
+      <div class="reading-columns"><aside class="toc-sidebar"><div class="toc-box"><span class="overline">EN ESTA PÁGINA</span><p>P5.2 · 12 bloques</p><nav class="toc-items" aria-label="Apartados de la página"><details class="toc-chapter" open><summary><span class="toc-number">·</span><span>Índice</span></summary><div class="toc-links"><a href="#índice">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">01</span><span>Objetivo y lugar en el temario</span></summary><div class="toc-links"><a href="#1-objetivo-y-lugar-en-el-temario">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">02</span><span>La idea del filtro de Kalman</span></summary><div class="toc-links"><a href="#2-la-idea-del-filtro-de-kalman">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">03</span><span>El algoritmo EKF</span></summary><div class="toc-links"><a href="#3-el-algoritmo-ekf">Ir al bloque</a><a href="#31-los-jacobianos">3.1. Los jacobianos</a><a href="#32-dimensiones">3.2. Dimensiones</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">04</span><span>De la fórmula al código: quién es quién</span></summary><div class="toc-links"><a href="#4-de-la-fórmula-al-código-quién-es-quién">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">05</span><span>El notebook, celda a celda</span></summary><div class="toc-links"><a href="#5-el-notebook-celda-a-celda">Ir al bloque</a><a href="#51-importaciones-celda-3">5.1. Importaciones (celda 3)</a><a href="#52-assignment-1-sensorobserve-celda-5">5.2. ASSIGNMENT 1: Sensor.observe() (celda 5)</a><a href="#53-assignment-1-random_observation-celda-5">5.3. ASSIGNMENT 1: random_observation() (celda 5)</a><a href="#54-assignment-2-robotstep-celda-10">5.4. ASSIGNMENT 2: Robot.step() (celda 10)</a><a href="#55-assignment-3-getobsjac-celda-15">5.5. ASSIGNMENT 3: getObsJac() (celda 15)</a><a href="#56-assignment-4-ekflocalization-celda-20">5.6. ASSIGNMENT 4: EKFLocalization() (celda 20)</a><a href="#57-main-celda-25">5.7. main() (celda 25)</a><a href="#58-assignment-5-fovsensorobserve_in_fov-celda-28">5.8. ASSIGNMENT 5: FOVSensor.observe_in_fov() (celda 28)</a><a href="#59-una-rareza-de-la-celda-22">5.9. Una rareza de la celda 22</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">06</span><span>Qué se observa al ejecutarlo</span></summary><div class="toc-links"><a href="#6-qué-se-observa-al-ejecutarlo">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">07</span><span>Cálculos resueltos</span></summary><div class="toc-links"><a href="#7-cálculos-resueltos">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">08</span><span>Errores típicos en el código</span></summary><div class="toc-links"><a href="#8-errores-típicos-en-el-código">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">09</span><span>Rellena el hueco</span></summary><div class="toc-links"><a href="#9-rellena-el-hueco">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">10</span><span>Preguntas de repaso (con solución)</span></summary><div class="toc-links"><a href="#10-preguntas-de-repaso-con-solución">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">11</span><span>Ideas esenciales para recordar</span></summary><div class="toc-links"><a href="#11-ideas-esenciales-para-recordar">Ir al bloque</a></div></details></nav><a class="toc-practice" href="index.html?lesson=P5.2&amp;kind=Pr%C3%A1ctica#filters">Practicar preguntas ↗</a></div></aside><div class="reading-main"><article class="notes-body"><section id="52-localización-con-ekf" class="level1">
+<h1>5.2 Localización con EKF</h1>
+<p>Guía de estudio del notebook <a href="../../Practicas/uma_robotics_2027/Chapter%2005.%20Localization/5.2%20EKF%20Localization.ipynb">5.2 EKF Localization</a>. La resolución concreta y los resultados de los experimentos están en <a href="../../Practicas/uma_robotics_2027/Chapter%2005.%20Localization/5.2%20Resoluci%C3%B3n%20y%20gu%C3%ADa%20de%20entrega.md">5.2 Resolución y guía de entrega.md</a>.</p>
+<p><strong>Enfoque de examen.</strong> Las preguntas de prácticas son sobre <strong>el código</strong>: localizar la línea con el error y rellenar huecos. Por eso esta guía recorre el código línea a línea, con dimensiones y orden de argumentos. Al final hay cálculos resueltos, errores típicos, huecos para rellenar y preguntas de repaso.</p>
+<section id="índice" class="level2">
+<h2>Índice</h2>
+<ol type="1">
+<li><a href="#1-objetivo-y-lugar-en-el-temario">Objetivo y lugar en el temario</a></li>
+<li><a href="#2-la-idea-del-filtro-de-kalman">La idea del filtro de Kalman</a></li>
+<li><a href="#3-el-algoritmo-ekf">El algoritmo EKF</a></li>
+<li><a href="#4-de-la-fórmula-al-código-quién-es-quién">De la fórmula al código: quién es quién</a></li>
+<li><a href="#5-el-notebook-celda-a-celda">El notebook, celda a celda</a></li>
+<li><a href="#6-qué-se-observa-al-ejecutarlo">Qué se observa al ejecutarlo</a></li>
+<li><a href="#7-cálculos-resueltos">Cálculos resueltos</a></li>
+<li><a href="#8-errores-típicos-en-el-código">Errores típicos en el código</a></li>
+<li><a href="#9-rellena-el-hueco">Rellena el hueco</a></li>
+<li><a href="#10-preguntas-de-repaso-con-solución">Preguntas de repaso (con solución)</a></li>
+<li><a href="#11-ideas-esenciales-para-recordar">Ideas esenciales para recordar</a></li>
+</ol>
+</section>
+<section id="1-objetivo-y-lugar-en-el-temario" class="level2">
+<h2>1. Objetivo y lugar en el temario</h2>
+<p><strong>Localizar</strong> un robot es averiguar su pose <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>𝐱</mi><annotation encoding="application/x-tex">\mathbf{x}</annotation></semantics></math> dentro de un mapa <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ℳ</mi><annotation encoding="application/x-tex">\mathcal{M}</annotation></semantics></math> conocido, a partir de sus movimientos <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>𝐮</mi><mrow><mn>0</mn><mo>:</mo><mi>t</mi></mrow></msub><annotation encoding="application/x-tex">\mathbf{u}_{0:t}</annotation></semantics></math> y de sus medidas <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>𝐳</mi><mrow><mn>0</mn><mo>:</mo><mi>t</mi></mrow></msub><annotation encoding="application/x-tex">\mathbf{z}_{0:t}</annotation></semantics></math>. El notebook 5.0 presenta el problema y sus tres variantes:</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Problema</th>
+<th>Qué se sabe al empezar</th>
+<th>El reto</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Position tracking</strong></td>
+<td>La pose inicial, de forma aproximada</td>
+<td>Mantener la estimación mientras el robot se mueve</td>
+</tr>
+<tr>
+<td><strong>Global localization</strong></td>
+<td>Nada: el robot no sabe dónde está</td>
+<td>Encontrar la pose desde cero</td>
+</tr>
+<tr>
+<td><strong>Kidnapped robot</strong></td>
+<td>El robot cree saberlo, pero se equivoca: lo han movido sin que lo note</td>
+<td>Detectar el error y volver a localizarse</td>
+</tr>
+</tbody>
+</table>
+<p>El EKF de este notebook resuelve el primero: <strong>empieza conociendo su pose</strong> (<code>xEst = true_pose</code>, <code>PEst = 0</code>) y la va siguiendo.</p>
+<p>Esta práctica junta dos temas anteriores:</p>
+<ul>
+<li>Del <strong>tema 3</strong>: la composición de poses <code>tcomp</code> y los jacobianos <code>J1</code> y <code>J2</code>, con los que se predice el movimiento y su incertidumbre.</li>
+<li>Del <strong>tema 4</strong>: el modelo de observación de rango y marcación de la práctica 4.1, con el que se predice qué debería medir el robot.</li>
+</ul>
+</section>
+<section id="2-la-idea-del-filtro-de-kalman" class="level2">
+<h2>2. La idea del filtro de Kalman</h2>
+<p>Tenemos dos fuentes de información, y ninguna es fiable por sí sola:</p>
+<ol type="1">
+<li><strong>El modelo de movimiento:</strong> «he mandado avanzar 10 m, así que estaré 10 m más adelante». Funciona a corto plazo, pero el error se acumula sin límite.</li>
+<li><strong>El sensor:</strong> «veo aquel landmark a 12 m». No acumula error, pero cada lectura tiene ruido y, por sí sola, no suele bastar para fijar la pose.</li>
+</ol>
+<p>El filtro de Kalman las combina en un ciclo de dos pasos. En cada paso guarda la pose como una <strong>gaussiana</strong>: una media <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>𝛍</mi><annotation encoding="application/x-tex">\boldsymbol{\mu}</annotation></semantics></math> (la mejor estimación) y una covarianza <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="normal">Σ</mi><annotation encoding="application/x-tex">\Sigma</annotation></semantics></math> (cuánto se fía de ella).</p>
+<ul>
+<li><strong>Predicción:</strong> se mueve la media con el comando. La incertidumbre <strong>crece</strong>, porque moverse añade error.</li>
+<li><strong>Corrección:</strong> se compara lo medido con lo que se esperaba medir y se mueve la media según esa diferencia. La incertidumbre <strong>se reduce</strong>, porque se ha ganado información.</li>
+</ul>
+<p><strong>Por qué «Extended».</strong> El filtro de Kalman básico exige modelos lineales. Los nuestros no lo son: la composición de poses usa senos y cosenos, y la observación usa una raíz y un <code>arctan2</code>. El EKF <strong>aproxima cada modelo por su recta tangente</strong> en la estimación actual. Esas tangentes son los jacobianos <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>G</mi><mi>t</mi></msub><annotation encoding="application/x-tex">G_t</annotation></semantics></math> y <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>H</mi><mi>t</mi></msub><annotation encoding="application/x-tex">H_t</annotation></semantics></math>.</p>
+</section>
+<section id="3-el-algoritmo-ekf" class="level2">
+<h2>3. El algoritmo EKF</h2>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtable><mtr><mtd columnalign="right" style="text-align: right"></mtd><mtd columnalign="left" style="text-align: left"><mtext mathvariant="bold">𝐏𝐫𝐞𝐝𝐢𝐜𝐜𝐢ó𝐧</mtext></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"></mtd><mtd columnalign="left" style="text-align: left"><msub><mover><mi>𝛍</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub><mo>=</mo><msub><mi>𝛍</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>⊕</mo><msub><mi>𝐮</mi><mi>t</mi></msub></mtd><mtd columnalign="right" style="text-align: right"><mtext mathvariant="normal">(1. Pose predicha)</mtext></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"></mtd><mtd columnalign="left" style="text-align: left"><msub><mover><mi mathvariant="normal">Σ</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub><mo>=</mo><msub><mi>G</mi><mi>t</mi></msub><msub><mi mathvariant="normal">Σ</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><msubsup><mi>G</mi><mi>t</mi><mi>T</mi></msubsup><mo>+</mo><msub><mi>R</mi><mi>t</mi></msub></mtd><mtd columnalign="right" style="text-align: right"><mtext mathvariant="normal">(2. Su incertidumbre)</mtext></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"></mtd><mtd columnalign="left" style="text-align: left"><mtext mathvariant="bold">𝐂𝐨𝐫𝐫𝐞𝐜𝐜𝐢ó𝐧</mtext></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"></mtd><mtd columnalign="left" style="text-align: left"><msub><mi>K</mi><mi>t</mi></msub><mo>=</mo><msub><mover><mi mathvariant="normal">Σ</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub><msubsup><mi>H</mi><mi>t</mi><mi>T</mi></msubsup><mo stretchy="false" form="prefix">(</mo><msub><mi>H</mi><mi>t</mi></msub><msub><mover><mi mathvariant="normal">Σ</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub><msubsup><mi>H</mi><mi>t</mi><mi>T</mi></msubsup><mo>+</mo><msub><mi>Q</mi><mi>t</mi></msub><msup><mo stretchy="false" form="postfix">)</mo><mrow><mi>−</mi><mn>1</mn></mrow></msup></mtd><mtd columnalign="right" style="text-align: right"><mtext mathvariant="normal">(3. Ganancia de Kalman)</mtext></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"></mtd><mtd columnalign="left" style="text-align: left"><msub><mi>𝛍</mi><mi>t</mi></msub><mo>=</mo><msub><mover><mi>𝛍</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub><mo>+</mo><msub><mi>K</mi><mi>t</mi></msub><mo stretchy="false" form="prefix">(</mo><msub><mi>𝐳</mi><mi>t</mi></msub><mo>−</mo><mi>𝐡</mi><mo stretchy="false" form="prefix">(</mo><msub><mover><mi>𝛍</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">)</mo></mtd><mtd columnalign="right" style="text-align: right"><mtext mathvariant="normal">(4. Pose estimada)</mtext></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"></mtd><mtd columnalign="left" style="text-align: left"><msub><mi mathvariant="normal">Σ</mi><mi>t</mi></msub><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mi>I</mi><mo>−</mo><msub><mi>K</mi><mi>t</mi></msub><msub><mi>H</mi><mi>t</mi></msub><mo stretchy="false" form="postfix">)</mo><msub><mover><mi mathvariant="normal">Σ</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub></mtd><mtd columnalign="right" style="text-align: right"><mtext mathvariant="normal">(5. Su incertidumbre)</mtext></mtd></mtr></mtable><annotation encoding="application/x-tex">
+\begin{aligned}
+&amp;\textbf{Predicción} \\
+&amp;\bar{\boldsymbol{\mu}}_t = \boldsymbol{\mu}_{t-1} \oplus \mathbf{u}_t &amp; \text{(1. Pose predicha)} \\
+&amp;\bar\Sigma_t = G_t \Sigma_{t-1} G_t^T + R_t &amp; \text{(2. Su incertidumbre)} \\
+&amp;\textbf{Corrección} \\
+&amp;K_t = \bar\Sigma_t H_t^T (H_t \bar\Sigma_t H_t^T + Q_t)^{-1} &amp; \text{(3. Ganancia de Kalman)} \\
+&amp;\boldsymbol{\mu}_t = \bar{\boldsymbol{\mu}}_t + K_t (\mathbf{z}_t - \mathbf{h}(\bar{\boldsymbol{\mu}}_t)) &amp; \text{(4. Pose estimada)} \\
+&amp;\Sigma_t = (I - K_t H_t) \bar\Sigma_t &amp; \text{(5. Su incertidumbre)}
+\end{aligned}
+</annotation></semantics></math></p>
+<p>Cada ecuación, en una frase:</p>
+<ol type="1">
+<li><strong>Pose predicha:</strong> la pose anterior compuesta con el comando.</li>
+<li><strong>Incertidumbre predicha:</strong> la incertidumbre anterior, propagada por el movimiento (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>G</mi><mi>t</mi></msub><annotation encoding="application/x-tex">G_t</annotation></semantics></math>), más la que añade el propio movimiento (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>R</mi><mi>t</mi></msub><annotation encoding="application/x-tex">R_t</annotation></semantics></math>). Por eso solo puede crecer.</li>
+<li><strong>Ganancia <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>K</mi><mi>t</mi></msub><annotation encoding="application/x-tex">K_t</annotation></semantics></math>:</strong> decide cuánto se cree la medida frente a la predicción. El término entre paréntesis es la covarianza de la innovación, que junta la incertidumbre de la predicción (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>H</mi><mi>t</mi></msub><msub><mover><mi mathvariant="normal">Σ</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub><msubsup><mi>H</mi><mi>t</mi><mi>T</mi></msubsup></mrow><annotation encoding="application/x-tex">H_t\bar\Sigma_t H_t^T</annotation></semantics></math>) y la del sensor (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>Q</mi><mi>t</mi></msub><annotation encoding="application/x-tex">Q_t</annotation></semantics></math>).</li>
+<li><strong>Pose estimada:</strong> la predicción más una corrección. La <strong>innovación</strong> <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>𝐳</mi><mi>t</mi></msub><mo>−</mo><mi>𝐡</mi><mo stretchy="false" form="prefix">(</mo><msub><mover><mi>𝛍</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\mathbf{z}_t - \mathbf{h}(\bar{\boldsymbol{\mu}}_t)</annotation></semantics></math> es la diferencia entre lo medido y lo que se esperaba medir. <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>K</mi><mi>t</mi></msub><annotation encoding="application/x-tex">K_t</annotation></semantics></math> la traduce de unidades de medida a unidades de pose.</li>
+<li><strong>Incertidumbre estimada:</strong> se reduce tanto más cuanto mayor es <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>K</mi><mi>t</mi></msub><annotation encoding="application/x-tex">K_t</annotation></semantics></math>.</li>
+</ol>
+<p><strong>La ganancia, con la intuición de los casos extremos</strong> (con <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">H = 1</annotation></semantics></math> en 1D, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi><mo>=</mo><msup><mover><mi>σ</mi><mo accent="true">‾</mo></mover><mn>2</mn></msup><mi>/</mi><mo stretchy="false" form="prefix">(</mo><msup><mover><mi>σ</mi><mo accent="true">‾</mo></mover><mn>2</mn></msup><mo>+</mo><mi>Q</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">K = \bar\sigma^2 / (\bar\sigma^2 + Q)</annotation></semantics></math>):</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Situación</th>
+<th><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>K</mi><annotation encoding="application/x-tex">K</annotation></semantics></math></th>
+<th>Qué hace el filtro</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sensor muy malo (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Q</mi><mo>→</mo><mi>∞</mi></mrow><annotation encoding="application/x-tex">Q \to \infty</annotation></semantics></math>)</td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\to 0</annotation></semantics></math></td>
+<td>Ignora la medida y se queda con la predicción</td>
+</tr>
+<tr>
+<td>Sensor perfecto (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Q</mi><mo>→</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">Q \to 0</annotation></semantics></math>)</td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\to 1</annotation></semantics></math></td>
+<td>Se fía por completo de la medida</td>
+</tr>
+<tr>
+<td>Predicción muy incierta (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mover><mi>σ</mi><mo accent="true">‾</mo></mover><mn>2</mn></msup><annotation encoding="application/x-tex">\bar\sigma^2</annotation></semantics></math> grande)</td>
+<td>Crece</td>
+<td>Hace más caso a la medida</td>
+</tr>
+</tbody>
+</table>
+<section id="31-los-jacobianos" class="level3">
+<h3>3.1. Los jacobianos</h3>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr>
+<th>Matriz</th>
+<th>Derivada de</th>
+<th>Respecto a</th>
+<th>Dónde se evalúa</th>
+<th>Dimensión</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>G</mi><mi>t</mi></msub><annotation encoding="application/x-tex">G_t</annotation></semantics></math> = <code>J1</code></td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>𝐠</mi><annotation encoding="application/x-tex">\mathbf{g}</annotation></semantics></math> (movimiento)</td>
+<td>La pose</td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>𝛍</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><annotation encoding="application/x-tex">\boldsymbol{\mu}_{t-1}</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>𝐮</mi><mi>t</mi></msub><annotation encoding="application/x-tex">\mathbf{u}_t</annotation></semantics></math></td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>3</mn><mo>×</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">3 \times 3</annotation></semantics></math></td>
+</tr>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>J</mi><mn>2</mn></msub><annotation encoding="application/x-tex">J_2</annotation></semantics></math> = <code>J2</code></td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>𝐠</mi><annotation encoding="application/x-tex">\mathbf{g}</annotation></semantics></math> (movimiento)</td>
+<td>El comando</td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>𝛍</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><annotation encoding="application/x-tex">\boldsymbol{\mu}_{t-1}</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>𝐮</mi><mi>t</mi></msub><annotation encoding="application/x-tex">\mathbf{u}_t</annotation></semantics></math></td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>3</mn><mo>×</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">3 \times 3</annotation></semantics></math></td>
+</tr>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>H</mi><mi>t</mi></msub><annotation encoding="application/x-tex">H_t</annotation></semantics></math></td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>𝐡</mi><annotation encoding="application/x-tex">\mathbf{h}</annotation></semantics></math> (observación)</td>
+<td>La pose</td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mover><mi>𝛍</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub><annotation encoding="application/x-tex">\bar{\boldsymbol{\mu}}_t</annotation></semantics></math></td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mi>n</mi><mo>×</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">2n \times 3</annotation></semantics></math></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Por qué <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>R</mi><mi>t</mi></msub><mo>=</mo><msub><mi>J</mi><mn>2</mn></msub><msub><mi mathvariant="normal">Σ</mi><msub><mi>𝐮</mi><mi>t</mi></msub></msub><msubsup><mi>J</mi><mn>2</mn><mi>T</mi></msubsup></mrow><annotation encoding="application/x-tex">R_t = J_2 \Sigma_{\mathbf{u}_t} J_2^T</annotation></semantics></math>.</strong> El ruido del comando está expresado <strong>en el marco del robot</strong>, y el filtro necesita su efecto <strong>en el mundo</strong>. <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>J</mi><mn>2</mn></msub><annotation encoding="application/x-tex">J_2</annotation></semantics></math> hace ese giro.</p>
+</section>
+<section id="32-dimensiones" class="level3">
+<h3>3.2. Dimensiones</h3>
+<p>Con <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math> landmarks observados, todo encaja así. Es muy útil para detectar errores en el código:</p>
+<table>
+<thead>
+<tr>
+<th>Elemento</th>
+<th>Dimensión</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>𝛍</mi><annotation encoding="application/x-tex">\boldsymbol{\mu}</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><mi>𝛍</mi><mo accent="true">‾</mo></mover><annotation encoding="application/x-tex">\bar{\boldsymbol{\mu}}</annotation></semantics></math></td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>3</mn><mo>×</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">3 \times 1</annotation></semantics></math></td>
+</tr>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="normal">Σ</mi><annotation encoding="application/x-tex">\Sigma</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><mi mathvariant="normal">Σ</mi><mo accent="true">‾</mo></mover><annotation encoding="application/x-tex">\bar\Sigma</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>G</mi><mi>t</mi></msub><annotation encoding="application/x-tex">G_t</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>J</mi><mn>2</mn></msub><annotation encoding="application/x-tex">J_2</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>R</mi><mi>t</mi></msub><annotation encoding="application/x-tex">R_t</annotation></semantics></math></td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>3</mn><mo>×</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">3 \times 3</annotation></semantics></math></td>
+</tr>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>𝐳</mi><mi>t</mi></msub><annotation encoding="application/x-tex">\mathbf{z}_t</annotation></semantics></math> e innovación</td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mi>n</mi><mo>×</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">2n \times 1</annotation></semantics></math></td>
+</tr>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>Q</mi><mi>t</mi></msub><annotation encoding="application/x-tex">Q_t</annotation></semantics></math> y <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>H</mi><mi>t</mi></msub><msub><mover><mi mathvariant="normal">Σ</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub><msubsup><mi>H</mi><mi>t</mi><mi>T</mi></msubsup><mo>+</mo><msub><mi>Q</mi><mi>t</mi></msub></mrow><annotation encoding="application/x-tex">H_t \bar\Sigma_t H_t^T + Q_t</annotation></semantics></math></td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mi>n</mi><mo>×</mo><mn>2</mn><mi>n</mi></mrow><annotation encoding="application/x-tex">2n \times 2n</annotation></semantics></math></td>
+</tr>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>H</mi><mi>t</mi></msub><annotation encoding="application/x-tex">H_t</annotation></semantics></math></td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mi>n</mi><mo>×</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">2n \times 3</annotation></semantics></math></td>
+</tr>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>K</mi><mi>t</mi></msub><annotation encoding="application/x-tex">K_t</annotation></semantics></math></td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>3</mn><mo>×</mo><mn>2</mn><mi>n</mi></mrow><annotation encoding="application/x-tex">3 \times 2n</annotation></semantics></math></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="4-de-la-fórmula-al-código-quién-es-quién" class="level2">
+<h2>4. De la fórmula al código: quién es quién</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Fórmula</th>
+<th>Código</th>
+<th>Observación</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pose ideal</td>
+<td><code>robot.pose</code></td>
+<td>Solo comandos sin ruido. <strong>El filtro no la usa</strong></td>
+</tr>
+<tr>
+<td>Pose real <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>𝐱</mi><mi>t</mi></msub><annotation encoding="application/x-tex">\mathbf{x}_t</annotation></semantics></math></td>
+<td><code>robot.true_pose</code></td>
+<td>Comandos con ruido. <strong>El filtro no la conoce</strong>; solo el sensor mide desde ella</td>
+</tr>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>𝛍</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><annotation encoding="application/x-tex">\boldsymbol{\mu}_{t-1}</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi mathvariant="normal">Σ</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><annotation encoding="application/x-tex">\Sigma_{t-1}</annotation></semantics></math></td>
+<td><code>robot.xEst</code>, <code>robot.PEst</code></td>
+<td>Estimación anterior</td>
+</tr>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mover><mi>𝛍</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub><annotation encoding="application/x-tex">\bar{\boldsymbol{\mu}}_t</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mover><mi mathvariant="normal">Σ</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub><annotation encoding="application/x-tex">\bar\Sigma_t</annotation></semantics></math></td>
+<td><code>xPred</code>, <code>PPred</code></td>
+<td>Predicción</td>
+</tr>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>𝛍</mi><mi>t</mi></msub><annotation encoding="application/x-tex">\boldsymbol{\mu}_t</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi mathvariant="normal">Σ</mi><mi>t</mi></msub><annotation encoding="application/x-tex">\Sigma_t</annotation></semantics></math></td>
+<td><code>xEst</code>, <code>PEst</code></td>
+<td>Lo que devuelve la función</td>
+</tr>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi mathvariant="normal">Σ</mi><msub><mi>𝐮</mi><mi>t</mi></msub></msub><annotation encoding="application/x-tex">\Sigma_{\mathbf{u}_t}</annotation></semantics></math></td>
+<td><code>robot.cov_move</code></td>
+<td>Se llama <code>R</code> en las celdas de ejecución, <strong>pero no es <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>R</mi><mi>t</mi></msub><annotation encoding="application/x-tex">R_t</annotation></semantics></math></strong></td>
+</tr>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>R</mi><mi>t</mi></msub><annotation encoding="application/x-tex">R_t</annotation></semantics></math></td>
+<td><code>j2@robot.cov_move@j2.T</code></td>
+<td>No tiene variable propia</td>
+</tr>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Q</mi><annotation encoding="application/x-tex">Q</annotation></semantics></math> de un landmark</td>
+<td><code>sensor.cov</code></td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mo>×</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">2 \times 2</annotation></semantics></math></td>
+</tr>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>Q</mi><mi>t</mi></msub><annotation encoding="application/x-tex">Q_t</annotation></semantics></math></td>
+<td><code>Q_t</code></td>
+<td>Un bloque <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Q</mi><annotation encoding="application/x-tex">Q</annotation></semantics></math> por landmark observado</td>
+</tr>
+</tbody>
+</table>
+<p><strong>La trampa más preguntable:</strong> hay tres poses, y cada función usa una. El sensor mide desde <code>true_pose</code>, la predicción parte de <code>xEst</code> y el jacobiano <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>H</mi><annotation encoding="application/x-tex">H</annotation></semantics></math> se evalúa en <code>xPred</code>.</p>
+</section>
+<section id="5-el-notebook-celda-a-celda" class="level2">
+<h2>5. El notebook, celda a celda</h2>
+<section id="51-importaciones-celda-3" class="level3">
+<h3>5.1. Importaciones (celda 3)</h3>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>matplotlib widget</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sys</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>sys.path.append(<span class="st">&quot;..&quot;</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> utils.AngleWrap <span class="im">import</span> AngleWrapList</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> utils.PlotEllipse <span class="im">import</span> PlotEllipse</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> utils.Drawings <span class="im">import</span> DrawRobot, drawFOV, drawObservations</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> utils.Jacobians <span class="im">import</span> J1, J2</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> utils.tcomp <span class="im">import</span> tcomp</span></code></pre></div>
+<p>El notebook está en <code>Chapter 05. Localization/</code> y <code>utils/</code> está un nivel por encima, de ahí <code>".."</code>. <code>%matplotlib widget</code> necesita tener instalado <code>ipympl</code>.</p>
+</section>
+<section id="52-assignment-1-sensorobserve-celda-5" class="level3">
+<h3>5.2. ASSIGNMENT 1: <code>Sensor.observe()</code> (celda 5)</h3>
+<p>Recordatorio del modelo, para un landmark en <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><msub><mi>x</mi><mi>i</mi></msub><mo>,</mo><msub><mi>y</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(x_i, y_i)</annotation></semantics></math> y el robot en <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mi>x</mi><mo>,</mo><mi>y</mi><mo>,</mo><mi>θ</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(x, y, \theta)</annotation></semantics></math>:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝐡</mi><mo stretchy="false" form="prefix">(</mo><mi>𝐱</mi><mo>,</mo><msub><mi>𝐦</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><msqrt><mrow><mo stretchy="false" form="prefix">(</mo><msub><mi>x</mi><mi>i</mi></msub><mo>−</mo><mi>x</mi><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup><mo>+</mo><mo stretchy="false" form="prefix">(</mo><msub><mi>y</mi><mi>i</mi></msub><mo>−</mo><mi>y</mi><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup></mrow></msqrt></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mtext mathvariant="normal">atan2</mtext><mo stretchy="false" form="prefix">(</mo><msub><mi>y</mi><mi>i</mi></msub><mo>−</mo><mi>y</mi><mo>,</mo><mspace width="0.222em"></mspace><msub><mi>x</mi><mi>i</mi></msub><mo>−</mo><mi>x</mi><mo stretchy="false" form="postfix">)</mo><mo>−</mo><mi>θ</mi></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">
+\mathbf{h}(\mathbf{x}, \mathbf{m}_i) = \begin{bmatrix} \sqrt{(x_i-x)^2+(y_i-y)^2} \\ \text{atan2}(y_i-y,\ x_i-x) - \theta \end{bmatrix}
+</annotation></semantics></math></p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>delta <span class="op">=</span> world <span class="op">-</span> from_pose[<span class="dv">0</span>:<span class="dv">2</span>]</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>z <span class="op">=</span> np.empty_like(delta)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>z[<span class="dv">0</span>, :] <span class="op">=</span> np.sqrt(delta[<span class="dv">0</span>, :]<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> delta[<span class="dv">1</span>, :]<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>z[<span class="dv">1</span>, :] <span class="op">=</span> np.arctan2(delta[<span class="dv">1</span>, :], delta[<span class="dv">0</span>, :]) <span class="op">-</span> from_pose[<span class="dv">2</span>, <span class="dv">0</span>]</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>z[<span class="dv">1</span>, :] <span class="op">=</span> AngleWrapList(z[<span class="dv">1</span>, :])</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> noisy:</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    z <span class="op">+=</span> np.sqrt(<span class="va">self</span>.cov)<span class="op">@</span>random.randn(<span class="dv">2</span>, world.shape[<span class="dv">1</span>])</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> flatten:</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.vstack(z.flatten(<span class="st">&#39;F&#39;</span>))</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> z</span></code></pre></div>
+<p>Línea a línea:</p>
+<ul>
+<li><strong><code>delta = world - from_pose[0:2]</code>:</strong> <code>world</code> es <code>(2, n)</code> y <code>from_pose[0:2]</code> es <code>(2, 1)</code>. Por <em>broadcasting</em>, la posición del robot se resta a cada columna. <code>delta</code> queda <code>(2, n)</code>: fila 0 los <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><mi>x</mi></mrow><annotation encoding="application/x-tex">\Delta x</annotation></semantics></math> y fila 1 los <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><mi>y</mi></mrow><annotation encoding="application/x-tex">\Delta y</annotation></semantics></math>.</li>
+<li><strong><code>z[0, :]</code>:</strong> la distancia a cada landmark.</li>
+<li><strong><code>z[1, :]</code>:</strong> la marcación. <code>arctan2</code> recibe <strong>primero <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><mi>y</mi></mrow><annotation encoding="application/x-tex">\Delta y</annotation></semantics></math> y después <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><mi>x</mi></mrow><annotation encoding="application/x-tex">\Delta x</annotation></semantics></math></strong>, y se le resta <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>θ</mi><annotation encoding="application/x-tex">\theta</annotation></semantics></math> porque el ángulo se mide desde el frente del robot. <code>from_pose[2, 0]</code> es un número; <code>from_pose[2]</code> sería un array de un elemento.</li>
+<li><strong><code>AngleWrapList</code>:</strong> devuelve el ángulo a <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">[</mo><mi>−</mi><mi>π</mi><mo>,</mo><mi>π</mi><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">[-\pi, \pi]</annotation></semantics></math>.</li>
+<li><strong>Ruido:</strong> <code>random.randn(2, n)</code> da gaussianas de <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>σ</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\sigma = 1</annotation></semantics></math>. Al multiplicar por <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msqrt><mi>Q</mi></msqrt><annotation encoding="application/x-tex">\sqrt{Q}</annotation></semantics></math>, cada fila adquiere su desviación. <code>np.sqrt</code> actúa elemento a elemento, así que esto <strong>solo es válido si <code>cov</code> es diagonal</strong>.</li>
+<li><strong><code>z.flatten('F')</code>:</strong> recorre por columnas (<em>Fortran order</em>) y da <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">[</mo><msub><mi>d</mi><mn>1</mn></msub><mo>,</mo><msub><mi>θ</mi><mn>1</mn></msub><mo>,</mo><msub><mi>d</mi><mn>2</mn></msub><mo>,</mo><msub><mi>θ</mi><mn>2</mn></msub><mo>,</mo><mi>…</mi><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">[d_1, \theta_1, d_2, \theta_2, \dots]</annotation></semantics></math>. Con <code>'C'</code> saldría <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">[</mo><msub><mi>d</mi><mn>1</mn></msub><mo>,</mo><msub><mi>d</mi><mn>2</mn></msub><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi>θ</mi><mn>1</mn></msub><mo>,</mo><msub><mi>θ</mi><mn>2</mn></msub><mo>,</mo><mi>…</mi><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">[d_1, d_2, \dots, \theta_1, \theta_2, \dots]</annotation></semantics></math>, que no encaja con <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>H</mi><annotation encoding="application/x-tex">H</annotation></semantics></math>.</li>
+<li><strong><code>np.vstack(...)</code>:</strong> convierte el array 1D en un vector columna <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>2</mn><mi>n</mi><mo>,</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(2n, 1)</annotation></semantics></math>.</li>
+</ul>
+</section>
+<section id="53-assignment-1-random_observation-celda-5" class="level3">
+<h3>5.3. ASSIGNMENT 1: <code>random_observation()</code> (celda 5)</h3>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>n_landmarks <span class="op">=</span> world.shape[<span class="dv">1</span>]</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>rand_idx <span class="op">=</span> random.randint(<span class="dv">0</span>, n_landmarks)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>world <span class="op">=</span> world[:, [rand_idx]]</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>z <span class="op">=</span> <span class="va">self</span>.observe(from_pose, world, noisy)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="cf">return</span> z, np.array([rand_idx])</span></code></pre></div>
+<ul>
+<li><strong><code>world.shape[1]</code>:</strong> los landmarks están en columnas.</li>
+<li><strong><code>random.randint(0, n)</code>:</strong> el límite superior <strong>no se incluye</strong>, así que da de <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0</mn><annotation encoding="application/x-tex">0</annotation></semantics></math> a <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">n-1</annotation></semantics></math>.</li>
+<li><strong><code>world[:, [rand_idx]]</code>:</strong> los corchetes interiores conservan la forma <code>(2, 1)</code>. Sin ellos saldría <code>(2,)</code> y <code>observe()</code> fallaría al restar.</li>
+<li><strong><code>np.array([rand_idx])</code>:</strong> el índice se devuelve como array porque el EKF usa <code>landmark.shape[0]</code> y <code>Map[:, landmark]</code>.</li>
+</ul>
+</section>
+<section id="54-assignment-2-robotstep-celda-10" class="level3">
+<h3>5.4. ASSIGNMENT 2: <code>Robot.step()</code> (celda 10)</h3>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> step(<span class="va">self</span>, u):</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>.pose <span class="op">=</span> tcomp(<span class="va">self</span>.pose,u)                     <span class="co"># Ideal: sin ruido</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    noise <span class="op">=</span> np.sqrt(<span class="va">self</span>.cov_move)<span class="op">@</span>random.randn(<span class="dv">3</span>,<span class="dv">1</span>)   <span class="co"># Ruido del comando</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    noisy_u <span class="op">=</span> u <span class="op">+</span> noise</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>.true_pose <span class="op">=</span> tcomp(<span class="va">self</span>.true_pose, noisy_u)    <span class="co"># Real: con ruido</span></span></code></pre></div>
+<ul>
+<li>El ruido se suma <strong>al comando</strong>, porque se expresa en el marco del robot.</li>
+<li>Se compone sobre <strong><code>self.true_pose</code></strong>, no sobre <code>self.pose</code>. Si se compusiera sobre la ideal, el error no se acumularía: la pose real volvería cada vez a la ideal más un solo ruido.</li>
+</ul>
+</section>
+<section id="55-assignment-3-getobsjac-celda-15" class="level3">
+<h3>5.5. ASSIGNMENT 3: <code>getObsJac()</code> (celda 15)</h3>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>J</mi><mrow><mi>𝐡</mi><mo>,</mo><mi>𝐱</mi></mrow></msub><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mi>−</mi><mfrac><mrow><mi mathvariant="normal">Δ</mi><mi>x</mi></mrow><mi>d</mi></mfrac></mtd><mtd columnalign="center" style="text-align: center"><mi>−</mi><mfrac><mrow><mi mathvariant="normal">Δ</mi><mi>y</mi></mrow><mi>d</mi></mfrac></mtd><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mfrac><mrow><mi mathvariant="normal">Δ</mi><mi>y</mi></mrow><msup><mi>d</mi><mn>2</mn></msup></mfrac></mtd><mtd columnalign="center" style="text-align: center"><mi>−</mi><mfrac><mrow><mi mathvariant="normal">Δ</mi><mi>x</mi></mrow><msup><mi>d</mi><mn>2</mn></msup></mfrac></mtd><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>1</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow><mo>,</mo><mspace width="2.0em"></mspace><mi mathvariant="normal">Δ</mi><mi>x</mi><mo>=</mo><msub><mi>x</mi><mi>i</mi></msub><mo>−</mo><mi>x</mi><mo>,</mo><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mi mathvariant="normal">Δ</mi><mi>y</mi><mo>=</mo><msub><mi>y</mi><mi>i</mi></msub><mo>−</mo><mi>y</mi></mrow><annotation encoding="application/x-tex">
+J_{\mathbf{h},\mathbf{x}} =
+\begin{bmatrix}
+-\frac{\Delta x}{d} &amp; -\frac{\Delta y}{d} &amp; 0 \\
+\frac{\Delta y}{d^2} &amp; -\frac{\Delta x}{d^2} &amp; -1
+\end{bmatrix},
+\qquad \Delta x = x_i - x,\ \ \Delta y = y_i - y
+</annotation></semantics></math></p>
+<p><strong>Qué significa cada fila.</strong> Es una forma de recordarla sin memorizar:</p>
+<ul>
+<li><strong>Fila 1 (distancia):</strong> si el robot avanza hacia el landmark, la distancia baja; de ahí los signos negativos. Girar sobre sí mismo no cambia la distancia, de ahí el <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0</mn><annotation encoding="application/x-tex">0</annotation></semantics></math>.</li>
+<li><strong>Fila 2 (marcación):</strong> si el robot gira <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>+</mi><mn>1</mn></mrow><annotation encoding="application/x-tex">+1</annotation></semantics></math> rad, el landmark se ve <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>1</mn><annotation encoding="application/x-tex">1</annotation></semantics></math> rad más a la derecha, de ahí el <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>1</mn></mrow><annotation encoding="application/x-tex">-1</annotation></semantics></math>. Moverse de lado cambia el ángulo tanto menos cuanto más lejos está el landmark, de ahí el <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>d</mi><mn>2</mn></msup><annotation encoding="application/x-tex">d^2</annotation></semantics></math> en el denominador.</li>
+</ul>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>n_land <span class="op">=</span> <span class="bu">len</span>(lm)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>jH <span class="op">=</span> np.empty((<span class="dv">2</span><span class="op">*</span>n_land,<span class="dv">3</span>))</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(n_land):</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    dx <span class="op">=</span> Map[<span class="dv">0</span>, lm[i]] <span class="op">-</span> xPred[<span class="dv">0</span>, <span class="dv">0</span>]</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    dy <span class="op">=</span> Map[<span class="dv">1</span>, lm[i]] <span class="op">-</span> xPred[<span class="dv">1</span>, <span class="dv">0</span>]</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    d <span class="op">=</span> np.sqrt(dx<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> dy<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    d2 <span class="op">=</span> d<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    ii <span class="op">=</span> <span class="dv">2</span><span class="op">*</span>i</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    jH[ii:ii<span class="op">+</span><span class="dv">2</span>,:] <span class="op">=</span> [</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>        [<span class="op">-</span>dx<span class="op">/</span>d, <span class="op">-</span>dy<span class="op">/</span>d, <span class="dv">0</span>],</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>        [dy<span class="op">/</span>d2, <span class="op">-</span>dx<span class="op">/</span>d2, <span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    ]</span></code></pre></div>
+<ul>
+<li><strong><code>lm[i]</code>, no <code>i</code>:</strong> <code>lm</code> contiene los índices de los landmarks en el mapa. <code>i</code> solo es el número de observación. Si se ven los landmarks 0 y 2, en la segunda vuelta <code>i = 1</code> pero el landmark es el 2.</li>
+<li><strong><code>ii = 2*i</code>:</strong> cada observación ocupa dos filas, así que el bloque <code>i</code> va en las filas <code>2i</code> y <code>2i+1</code>. <code>ii:ii+2</code> no incluye <code>ii+2</code>.</li>
+<li><strong>El signo de <code>dx</code>:</strong> es landmark menos robot, igual que en <code>delta</code>.</li>
+</ul>
+</section>
+<section id="56-assignment-4-ekflocalization-celda-20" class="level3">
+<h3>5.6. ASSIGNMENT 4: <code>EKFLocalization()</code> (celda 20)</h3>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Predicción</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>xPred <span class="op">=</span> tcomp(robot.xEst, u)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>G <span class="op">=</span> J1(robot.xEst, u)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>j2 <span class="op">=</span> J2(robot.xEst, u)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>PPred <span class="op">=</span> G<span class="op">@</span>robot.PEst<span class="op">@</span>G.T <span class="op">+</span> j2<span class="op">@</span>robot.cov_move<span class="op">@</span>j2.T</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Corrección</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> landmark.shape[<span class="dv">0</span>] <span class="op">&gt;</span> <span class="dv">0</span>:</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    H <span class="op">=</span> getObsJac(xPred, landmark, Map)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    Q_t <span class="op">=</span> np.kron(np.eye(landmark.shape[<span class="dv">0</span>]), sensor.cov)</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    K <span class="op">=</span> PPred<span class="op">@</span>H.T<span class="op">@</span>linalg.inv(H<span class="op">@</span>PPred<span class="op">@</span>H.T <span class="op">+</span> Q_t)</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    innovation <span class="op">=</span> z <span class="op">-</span> sensor.observe(xPred, Map[:, landmark], noisy<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    innovation[<span class="dv">1</span>::<span class="dv">2</span>] <span class="op">=</span> AngleWrapList(innovation[<span class="dv">1</span>::<span class="dv">2</span>])</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    xEst <span class="op">=</span> xPred <span class="op">+</span> K<span class="op">@</span>innovation</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    PEst <span class="op">=</span> (np.eye(<span class="dv">3</span>) <span class="op">-</span> K<span class="op">@</span>H)<span class="op">@</span>PPred</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>    xEst <span class="op">=</span> xPred</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>    PEst <span class="op">=</span> PPred</span></code></pre></div>
+<p><strong>Predicción:</strong></p>
+<ul>
+<li><strong><code>tcomp(robot.xEst, u)</code>:</strong> parte de la estimación anterior y usa <code>u</code> <strong>sin ruido</strong>, porque el ruido real es desconocido para el filtro.</li>
+<li><strong><code>J1</code> y <code>J2</code></strong> se evalúan en el punto de partida, <code>robot.xEst</code> y <code>u</code>. No en <code>xPred</code>.</li>
+<li><strong><code>PPred</code>:</strong> son dos sumandos, y cada uno lleva su jacobiano y su traspuesta: <code>G</code> con <code>robot.PEst</code> y <code>j2</code> con <code>robot.cov_move</code>.</li>
+</ul>
+<p><strong>Corrección:</strong></p>
+<ul>
+<li><p><strong><code>landmark.shape[0] &gt; 0</code>:</strong> si no se ha visto nada, no hay nada con lo que corregir.</p></li>
+<li><p><strong><code>H</code></strong> se evalúa en <code>xPred</code>, la pose desde la que se predice la medida.</p></li>
+<li><p><strong><code>np.kron(np.eye(n), sensor.cov)</code>:</strong> repite <code>sensor.cov</code> en la diagonal, una vez por landmark. Con <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>=</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">n = 2</annotation></semantics></math>:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Q</mi><mi>t</mi></msub><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mi>Q</mi></mtd><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd><mtd columnalign="center" style="text-align: center"><mi>Q</mi></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><msubsup><mi>σ</mi><mi>d</mi><mn>2</mn></msubsup></mtd><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd><mtd columnalign="center" style="text-align: center"><msubsup><mi>σ</mi><mi>θ</mi><mn>2</mn></msubsup></mtd><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd><mtd columnalign="center" style="text-align: center"><msubsup><mi>σ</mi><mi>d</mi><mn>2</mn></msubsup></mtd><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd><mtd columnalign="center" style="text-align: center"><msubsup><mi>σ</mi><mi>θ</mi><mn>2</mn></msubsup></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">
+Q_t = \begin{bmatrix} Q &amp; 0 \\ 0 &amp; Q \end{bmatrix} = \begin{bmatrix} \sigma_d^2 &amp; 0 &amp; 0 &amp; 0 \\ 0 &amp; \sigma_\theta^2 &amp; 0 &amp; 0 \\ 0 &amp; 0 &amp; \sigma_d^2 &amp; 0 \\ 0 &amp; 0 &amp; 0 &amp; \sigma_\theta^2 \end{bmatrix}
+</annotation></semantics></math></p></li>
+<li><p><strong><code>K</code>:</strong> es la ecuación 3. <code>@</code> es producto matricial; <code>*</code> sería elemento a elemento.</p></li>
+<li><p><strong><code>sensor.observe(xPred, Map[:, landmark], noisy=False)</code>:</strong> es <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝐡</mi><mo stretchy="false" form="prefix">(</mo><msub><mover><mi>𝛍</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\mathbf{h}(\bar{\boldsymbol{\mu}}_t)</annotation></semantics></math>, la medida esperada desde la pose predicha, <strong>sin ruido</strong>. <code>Map[:, landmark]</code> selecciona solo los landmarks observados, en el mismo orden que <code>z</code>.</p></li>
+<li><p><strong><code>innovation[1::2]</code>:</strong> las posiciones 1, 3, 5… son las marcaciones. Hay que normalizarlas porque la resta de dos ángulos puede caer fuera de <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">[</mo><mi>−</mi><mi>π</mi><mo>,</mo><mi>π</mi><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">[-\pi, \pi]</annotation></semantics></math>: ver C6.</p></li>
+<li><p><strong><code>PEst</code></strong> se calcula con <code>PPred</code>, no con <code>robot.PEst</code>. <code>np.eye(3)</code> porque el estado tiene 3 variables.</p></li>
+</ul>
+<p>La plantilla del notebook solo dejaba hueco para <code>H</code>, <code>K</code>, <code>xEst</code> y <code>PEst</code>, pero <code>Q_t</code> y la innovación hay que construirlas igualmente. En una solución más compacta, todo puede ir dentro de las líneas de <code>K</code> y <code>xEst</code>.</p>
+</section>
+<section id="57-main-celda-25" class="level3">
+<h3>5.7. <code>main()</code> (celda 25)</h3>
+<p>No hay que rellenarla, pero conviene saber cómo se usan las piezas, en este orden dentro de <code>move_and_localize(k)</code>:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>u[<span class="dv">2</span>] <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> k <span class="op">%</span> turning <span class="op">==</span> turning<span class="op">-</span><span class="dv">1</span>:</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    u[<span class="dv">2</span>] <span class="op">=</span> <span class="op">-</span>np.pi<span class="op">/</span><span class="dv">2</span>                <span class="co"># Cada 5 movimientos gira 90° a la derecha</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>robot.step(u)                      <span class="co"># 1. El robot se mueve de verdad</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>z, landmark <span class="op">=</span> sensor.random_observation(robot.true_pose, Map)   <span class="co"># 2. Mide DESDE LA POSE REAL</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>robot.xEst, robot.PEst <span class="op">=</span> EKFLocalization(robot, sensor, u, z, landmark, Map)  <span class="co"># 3. Estima</span></span></code></pre></div>
+<ul>
+<li>El avance por paso es <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>u</mi><mi>x</mi></msub><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mn>2</mn><mo>⋅</mo><mn>50</mn><mo>−</mo><mn>2</mn><mo>⋅</mo><mn>50</mn><mi>/</mi><mn>3</mn><mo stretchy="false" form="postfix">)</mo><mi>/</mi><mn>5</mn><mo>=</mo><mn>13.33</mn></mrow><annotation encoding="application/x-tex">u_x = (2 \cdot 50 - 2 \cdot 50/3)/5 = 13.33</annotation></semantics></math> m, de modo que 5 pasos recorren el lado del cuadrado.</li>
+<li><strong>El sensor mide desde <code>robot.true_pose</code></strong>: es lo que hace un sensor real. El filtro recibe <code>u</code> (sin ruido) y <code>z</code>, nunca la pose real.</li>
+<li><code>robot.draw()</code> dibuja la pose ideal en <strong>rojo</strong>, la real en <strong>azul</strong> y la estimada en <strong>verde</strong>, con su elipse. La elipse se dibuja a <strong>4 sigmas</strong> (<code>PlotEllipse(..., 4, ...)</code>).</li>
+</ul>
+</section>
+<section id="58-assignment-5-fovsensorobserve_in_fov-celda-28" class="level3">
+<h3>5.8. ASSIGNMENT 5: <code>FOVSensor.observe_in_fov()</code> (celda 28)</h3>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> FOVSensor(Sensor):</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> observe_in_fov(<span class="va">self</span>, from_pose, world, noisy<span class="op">=</span><span class="va">True</span>):</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>        <span class="co"># 1. Observaciones a todos los landmarks, SIN ruido</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>        z <span class="op">=</span> <span class="va">self</span>.observe(from_pose, world, <span class="va">False</span>, <span class="va">False</span>)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>        <span class="co"># 2. Cuáles caen dentro del FOV y del alcance</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>        angle_limit <span class="op">=</span> <span class="va">self</span>.fov<span class="op">/</span><span class="dv">2</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>        feats_idx <span class="op">=</span> np.nonzero(np.asarray((z[<span class="dv">0</span>, :] <span class="op">&lt;</span> <span class="va">self</span>.max_range) <span class="op">&amp;</span> (np.<span class="bu">abs</span>(z[<span class="dv">1</span>, :]) <span class="op">&lt;</span> angle_limit)))[<span class="dv">0</span>]</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> noisy:</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>            z <span class="op">=</span> <span class="va">self</span>.observe(from_pose, world, <span class="va">True</span>, <span class="va">False</span>)   <span class="co"># Ahora sí, CON ruido</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>        z <span class="op">=</span> z[:, feats_idx]</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>        <span class="co"># 3. Aplanar a [d_1, theta_1, d_2, theta_2, ...]</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> z.size<span class="op">&gt;</span><span class="dv">0</span>:</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>            z <span class="op">=</span> np.vstack(z.flatten(<span class="st">&#39;F&#39;</span>))</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> z, feats_idx</span></code></pre></div>
+<ul>
+<li><strong><code>class FOVSensor(Sensor)</code>:</strong> hereda <code>observe()</code> y <code>random_observation()</code>, y <code>super().__init__(cov)</code> guarda la covarianza.</li>
+<li><strong>Argumentos de <code>observe</code>:</strong> <code>(from_pose, world, noisy, flatten)</code>. Los dos últimos, en ese orden. Aquí <code>flatten=False</code>, para tener la matriz <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mo>×</mo><mi>n</mi></mrow><annotation encoding="application/x-tex">2 \times n</annotation></semantics></math> con la que filtrar.</li>
+<li><strong><code>self.fov/2</code>:</strong> el FOV es el ángulo <strong>total</strong>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mi>α</mi></mrow><annotation encoding="application/x-tex">2\alpha</annotation></semantics></math>, y el landmark está dentro si <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">|</mo><mi>θ</mi><mo stretchy="false" form="prefix">|</mo><mo>&lt;</mo><mi>α</mi></mrow><annotation encoding="application/x-tex">|\theta| &lt; \alpha</annotation></semantics></math>.</li>
+<li><strong><code>np.abs</code>:</strong> las marcaciones pueden ser negativas (landmark a la derecha).</li>
+<li><strong><code>&amp;</code>, no <code>and</code>:</strong> se trata de arrays, y <code>and</code> daría error. Los <strong>paréntesis</strong> de cada condición son obligatorios, porque <code>&amp;</code> tiene más prioridad que <code>&lt;</code>.</li>
+<li><strong><code>np.nonzero(...)[0]</code>:</strong> devuelve una tupla con un array por dimensión; <code>[0]</code> extrae los índices.</li>
+<li><strong>Se filtra con la medida sin ruido</strong> y después se genera la ruidosa. Si se filtrara con ruido, un landmark fuera de alcance podría «verse» por casualidad.</li>
+<li><strong><code>z.size&gt;0</code>:</strong> si no se ve nada, <code>z</code> queda <code>(2, 0)</code> y no se aplana. No pasa nada, porque el EKF ya no la usa: entra por la rama del <code>else</code>.</li>
+</ul>
+<p><strong>Prueba del notebook (celda 30).</strong> Robot en <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">[</mo><mn>1</mn><mo>,</mo><mn>2</mn><mo>,</mo><mn>0</mn><msup><mo stretchy="false" form="postfix">]</mo><mi>T</mi></msup></mrow><annotation encoding="application/x-tex">[1, 2, 0]^T</annotation></semantics></math>, FOV <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>=</mo><mn>90</mn><mi>°</mi></mrow><annotation encoding="application/x-tex">= 90°</annotation></semantics></math> y alcance <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>=</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">= 2</annotation></semantics></math> m. Ver el cálculo en C8.</p>
+<figure>
+<img src="../../Practicas/uma_robotics_2027/Chapter%2005.%20Localization/img/5.2_captura_assignment5_fov.png" alt="Prueba del FOV" />
+<figcaption aria-hidden="true">Prueba del FOV</figcaption>
+</figure>
+</section>
+<section id="59-una-rareza-de-la-celda-22" class="level3">
+<h3>5.9. Una rareza de la celda 22</h3>
+<p>La prueba del Assignment 4 llama a <code>sensor.random_observation(true_pose, Map, noisy)</code>, con la variable <code>true_pose</code> <strong>inicial</strong>, no con <code>robot.true_pose</code> tras el movimiento. Por tanto, esa medida no es coherente con la pose desde la que se corrige. Hay que mantenerlo para reproducir la salida esperada, pero no es el uso correcto: el correcto es el de <code>main()</code>.</p>
+</section>
+</section>
+<section id="6-qué-se-observa-al-ejecutarlo" class="level2">
+<h2>6. Qué se observa al ejecutarlo</h2>
+<p><strong>Sensor inicial</strong> (un landmark al azar, sin límite de alcance ni de ángulo):</p>
+<figure>
+<img src="../../Practicas/uma_robotics_2027/Chapter%2005.%20Localization/img/5.2_captura_ekf_un_landmark.png" alt="EKF con un landmark" />
+<figcaption aria-hidden="true">EKF con un landmark</figcaption>
+</figure>
+<p><strong>Sensor FOV</strong> (todos los landmarks dentro de un FOV de 90°):</p>
+<figure>
+<img src="../../Practicas/uma_robotics_2027/Chapter%2005.%20Localization/img/5.2_captura_ekf_fov.png" alt="EKF con FOV" />
+<figcaption aria-hidden="true">EKF con FOV</figcaption>
+</figure>
+<p>Lo que hay que saber contar:</p>
+<ul>
+<li><strong>Rojo:</strong> el cuadrado perfecto, ajeno a la realidad.</li>
+<li><strong>Azul:</strong> se va alejando de la roja. Con 200 semillas, unos 20 m de media al final, sea cual sea el sensor: el sensor no influye en cómo se mueve el robot.</li>
+<li><strong>Verde:</strong> sigue a la azul (1.88 m de error medio con el sensor inicial; 2.86 m con el FOV), porque los landmarks son una referencia absoluta.</li>
+<li><strong>Elipses:</strong> se alargan en perpendicular al rayo del landmark observado. La distancia es precisa (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>σ</mi><mi>d</mi></msub><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\sigma_d = 1</annotation></semantics></math> m), pero la marcación no (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>σ</mi><mi>θ</mi></msub><mo>=</mo><mn>0.7</mn></mrow><annotation encoding="application/x-tex">\sigma_\theta = 0.7</annotation></semantics></math> rad): a 30 m, eso son unos 21 m de error lateral.</li>
+</ul>
+<p>La figura siguiente resume el ciclo. Cada subida es una predicción y cada caída vertical, una corrección. En las bandas grises no se ve ningún landmark, no hay caída y la incertidumbre se acumula.</p>
+<figure>
+<img src="../../Practicas/uma_robotics_2027/Chapter%2005.%20Localization/img/5.2_captura_error_e_incertidumbre.png" alt="Error e incertidumbre" />
+<figcaption aria-hidden="true">Error e incertidumbre</figcaption>
+</figure>
+<p><strong>Sin ningún landmark</strong> (sensor de alcance 0), el filtro no falla, pero solo predice: la incertidumbre sube de 1.13 a 23.03 m en 17 pasos y la estimación coincide exactamente con la pose ideal.</p>
+</section>
+<section id="7-cálculos-resueltos" class="level2">
+<h2>7. Cálculos resueltos</h2>
+<p>Todos siguen la misma estructura: <strong>qué buscamos</strong> → <strong>fórmula</strong> → <strong>pasos</strong> → <strong>resultado e interpretación</strong>. C1–C2 son el filtro en 1D, C3–C4 la predicción, C5–C8 la observación y C9 un ciclo de corrección completo.</p>
+<p><strong>C1. La ganancia de Kalman en 1D.</strong></p>
+<ul>
+<li><strong>Qué buscamos.</strong> Cuánto hay que creer al sensor. El robot predice que está en <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>μ</mi><mo accent="true">‾</mo></mover><mo>=</mo><mn>10</mn></mrow><annotation encoding="application/x-tex">\bar\mu = 10</annotation></semantics></math> m con varianza <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mover><mi>σ</mi><mo accent="true">‾</mo></mover><mn>2</mn></msup><mo>=</mo><mn>4</mn></mrow><annotation encoding="application/x-tex">\bar\sigma^2 = 4</annotation></semantics></math> m². El sensor mide su posición directamente, con varianza <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Q</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">Q = 1</annotation></semantics></math> m². ¿Cuánto vale <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>K</mi><annotation encoding="application/x-tex">K</annotation></semantics></math>?</li>
+<li><strong>Fórmula.</strong> La ecuación 3 con <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">H = 1</annotation></semantics></math>, porque se mide la posición directamente: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi><mo>=</mo><msup><mover><mi>σ</mi><mo accent="true">‾</mo></mover><mn>2</mn></msup><mi>/</mi><mo stretchy="false" form="prefix">(</mo><msup><mover><mi>σ</mi><mo accent="true">‾</mo></mover><mn>2</mn></msup><mo>+</mo><mi>Q</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">K = \bar\sigma^2 / (\bar\sigma^2 + Q)</annotation></semantics></math>.</li>
+<li><strong>Pasos.</strong> <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi><mo>=</mo><mn>4</mn><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mn>4</mn><mo>+</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>4</mn><mi>/</mi><mn>5</mn><mo>=</mo><mn>0.8</mn></mrow><annotation encoding="application/x-tex">K = 4 / (4 + 1) = 4/5 = 0.8</annotation></semantics></math>.</li>
+<li><strong>Resultado.</strong> <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi><mo>=</mo><mn>0.8</mn></mrow><annotation encoding="application/x-tex">K = 0.8</annotation></semantics></math>. El sensor es 4 veces más preciso que la predicción, así que el filtro le hace mucho caso. <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>K</mi><annotation encoding="application/x-tex">K</annotation></semantics></math> siempre queda entre 0 y 1 en este caso.</li>
+</ul>
+<p><strong>C2. La corrección en 1D.</strong></p>
+<ul>
+<li><strong>Qué buscamos.</strong> Con los datos de C1, el sensor mide <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>z</mi><mo>=</mo><mn>12</mn></mrow><annotation encoding="application/x-tex">z = 12</annotation></semantics></math> m. ¿Cuál es la nueva estimación y su varianza?</li>
+<li><strong>Fórmulas.</strong> Las ecuaciones 4 y 5: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>μ</mi><mo>=</mo><mover><mi>μ</mi><mo accent="true">‾</mo></mover><mo>+</mo><mi>K</mi><mo stretchy="false" form="prefix">(</mo><mi>z</mi><mo>−</mo><mover><mi>μ</mi><mo accent="true">‾</mo></mover><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\mu = \bar\mu + K(z - \bar\mu)</annotation></semantics></math> y <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>σ</mi><mn>2</mn></msup><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>K</mi><mo stretchy="false" form="postfix">)</mo><msup><mover><mi>σ</mi><mo accent="true">‾</mo></mover><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">\sigma^2 = (1 - K)\bar\sigma^2</annotation></semantics></math>.</li>
+<li><strong>Pasos.</strong>
+<ol type="1">
+<li>Innovación: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>z</mi><mo>−</mo><mover><mi>μ</mi><mo accent="true">‾</mo></mover><mo>=</mo><mn>12</mn><mo>−</mo><mn>10</mn><mo>=</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">z - \bar\mu = 12 - 10 = 2</annotation></semantics></math> m.</li>
+<li>Corrección: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi><mo>⋅</mo><mn>2</mn><mo>=</mo><mn>0.8</mn><mo>⋅</mo><mn>2</mn><mo>=</mo><mn>1.6</mn></mrow><annotation encoding="application/x-tex">K \cdot 2 = 0.8 \cdot 2 = 1.6</annotation></semantics></math> m.</li>
+<li>Nueva media: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>μ</mi><mo>=</mo><mn>10</mn><mo>+</mo><mn>1.6</mn><mo>=</mo><mn>11.6</mn></mrow><annotation encoding="application/x-tex">\mu = 10 + 1.6 = 11.6</annotation></semantics></math> m.</li>
+<li>Nueva varianza: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>σ</mi><mn>2</mn></msup><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mn>0.8</mn><mo stretchy="false" form="postfix">)</mo><mo>⋅</mo><mn>4</mn><mo>=</mo><mn>0.8</mn></mrow><annotation encoding="application/x-tex">\sigma^2 = (1 - 0.8) \cdot 4 = 0.8</annotation></semantics></math> m².</li>
+</ol></li>
+<li><strong>Resultado.</strong> <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>μ</mi><mo>=</mo><mn>11.6</mn></mrow><annotation encoding="application/x-tex">\mu = 11.6</annotation></semantics></math> m y <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>σ</mi><mn>2</mn></msup><mo>=</mo><mn>0.8</mn></mrow><annotation encoding="application/x-tex">\sigma^2 = 0.8</annotation></semantics></math> m². La media queda entre la predicción y la medida, más cerca de la medida. La varianza queda <strong>por debajo de las dos</strong> (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.8</mn><mo>&lt;</mo><mn>1</mn><mo>&lt;</mo><mn>4</mn></mrow><annotation encoding="application/x-tex">0.8 &lt; 1 &lt; 4</annotation></semantics></math>): combinar dos fuentes es mejor que cualquiera de ellas.</li>
+</ul>
+<p><strong>C3. Predecir la pose.</strong></p>
+<ul>
+<li><strong>Qué buscamos.</strong> El robot está en <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>𝛍</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>=</mo><mo stretchy="false" form="prefix">[</mo><mn>2</mn><mo>,</mo><mn>3</mn><mo>,</mo><mi>π</mi><mi>/</mi><mn>2</mn><msup><mo stretchy="false" form="postfix">]</mo><mi>T</mi></msup></mrow><annotation encoding="application/x-tex">\boldsymbol{\mu}_{t-1} = [2, 3, \pi/2]^T</annotation></semantics></math> y recibe el comando <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝐮</mi><mo>=</mo><mo stretchy="false" form="prefix">[</mo><mn>1</mn><mo>,</mo><mn>2</mn><mo>,</mo><mn>0</mn><msup><mo stretchy="false" form="postfix">]</mo><mi>T</mi></msup></mrow><annotation encoding="application/x-tex">\mathbf{u} = [1, 2, 0]^T</annotation></semantics></math>, en su propio marco. ¿Cuál es <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mover><mi>𝛍</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub><annotation encoding="application/x-tex">\bar{\boldsymbol{\mu}}_t</annotation></semantics></math>?</li>
+<li><strong>Fórmula.</strong> La composición, <code>tcomp(xEst, u)</code>: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>x</mi><mo>′</mo></msup><mo>=</mo><mi>x</mi><mo>+</mo><msub><mi>u</mi><mi>x</mi></msub><mrow><mi mathvariant="normal">cos</mi><mo>&#8289;</mo></mrow><mi>θ</mi><mo>−</mo><msub><mi>u</mi><mi>y</mi></msub><mrow><mi mathvariant="normal">sin</mi><mo>&#8289;</mo></mrow><mi>θ</mi></mrow><annotation encoding="application/x-tex">x&#39; = x + u_x\cos\theta - u_y\sin\theta</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>y</mi><mo>′</mo></msup><mo>=</mo><mi>y</mi><mo>+</mo><msub><mi>u</mi><mi>x</mi></msub><mrow><mi mathvariant="normal">sin</mi><mo>&#8289;</mo></mrow><mi>θ</mi><mo>+</mo><msub><mi>u</mi><mi>y</mi></msub><mrow><mi mathvariant="normal">cos</mi><mo>&#8289;</mo></mrow><mi>θ</mi></mrow><annotation encoding="application/x-tex">y&#39; = y + u_x\sin\theta + u_y\cos\theta</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>θ</mi><mo>′</mo></msup><mo>=</mo><mi>θ</mi><mo>+</mo><msub><mi>u</mi><mi>θ</mi></msub></mrow><annotation encoding="application/x-tex">\theta&#39; = \theta + u_\theta</annotation></semantics></math>.</li>
+<li><strong>Pasos.</strong> Con <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">cos</mi><mo>&#8289;</mo></mrow><mn>90</mn><mi>°</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\cos 90° = 0</annotation></semantics></math> y <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">sin</mi><mo>&#8289;</mo></mrow><mn>90</mn><mi>°</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\sin 90° = 1</annotation></semantics></math>:
+<ul>
+<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>x</mi><mo>′</mo></msup><mo>=</mo><mn>2</mn><mo>+</mo><mn>1</mn><mo>⋅</mo><mn>0</mn><mo>−</mo><mn>2</mn><mo>⋅</mo><mn>1</mn><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">x&#39; = 2 + 1 \cdot 0 - 2 \cdot 1 = 0</annotation></semantics></math>.</li>
+<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>y</mi><mo>′</mo></msup><mo>=</mo><mn>3</mn><mo>+</mo><mn>1</mn><mo>⋅</mo><mn>1</mn><mo>+</mo><mn>2</mn><mo>⋅</mo><mn>0</mn><mo>=</mo><mn>4</mn></mrow><annotation encoding="application/x-tex">y&#39; = 3 + 1 \cdot 1 + 2 \cdot 0 = 4</annotation></semantics></math>.</li>
+<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>θ</mi><mo>′</mo></msup><mo>=</mo><mi>π</mi><mi>/</mi><mn>2</mn><mo>+</mo><mn>0</mn><mo>=</mo><mi>π</mi><mi>/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">\theta&#39; = \pi/2 + 0 = \pi/2</annotation></semantics></math>.</li>
+</ul></li>
+<li><strong>Resultado.</strong> <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">[</mo><mn>0</mn><mo>,</mo><mn>4</mn><mo>,</mo><mi>π</mi><mi>/</mi><mn>2</mn><msup><mo stretchy="false" form="postfix">]</mo><mi>T</mi></msup></mrow><annotation encoding="application/x-tex">[0, 4, \pi/2]^T</annotation></semantics></math>. Es la pose ideal de la celda 12; la real de esa celda, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">[</mo><mi>−</mi><mn>0.32</mn><mo>,</mo><mn>5.41</mn><mo>,</mo><mn>1.67</mn><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">[-0.32, 5.41, 1.67]</annotation></semantics></math>, es esta más el ruido.</li>
+</ul>
+<p><strong>C4. Predecir la incertidumbre.</strong></p>
+<ul>
+<li><strong>Qué buscamos.</strong> Cuánto crece la covarianza al moverse. Robot en <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">[</mo><mn>0</mn><mo>,</mo><mn>0</mn><mo>,</mo><mn>0</mn><msup><mo stretchy="false" form="postfix">]</mo><mi>T</mi></msup></mrow><annotation encoding="application/x-tex">[0, 0, 0]^T</annotation></semantics></math>, comando <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝐮</mi><mo>=</mo><mo stretchy="false" form="prefix">[</mo><mn>1</mn><mo>,</mo><mn>0</mn><mo>,</mo><mn>0</mn><msup><mo stretchy="false" form="postfix">]</mo><mi>T</mi></msup></mrow><annotation encoding="application/x-tex">\mathbf{u} = [1, 0, 0]^T</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi mathvariant="normal">Σ</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>=</mo><mrow><mi mathvariant="normal">d</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">g</mi></mrow><mo stretchy="false" form="prefix">(</mo><mn>0.01</mn><mo>,</mo><mspace width="0.222em"></mspace><mn>0.01</mn><mo>,</mo><mspace width="0.222em"></mspace><mn>0.04</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\Sigma_{t-1} = \mathrm{diag}(0.01,\ 0.01,\ 0.04)</annotation></semantics></math> y <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi mathvariant="normal">Σ</mi><mi>𝐮</mi></msub><mo>=</mo><mrow><mi mathvariant="normal">d</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">g</mi></mrow><mo stretchy="false" form="prefix">(</mo><mn>0.02</mn><mo>,</mo><mspace width="0.222em"></mspace><mn>0.02</mn><mo>,</mo><mspace width="0.222em"></mspace><mn>0.01</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\Sigma_{\mathbf{u}} = \mathrm{diag}(0.02,\ 0.02,\ 0.01)</annotation></semantics></math>.</li>
+<li><strong>Fórmula.</strong> <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi mathvariant="normal">Σ</mi><mo accent="true">‾</mo></mover><mo>=</mo><mi>G</mi><mi mathvariant="normal">Σ</mi><msup><mi>G</mi><mi>T</mi></msup><mo>+</mo><msub><mi>J</mi><mn>2</mn></msub><msub><mi mathvariant="normal">Σ</mi><mi>𝐮</mi></msub><msubsup><mi>J</mi><mn>2</mn><mi>T</mi></msubsup></mrow><annotation encoding="application/x-tex">\bar\Sigma = G\Sigma G^T + J_2\Sigma_{\mathbf{u}}J_2^T</annotation></semantics></math>. La tercera columna de <code>J1</code> es <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">[</mo><mi>−</mi><msub><mi>u</mi><mi>x</mi></msub><mrow><mi mathvariant="normal">sin</mi><mo>&#8289;</mo></mrow><mi>θ</mi><mo>−</mo><msub><mi>u</mi><mi>y</mi></msub><mrow><mi mathvariant="normal">cos</mi><mo>&#8289;</mo></mrow><mi>θ</mi><mo>,</mo><mspace width="0.222em"></mspace><msub><mi>u</mi><mi>x</mi></msub><mrow><mi mathvariant="normal">cos</mi><mo>&#8289;</mo></mrow><mi>θ</mi><mo>−</mo><msub><mi>u</mi><mi>y</mi></msub><mrow><mi mathvariant="normal">sin</mi><mo>&#8289;</mo></mrow><mi>θ</mi><mo>,</mo><mspace width="0.222em"></mspace><mn>1</mn><msup><mo stretchy="false" form="postfix">]</mo><mi>T</mi></msup></mrow><annotation encoding="application/x-tex">[-u_x\sin\theta - u_y\cos\theta,\ u_x\cos\theta - u_y\sin\theta,\ 1]^T</annotation></semantics></math>.</li>
+<li><strong>Pasos.</strong>
+<ol type="1">
+<li>Con <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>θ</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\theta = 0</annotation></semantics></math>: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>G</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>1</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>1</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>1</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>1</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">G = \begin{bmatrix} 1 &amp; 0 &amp; 0 \\ 0 &amp; 1 &amp; 1 \\ 0 &amp; 0 &amp; 1 \end{bmatrix}</annotation></semantics></math> y <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>J</mi><mn>2</mn></msub><mo>=</mo><mi>I</mi></mrow><annotation encoding="application/x-tex">J_2 = I</annotation></semantics></math>.</li>
+<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>G</mi><mi mathvariant="normal">Σ</mi><msup><mi>G</mi><mi>T</mi></msup><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>0.01</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>0.01</mn><mo>+</mo><mn>0.04</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>0.04</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>0.04</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>0.04</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">G\Sigma G^T = \begin{bmatrix} 0.01 &amp; 0 &amp; 0 \\ 0 &amp; 0.01 + 0.04 &amp; 0.04 \\ 0 &amp; 0.04 &amp; 0.04 \end{bmatrix}</annotation></semantics></math>.</li>
+<li>Se suma <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>J</mi><mn>2</mn></msub><msub><mi mathvariant="normal">Σ</mi><mi>𝐮</mi></msub><msubsup><mi>J</mi><mn>2</mn><mi>T</mi></msubsup><mo>=</mo><msub><mi mathvariant="normal">Σ</mi><mi>𝐮</mi></msub></mrow><annotation encoding="application/x-tex">J_2\Sigma_{\mathbf{u}}J_2^T = \Sigma_{\mathbf{u}}</annotation></semantics></math>.</li>
+</ol></li>
+<li><strong>Resultado.</strong> <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi mathvariant="normal">Σ</mi><mo accent="true">‾</mo></mover><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>0.03</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>0.07</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>0.04</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>0.04</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>0.05</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">\bar\Sigma = \begin{bmatrix} 0.03 &amp; 0 &amp; 0 \\ 0 &amp; 0.07 &amp; 0.04 \\ 0 &amp; 0.04 &amp; 0.05 \end{bmatrix}</annotation></semantics></math>.</li>
+<li><strong>Interpretación.</strong> La incertidumbre en <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>y</mi><annotation encoding="application/x-tex">y</annotation></semantics></math> crece más que en <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>x</mi><annotation encoding="application/x-tex">x</annotation></semantics></math> (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.07</mn><annotation encoding="application/x-tex">0.07</annotation></semantics></math> frente a <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.03</mn><annotation encoding="application/x-tex">0.03</annotation></semantics></math>): al avanzar en <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>x</mi><annotation encoding="application/x-tex">x</annotation></semantics></math>, un error de orientación desvía al robot de lado. Es el <strong>efecto palanca</strong>, y por eso aparece la correlación <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>y</mi><annotation encoding="application/x-tex">y</annotation></semantics></math>–<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>θ</mi><annotation encoding="application/x-tex">\theta</annotation></semantics></math> de <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.04</mn><annotation encoding="application/x-tex">0.04</annotation></semantics></math>.</li>
+</ul>
+<p><strong>C5. Qué debería medir el robot.</strong></p>
+<ul>
+<li><strong>Qué buscamos.</strong> La medida esperada <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>𝐡</mi><annotation encoding="application/x-tex">\mathbf{h}</annotation></semantics></math>. Robot en <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">[</mo><mn>1</mn><mo>,</mo><mn>2</mn><mo>,</mo><mi>π</mi><mi>/</mi><mn>2</mn><msup><mo stretchy="false" form="postfix">]</mo><mi>T</mi></msup></mrow><annotation encoding="application/x-tex">[1, 2, \pi/2]^T</annotation></semantics></math> y landmark en <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>4</mn><mo>,</mo><mn>6</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(4, 6)</annotation></semantics></math>.</li>
+<li><strong>Fórmula.</strong> El modelo de observación.</li>
+<li><strong>Pasos.</strong>
+<ol type="1">
+<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><mi>x</mi><mo>=</mo><mn>4</mn><mo>−</mo><mn>1</mn><mo>=</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">\Delta x = 4 - 1 = 3</annotation></semantics></math> y <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><mi>y</mi><mo>=</mo><mn>6</mn><mo>−</mo><mn>2</mn><mo>=</mo><mn>4</mn></mrow><annotation encoding="application/x-tex">\Delta y = 6 - 2 = 4</annotation></semantics></math>.</li>
+<li>Distancia: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi><mo>=</mo><msqrt><mrow><msup><mn>3</mn><mn>2</mn></msup><mo>+</mo><msup><mn>4</mn><mn>2</mn></msup></mrow></msqrt><mo>=</mo><msqrt><mn>25</mn></msqrt><mo>=</mo><mn>5</mn></mrow><annotation encoding="application/x-tex">d = \sqrt{3^2 + 4^2} = \sqrt{25} = 5</annotation></semantics></math> m.</li>
+<li>Marcación: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext mathvariant="normal">atan2</mtext><mo stretchy="false" form="prefix">(</mo><mn>4</mn><mo>,</mo><mn>3</mn><mo stretchy="false" form="postfix">)</mo><mo>−</mo><mi>π</mi><mi>/</mi><mn>2</mn><mo>=</mo><mn>0.9273</mn><mo>−</mo><mn>1.5708</mn><mo>=</mo><mi>−</mi><mn>0.6435</mn></mrow><annotation encoding="application/x-tex">\text{atan2}(4, 3) - \pi/2 = 0.9273 - 1.5708 = -0.6435</annotation></semantics></math> rad.</li>
+</ol></li>
+<li><strong>Resultado.</strong> <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝐡</mi><mo>=</mo><mo stretchy="false" form="prefix">[</mo><mn>5</mn><mo>,</mo><mspace width="0.222em"></mspace><mo>−</mo><mn>0.6435</mn><msup><mo stretchy="false" form="postfix">]</mo><mi>T</mi></msup></mrow><annotation encoding="application/x-tex">\mathbf{h} = [5,\ -0.6435]^T</annotation></semantics></math>. El signo negativo indica que el landmark queda a la derecha del robot, unos <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>36.9</mn><mi>°</mi></mrow><annotation encoding="application/x-tex">36.9°</annotation></semantics></math>.</li>
+</ul>
+<p><strong>C6. Por qué hay que normalizar la marcación de la innovación.</strong></p>
+<ul>
+<li><strong>Qué buscamos.</strong> El robot espera ver un landmark casi justo detrás, a <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>h</mi><mi>θ</mi></msub><mo>=</mo><mn>3.10</mn></mrow><annotation encoding="application/x-tex">h_\theta = 3.10</annotation></semantics></math> rad, y mide <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>z</mi><mi>θ</mi></msub><mo>=</mo><mi>−</mi><mn>3.10</mn></mrow><annotation encoding="application/x-tex">z_\theta = -3.10</annotation></semantics></math> rad. ¿Cuál es la innovación?</li>
+<li><strong>Fórmula.</strong> <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ν</mi><mi>θ</mi></msub><mo>=</mo><msub><mi>z</mi><mi>θ</mi></msub><mo>−</mo><msub><mi>h</mi><mi>θ</mi></msub></mrow><annotation encoding="application/x-tex">\nu_\theta = z_\theta - h_\theta</annotation></semantics></math>, y después se devuelve a <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">[</mo><mi>−</mi><mi>π</mi><mo>,</mo><mi>π</mi><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">[-\pi, \pi]</annotation></semantics></math> sumando o restando <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mi>π</mi></mrow><annotation encoding="application/x-tex">2\pi</annotation></semantics></math>.</li>
+<li><strong>Pasos.</strong>
+<ol type="1">
+<li>Sin normalizar: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>3.10</mn><mo>−</mo><mn>3.10</mn><mo>=</mo><mi>−</mi><mn>6.20</mn></mrow><annotation encoding="application/x-tex">-3.10 - 3.10 = -6.20</annotation></semantics></math> rad.</li>
+<li>Como <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>6.20</mn><mo>&lt;</mo><mi>−</mi><mi>π</mi></mrow><annotation encoding="application/x-tex">-6.20 &lt; -\pi</annotation></semantics></math>, se suma <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mi>π</mi></mrow><annotation encoding="application/x-tex">2\pi</annotation></semantics></math>: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>6.20</mn><mo>+</mo><mn>6.2832</mn><mo>=</mo><mn>0.0832</mn></mrow><annotation encoding="application/x-tex">-6.20 + 6.2832 = 0.0832</annotation></semantics></math> rad.</li>
+</ol></li>
+<li><strong>Resultado.</strong> <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.0832</mn><annotation encoding="application/x-tex">0.0832</annotation></semantics></math> rad, unos <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>4.8</mn><mi>°</mi></mrow><annotation encoding="application/x-tex">4.8°</annotation></semantics></math>. Las dos direcciones están muy cerca, a uno y otro lado de <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>±</mi><mi>π</mi></mrow><annotation encoding="application/x-tex">\pm\pi</annotation></semantics></math>. Sin normalizar, el filtro creería que hay un error de casi una vuelta entera y haría una corrección absurda.</li>
+</ul>
+<p><strong>C7. El jacobiano de la observación.</strong></p>
+<ul>
+<li><strong>Qué buscamos.</strong> <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>H</mi><annotation encoding="application/x-tex">H</annotation></semantics></math> para los datos de C5 (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><mi>x</mi><mo>=</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">\Delta x = 3</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><mi>y</mi><mo>=</mo><mn>4</mn></mrow><annotation encoding="application/x-tex">\Delta y = 4</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi><mo>=</mo><mn>5</mn></mrow><annotation encoding="application/x-tex">d = 5</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>d</mi><mn>2</mn></msup><mo>=</mo><mn>25</mn></mrow><annotation encoding="application/x-tex">d^2 = 25</annotation></semantics></math>).</li>
+<li><strong>Fórmula.</strong> La de <code>getObsJac</code>.</li>
+<li><strong>Pasos.</strong>
+<ul>
+<li>Fila 1: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mi mathvariant="normal">Δ</mi><mi>x</mi><mi>/</mi><mi>d</mi><mo>=</mo><mi>−</mi><mn>3</mn><mi>/</mi><mn>5</mn><mo>=</mo><mi>−</mi><mn>0.6</mn></mrow><annotation encoding="application/x-tex">-\Delta x/d = -3/5 = -0.6</annotation></semantics></math>; <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mi mathvariant="normal">Δ</mi><mi>y</mi><mi>/</mi><mi>d</mi><mo>=</mo><mi>−</mi><mn>4</mn><mi>/</mi><mn>5</mn><mo>=</mo><mi>−</mi><mn>0.8</mn></mrow><annotation encoding="application/x-tex">-\Delta y/d = -4/5 = -0.8</annotation></semantics></math>; <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0</mn><annotation encoding="application/x-tex">0</annotation></semantics></math>.</li>
+<li>Fila 2: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><mi>y</mi><mi>/</mi><msup><mi>d</mi><mn>2</mn></msup><mo>=</mo><mn>4</mn><mi>/</mi><mn>25</mn><mo>=</mo><mn>0.16</mn></mrow><annotation encoding="application/x-tex">\Delta y/d^2 = 4/25 = 0.16</annotation></semantics></math>; <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mi mathvariant="normal">Δ</mi><mi>x</mi><mi>/</mi><msup><mi>d</mi><mn>2</mn></msup><mo>=</mo><mi>−</mi><mn>3</mn><mi>/</mi><mn>25</mn><mo>=</mo><mi>−</mi><mn>0.12</mn></mrow><annotation encoding="application/x-tex">-\Delta x/d^2 = -3/25 = -0.12</annotation></semantics></math>; <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>1</mn></mrow><annotation encoding="application/x-tex">-1</annotation></semantics></math>.</li>
+</ul></li>
+<li><strong>Resultado.</strong> <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>0.6</mn></mtd><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>0.8</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0.16</mn></mtd><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>0.12</mn></mtd><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>1</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">H = \begin{bmatrix} -0.6 &amp; -0.8 &amp; 0 \\ 0.16 &amp; -0.12 &amp; -1 \end{bmatrix}</annotation></semantics></math>. Con 3 landmarks se apilarían 3 bloques: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>H</mi><annotation encoding="application/x-tex">H</annotation></semantics></math> sería de <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>6</mn><mo>×</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">6 \times 3</annotation></semantics></math> y <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>K</mi><annotation encoding="application/x-tex">K</annotation></semantics></math>, de <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>3</mn><mo>×</mo><mn>6</mn></mrow><annotation encoding="application/x-tex">3 \times 6</annotation></semantics></math>.</li>
+</ul>
+<p><strong>C8. Qué landmarks entran en el FOV (celda 30).</strong></p>
+<ul>
+<li><p><strong>Qué buscamos.</strong> Robot en <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">[</mo><mn>1</mn><mo>,</mo><mn>2</mn><mo>,</mo><mn>0</mn><msup><mo stretchy="false" form="postfix">]</mo><mi>T</mi></msup></mrow><annotation encoding="application/x-tex">[1, 2, 0]^T</annotation></semantics></math>, FOV <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>=</mo><mi>π</mi><mi>/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">= \pi/2</annotation></semantics></math> (así que <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>=</mo><mi>π</mi><mi>/</mi><mn>4</mn><mo>=</mo><mn>0.785</mn></mrow><annotation encoding="application/x-tex">\alpha = \pi/4 = 0.785</annotation></semantics></math> rad) y alcance <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>=</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">= 2</annotation></semantics></math> m. ¿Cuáles de estos landmarks se ven?</p></li>
+<li><p><strong>Condición.</strong> <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi><mo>&lt;</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">d &lt; 2</annotation></semantics></math> <strong>y</strong> <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">|</mo><mi>θ</mi><mo stretchy="false" form="prefix">|</mo><mo>&lt;</mo><mn>0.785</mn></mrow><annotation encoding="application/x-tex">|\theta| &lt; 0.785</annotation></semantics></math>.</p></li>
+<li><p><strong>Pasos.</strong></p>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr>
+<th>Landmark</th>
+<th><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mi mathvariant="normal">Δ</mi><mi>x</mi><mo>,</mo><mi mathvariant="normal">Δ</mi><mi>y</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(\Delta x, \Delta y)</annotation></semantics></math></th>
+<th><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>d</mi><annotation encoding="application/x-tex">d</annotation></semantics></math></th>
+<th><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>θ</mi><annotation encoding="application/x-tex">\theta</annotation></semantics></math></th>
+<th>¿Se ve?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>2</mn><mo>,</mo><mn>2</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(2, 2)</annotation></semantics></math></td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>,</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(1, 0)</annotation></semantics></math></td>
+<td>1.00</td>
+<td>0.000</td>
+<td>Sí</td>
+</tr>
+<tr>
+<td>1: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>2.5</mn><mo>,</mo><mn>3</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(2.5, 3)</annotation></semantics></math></td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>1.5</mn><mo>,</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(1.5, 1)</annotation></semantics></math></td>
+<td>1.80</td>
+<td>0.588</td>
+<td>Sí</td>
+</tr>
+<tr>
+<td>2: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>3.5</mn><mo>,</mo><mn>1.5</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(3.5, 1.5)</annotation></semantics></math></td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>2.5</mn><mo>,</mo><mi>−</mi><mn>0.5</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(2.5, -0.5)</annotation></semantics></math></td>
+<td>2.55</td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>0.197</mn></mrow><annotation encoding="application/x-tex">-0.197</annotation></semantics></math></td>
+<td>No: demasiado lejos</td>
+</tr>
+<tr>
+<td>3: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>0.5</mn><mo>,</mo><mn>3.5</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(0.5, 3.5)</annotation></semantics></math></td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mi>−</mi><mn>0.5</mn><mo>,</mo><mn>1.5</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(-0.5, 1.5)</annotation></semantics></math></td>
+<td>1.58</td>
+<td>1.893</td>
+<td>No: fuera del ángulo</td>
+</tr>
+</tbody>
+</table></li>
+<li><p><strong>Resultado.</strong> <code>feats_idx = [0, 1]</code>, como en la salida esperada: 1.18 y 1.84 m, que son estas distancias más el ruido.</p></li>
+</ul>
+<p><strong>C9. Una corrección completa.</strong></p>
+<ul>
+<li><strong>Qué buscamos.</strong> El ciclo de corrección con matrices. Pose predicha <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>𝛍</mi><mo accent="true">‾</mo></mover><mo>=</mo><mo stretchy="false" form="prefix">[</mo><mn>0</mn><mo>,</mo><mn>0</mn><mo>,</mo><mn>0</mn><msup><mo stretchy="false" form="postfix">]</mo><mi>T</mi></msup></mrow><annotation encoding="application/x-tex">\bar{\boldsymbol{\mu}} = [0, 0, 0]^T</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi mathvariant="normal">Σ</mi><mo accent="true">‾</mo></mover><mo>=</mo><mrow><mi mathvariant="normal">d</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">g</mi></mrow><mo stretchy="false" form="prefix">(</mo><mn>0.25</mn><mo>,</mo><mspace width="0.222em"></mspace><mn>0.25</mn><mo>,</mo><mspace width="0.222em"></mspace><mn>0.01</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\bar\Sigma = \mathrm{diag}(0.25,\ 0.25,\ 0.01)</annotation></semantics></math>, landmark en <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>10</mn><mo>,</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(10, 0)</annotation></semantics></math> y <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Q</mi><mo>=</mo><mrow><mi mathvariant="normal">d</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">g</mi></mrow><mo stretchy="false" form="prefix">(</mo><mn>0.04</mn><mo>,</mo><mspace width="0.222em"></mspace><mn>0.01</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">Q = \mathrm{diag}(0.04,\ 0.01)</annotation></semantics></math>. El sensor mide <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝐳</mi><mo>=</mo><mo stretchy="false" form="prefix">[</mo><mn>10.5</mn><mo>,</mo><mspace width="0.222em"></mspace><mn>0.02</mn><msup><mo stretchy="false" form="postfix">]</mo><mi>T</mi></msup></mrow><annotation encoding="application/x-tex">\mathbf{z} = [10.5,\ 0.02]^T</annotation></semantics></math>.</li>
+<li><strong>Pasos.</strong>
+<ol type="1">
+<li><strong>Medida esperada:</strong> <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝐡</mi><mo>=</mo><mo stretchy="false" form="prefix">[</mo><mn>10</mn><mo>,</mo><mspace width="0.222em"></mspace><mn>0</mn><msup><mo stretchy="false" form="postfix">]</mo><mi>T</mi></msup></mrow><annotation encoding="application/x-tex">\mathbf{h} = [10,\ 0]^T</annotation></semantics></math>, porque el landmark está a 10 m justo de frente.</li>
+<li><strong>Innovación:</strong> <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝛎</mi><mo>=</mo><mo stretchy="false" form="prefix">[</mo><mn>10.5</mn><mo>−</mo><mn>10</mn><mo>,</mo><mspace width="0.222em"></mspace><mn>0.02</mn><mo>−</mo><mn>0</mn><msup><mo stretchy="false" form="postfix">]</mo><mi>T</mi></msup><mo>=</mo><mo stretchy="false" form="prefix">[</mo><mn>0.5</mn><mo>,</mo><mspace width="0.222em"></mspace><mn>0.02</mn><msup><mo stretchy="false" form="postfix">]</mo><mi>T</mi></msup></mrow><annotation encoding="application/x-tex">\boldsymbol{\nu} = [10.5 - 10,\ 0.02 - 0]^T = [0.5,\ 0.02]^T</annotation></semantics></math>.</li>
+<li><strong>Jacobiano</strong> (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><mi>x</mi><mo>=</mo><mn>10</mn></mrow><annotation encoding="application/x-tex">\Delta x = 10</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><mi>y</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\Delta y = 0</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi><mo>=</mo><mn>10</mn></mrow><annotation encoding="application/x-tex">d = 10</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>d</mi><mn>2</mn></msup><mo>=</mo><mn>100</mn></mrow><annotation encoding="application/x-tex">d^2 = 100</annotation></semantics></math>): <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>1</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>0.1</mn></mtd><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>1</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">H = \begin{bmatrix} -1 &amp; 0 &amp; 0 \\ 0 &amp; -0.1 &amp; -1 \end{bmatrix}</annotation></semantics></math>.</li>
+<li><strong>Covarianza de la innovación</strong>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mo>=</mo><mi>H</mi><mover><mi mathvariant="normal">Σ</mi><mo accent="true">‾</mo></mover><msup><mi>H</mi><mi>T</mi></msup><mo>+</mo><mi>Q</mi></mrow><annotation encoding="application/x-tex">S = H\bar\Sigma H^T + Q</annotation></semantics></math>:
+<ul>
+<li>Elemento <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>,</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(1,1)</annotation></semantics></math>: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mi>−</mi><mn>1</mn><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup><mo>⋅</mo><mn>0.25</mn><mo>+</mo><mn>0.04</mn><mo>=</mo><mn>0.29</mn></mrow><annotation encoding="application/x-tex">(-1)^2 \cdot 0.25 + 0.04 = 0.29</annotation></semantics></math>.</li>
+<li>Elemento <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>2</mn><mo>,</mo><mn>2</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(2,2)</annotation></semantics></math>: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mi>−</mi><mn>0.1</mn><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup><mo>⋅</mo><mn>0.25</mn><mo>+</mo><mo stretchy="false" form="prefix">(</mo><mi>−</mi><mn>1</mn><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup><mo>⋅</mo><mn>0.01</mn><mo>+</mo><mn>0.01</mn><mo>=</mo><mn>0.0025</mn><mo>+</mo><mn>0.01</mn><mo>+</mo><mn>0.01</mn><mo>=</mo><mn>0.0225</mn></mrow><annotation encoding="application/x-tex">(-0.1)^2 \cdot 0.25 + (-1)^2 \cdot 0.01 + 0.01 = 0.0025 + 0.01 + 0.01 = 0.0225</annotation></semantics></math>.</li>
+<li>Los elementos fuera de la diagonal valen 0.</li>
+</ul></li>
+<li><strong>Ganancia</strong>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi><mo>=</mo><mover><mi mathvariant="normal">Σ</mi><mo accent="true">‾</mo></mover><msup><mi>H</mi><mi>T</mi></msup><msup><mi>S</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup></mrow><annotation encoding="application/x-tex">K = \bar\Sigma H^T S^{-1}</annotation></semantics></math>. Primero, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi mathvariant="normal">Σ</mi><mo accent="true">‾</mo></mover><msup><mi>H</mi><mi>T</mi></msup><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>0.25</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>0.025</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>0.01</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">\bar\Sigma H^T = \begin{bmatrix} -0.25 &amp; 0 \\ 0 &amp; -0.025 \\ 0 &amp; -0.01 \end{bmatrix}</annotation></semantics></math>. Al dividir la primera columna entre <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.29</mn><annotation encoding="application/x-tex">0.29</annotation></semantics></math> y la segunda entre <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.0225</mn><annotation encoding="application/x-tex">0.0225</annotation></semantics></math>: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>0.862</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>1.111</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>0.444</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">K = \begin{bmatrix} -0.862 &amp; 0 \\ 0 &amp; -1.111 \\ 0 &amp; -0.444 \end{bmatrix}</annotation></semantics></math>.</li>
+<li><strong>Corrección</strong>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi><mi>𝛎</mi></mrow><annotation encoding="application/x-tex">K\boldsymbol{\nu}</annotation></semantics></math>: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>x</mi><annotation encoding="application/x-tex">x</annotation></semantics></math>: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>0.862</mn><mo>⋅</mo><mn>0.5</mn><mo>=</mo><mi>−</mi><mn>0.431</mn></mrow><annotation encoding="application/x-tex">-0.862 \cdot 0.5 = -0.431</annotation></semantics></math>; <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>y</mi><annotation encoding="application/x-tex">y</annotation></semantics></math>: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>1.111</mn><mo>⋅</mo><mn>0.02</mn><mo>=</mo><mi>−</mi><mn>0.022</mn></mrow><annotation encoding="application/x-tex">-1.111 \cdot 0.02 = -0.022</annotation></semantics></math>; <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>θ</mi><annotation encoding="application/x-tex">\theta</annotation></semantics></math>: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>0.444</mn><mo>⋅</mo><mn>0.02</mn><mo>=</mo><mi>−</mi><mn>0.009</mn></mrow><annotation encoding="application/x-tex">-0.444 \cdot 0.02 = -0.009</annotation></semantics></math>.</li>
+<li><strong>Nueva incertidumbre en <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>x</mi><annotation encoding="application/x-tex">x</annotation></semantics></math></strong>, de <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mi>I</mi><mo>−</mo><mi>K</mi><mi>H</mi><mo stretchy="false" form="postfix">)</mo><mover><mi mathvariant="normal">Σ</mi><mo accent="true">‾</mo></mover></mrow><annotation encoding="application/x-tex">(I - KH)\bar\Sigma</annotation></semantics></math>: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mn>0.862</mn><mo stretchy="false" form="postfix">)</mo><mo>⋅</mo><mn>0.25</mn><mo>=</mo><mn>0.0345</mn></mrow><annotation encoding="application/x-tex">(1 - 0.862) \cdot 0.25 = 0.0345</annotation></semantics></math>.</li>
+</ol></li>
+<li><strong>Resultado.</strong> <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝛍</mi><mo>=</mo><mo stretchy="false" form="prefix">[</mo><mi>−</mi><mn>0.431</mn><mo>,</mo><mspace width="0.222em"></mspace><mo>−</mo><mn>0.022</mn><mo>,</mo><mspace width="0.222em"></mspace><mo>−</mo><mn>0.009</mn><msup><mo stretchy="false" form="postfix">]</mo><mi>T</mi></msup></mrow><annotation encoding="application/x-tex">\boldsymbol{\mu} = [-0.431,\ -0.022,\ -0.009]^T</annotation></semantics></math> y <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msubsup><mi>σ</mi><mi>x</mi><mn>2</mn></msubsup><annotation encoding="application/x-tex">\sigma_x^2</annotation></semantics></math> baja de <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.25</mn><annotation encoding="application/x-tex">0.25</annotation></semantics></math> a <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.0345</mn><annotation encoding="application/x-tex">0.0345</annotation></semantics></math>.</li>
+<li><strong>Interpretación.</strong> El landmark se ve <strong>más lejos</strong> de lo esperado (10.5 m frente a 10 m), así que el robot debe de estar <strong>más atrás</strong>: su <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>x</mi><annotation encoding="application/x-tex">x</annotation></semantics></math> baja. El signo sale solo, gracias al <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>1</mn></mrow><annotation encoding="application/x-tex">-1</annotation></semantics></math> de <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>H</mi><annotation encoding="application/x-tex">H</annotation></semantics></math>.</li>
+</ul>
+<p><strong>C10. Otros cálculos rápidos.</strong></p>
+<ul>
+<li><strong><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msqrt><mrow><mrow><mi mathvariant="normal">t</mi><mi mathvariant="normal">r</mi></mrow><mo stretchy="false" form="prefix">(</mo><msub><mi mathvariant="normal">Σ</mi><mrow><mi>x</mi><mi>y</mi></mrow></msub><mo stretchy="false" form="postfix">)</mo></mrow></msqrt><annotation encoding="application/x-tex">\sqrt{\mathrm{tr}(\Sigma_{xy})}</annotation></semantics></math> tras el primer paso sin observar.</strong> Con <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi mathvariant="normal">Σ</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\Sigma_{t-1} = 0</annotation></semantics></math> y <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>σ</mi><mi>x</mi></msub><mo>=</mo><msub><mi>σ</mi><mi>y</mi></msub><mo>=</mo><mn>0.8</mn></mrow><annotation encoding="application/x-tex">\sigma_x = \sigma_y = 0.8</annotation></semantics></math> m: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msqrt><mrow><mn>0.64</mn><mo>+</mo><mn>0.64</mn></mrow></msqrt><mo>=</mo><mn>1.13</mn></mrow><annotation encoding="application/x-tex">\sqrt{0.64 + 0.64} = 1.13</annotation></semantics></math> m, el valor con el que empieza la tabla del notebook.</li>
+<li><strong>Error lateral por la marcación.</strong> Con <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>σ</mi><mi>θ</mi></msub><mo>=</mo><mn>0.7</mn></mrow><annotation encoding="application/x-tex">\sigma_\theta = 0.7</annotation></semantics></math> rad y un landmark a 30 m: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mo>⋅</mo><mn>0.7</mn><mo>=</mo><mn>21</mn></mrow><annotation encoding="application/x-tex">30 \cdot 0.7 = 21</annotation></semantics></math> m. Por eso una sola observación apenas informa en perpendicular al rayo.</li>
+<li><strong>Dimensiones.</strong> Con 4 landmarks en el FOV: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>H</mi><annotation encoding="application/x-tex">H</annotation></semantics></math> de <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>8</mn><mo>×</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">8 \times 3</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>Q</mi><mi>t</mi></msub><annotation encoding="application/x-tex">Q_t</annotation></semantics></math> de <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>8</mn><mo>×</mo><mn>8</mn></mrow><annotation encoding="application/x-tex">8 \times 8</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>K</mi><annotation encoding="application/x-tex">K</annotation></semantics></math> de <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>3</mn><mo>×</mo><mn>8</mn></mrow><annotation encoding="application/x-tex">3 \times 8</annotation></semantics></math> y <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>𝐳</mi><annotation encoding="application/x-tex">\mathbf{z}</annotation></semantics></math> de <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>8</mn><mo>×</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">8 \times 1</annotation></semantics></math>.</li>
+</ul>
+</section>
+<section id="8-errores-típicos-en-el-código" class="level2">
+<h2>8. Errores típicos en el código</h2>
+<p>Cada fragmento tiene <strong>un</strong> error. Intenta encontrarlo antes de leer la corrección.</p>
+<p><strong>E1. Argumentos de <code>arctan2</code></strong></p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>z[<span class="dv">1</span>, :] <span class="op">=</span> np.arctan2(delta[<span class="dv">0</span>, :], delta[<span class="dv">1</span>, :]) <span class="op">-</span> from_pose[<span class="dv">2</span>, <span class="dv">0</span>]</span></code></pre></div>
+<blockquote>
+<p>Es <code>arctan2(dy, dx)</code>: <code>delta[1, :]</code> primero. Así se mediría el ángulo desde el eje <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>y</mi><annotation encoding="application/x-tex">y</annotation></semantics></math>.</p>
+</blockquote>
+<p><strong>E2. Olvidar la orientación</strong></p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>z[<span class="dv">1</span>, :] <span class="op">=</span> np.arctan2(delta[<span class="dv">1</span>, :], delta[<span class="dv">0</span>, :])</span></code></pre></div>
+<blockquote>
+<p>Falta <code>- from_pose[2, 0]</code>. La marcación se mide desde el frente del robot, no desde el eje <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>x</mi><annotation encoding="application/x-tex">x</annotation></semantics></math> del mundo.</p>
+</blockquote>
+<p><strong>E3. Ruido sin raíz</strong></p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>z <span class="op">+=</span> <span class="va">self</span>.cov<span class="op">@</span>random.randn(<span class="dv">2</span>, world.shape[<span class="dv">1</span>])</span></code></pre></div>
+<blockquote>
+<p><code>cov</code> contiene varianzas. Hay que usar <code>np.sqrt(self.cov)</code>, porque las gaussianas se escalan con la <strong>desviación típica</strong>.</p>
+</blockquote>
+<p><strong>E4. Perder una dimensión al elegir el landmark</strong></p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>world <span class="op">=</span> world[:, rand_idx]</span></code></pre></div>
+<blockquote>
+<p>Debe ser <code>world[:, [rand_idx]]</code>, para conservar la forma <code>(2, 1)</code>.</p>
+</blockquote>
+<p><strong>E5. El error no se acumula</strong></p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="va">self</span>.true_pose <span class="op">=</span> tcomp(<span class="va">self</span>.pose, noisy_u)</span></code></pre></div>
+<blockquote>
+<p>Debe componerse sobre <code>self.true_pose</code>. Así, la pose real volvería cada vez a la ideal.</p>
+</blockquote>
+<p><strong>E6. Índice del landmark</strong></p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>dx <span class="op">=</span> Map[<span class="dv">0</span>, i] <span class="op">-</span> xPred[<span class="dv">0</span>, <span class="dv">0</span>]</span></code></pre></div>
+<blockquote>
+<p>Debe ser <code>Map[0, lm[i]]</code>. <code>i</code> es el número de observación, no el índice en el mapa.</p>
+</blockquote>
+<p><strong>E7. Signo o denominador del jacobiano</strong></p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>jH[ii:ii<span class="op">+</span><span class="dv">2</span>,:] <span class="op">=</span> [[<span class="op">-</span>dx<span class="op">/</span>d, <span class="op">-</span>dy<span class="op">/</span>d, <span class="dv">0</span>], [dy<span class="op">/</span>d, <span class="op">-</span>dx<span class="op">/</span>d, <span class="op">-</span><span class="dv">1</span>]]</span></code></pre></div>
+<blockquote>
+<p>La segunda fila se divide entre <code>d2</code>, no entre <code>d</code>.</p>
+</blockquote>
+<p><strong>E8. Predecir desde la pose equivocada</strong></p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>xPred <span class="op">=</span> tcomp(robot.true_pose, u)</span></code></pre></div>
+<blockquote>
+<p>Debe ser <code>robot.xEst</code>. El filtro no conoce la pose real; si la usara, no habría nada que estimar.</p>
+</blockquote>
+<p><strong>E9. <code>R_t</code> sin girar</strong></p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>PPred <span class="op">=</span> G<span class="op">@</span>robot.PEst<span class="op">@</span>G.T <span class="op">+</span> robot.cov_move</span></code></pre></div>
+<blockquote>
+<p>Falta <code>j2@ ... @j2.T</code>. <code>cov_move</code> está en el marco del robot y hay que llevarla al mundo.</p>
+</blockquote>
+<p><strong>E10. Jacobianos en la pose predicha</strong></p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>xPred <span class="op">=</span> tcomp(robot.xEst, u)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>G <span class="op">=</span> J1(xPred, u)</span></code></pre></div>
+<blockquote>
+<p><code>G</code> se evalúa en el punto de partida: <code>J1(robot.xEst, u)</code>.</p>
+</blockquote>
+<p><strong>E11. Medida esperada con ruido</strong></p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>innovation <span class="op">=</span> z <span class="op">-</span> sensor.observe(xPred, Map[:, landmark])</span></code></pre></div>
+<blockquote>
+<p><code>noisy</code> vale <code>True</code> por defecto. Hay que pasar <code>noisy=False</code>, porque <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝐡</mi><mo stretchy="false" form="prefix">(</mo><msub><mover><mi>𝛍</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\mathbf{h}(\bar{\boldsymbol{\mu}}_t)</annotation></semantics></math> no lleva ruido.</p>
+</blockquote>
+<p><strong>E12. Medida esperada de todos los landmarks</strong></p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>innovation <span class="op">=</span> z <span class="op">-</span> sensor.observe(xPred, Map, noisy<span class="op">=</span><span class="va">False</span>)</span></code></pre></div>
+<blockquote>
+<p>Debe ser <code>Map[:, landmark]</code>. Si no, las dimensiones no coinciden con <code>z</code>.</p>
+</blockquote>
+<p><strong>E13. Covarianza desde la anterior</strong></p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>PEst <span class="op">=</span> (np.eye(<span class="dv">3</span>) <span class="op">-</span> K<span class="op">@</span>H)<span class="op">@</span>robot.PEst</span></code></pre></div>
+<blockquote>
+<p>Debe ser <code>PPred</code>. Así se perdería toda la predicción.</p>
+</blockquote>
+<p><strong>E14. <code>Q_t</code> de tamaño fijo</strong></p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>K <span class="op">=</span> PPred<span class="op">@</span>H.T<span class="op">@</span>linalg.inv(H<span class="op">@</span>PPred<span class="op">@</span>H.T <span class="op">+</span> sensor.cov)</span></code></pre></div>
+<blockquote>
+<p>Solo funciona con un landmark. Con <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math> hacen falta <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math> bloques: <code>np.kron(np.eye(n), sensor.cov)</code>.</p>
+</blockquote>
+<p><strong>E15. Ángulo del FOV completo</strong></p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>(np.<span class="bu">abs</span>(z[<span class="dv">1</span>, :]) <span class="op">&lt;</span> <span class="va">self</span>.fov)</span></code></pre></div>
+<blockquote>
+<p>El límite es <code>self.fov/2</code>. El FOV es el ángulo total, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mi>α</mi></mrow><annotation encoding="application/x-tex">2\alpha</annotation></semantics></math>.</p>
+</blockquote>
+<p><strong>E16. Falta el valor absoluto</strong></p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>(z[<span class="dv">1</span>, :] <span class="op">&lt;</span> angle_limit)</span></code></pre></div>
+<blockquote>
+<p>Con marcaciones negativas, los landmarks de la derecha pasarían siempre el filtro, incluso los que están detrás.</p>
+</blockquote>
+<p><strong>E17. <code>and</code> entre arrays</strong></p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>np.nonzero((z[<span class="dv">0</span>, :] <span class="op">&lt;</span> <span class="va">self</span>.max_range) <span class="kw">and</span> (np.<span class="bu">abs</span>(z[<span class="dv">1</span>, :]) <span class="op">&lt;</span> angle_limit))[<span class="dv">0</span>]</span></code></pre></div>
+<blockquote>
+<p>Debe ser <code>&amp;</code>. <code>and</code> da <code>ValueError</code> con arrays de más de un elemento.</p>
+</blockquote>
+<p><strong>E18. Aplanar en el orden equivocado</strong></p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>z <span class="op">=</span> np.vstack(z.flatten(<span class="st">&#39;C&#39;</span>))</span></code></pre></div>
+<blockquote>
+<p>Debe ser <code>'F'</code>. <code>'C'</code> da <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">[</mo><msub><mi>d</mi><mn>1</mn></msub><mo>,</mo><msub><mi>d</mi><mn>2</mn></msub><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi>θ</mi><mn>1</mn></msub><mo>,</mo><msub><mi>θ</mi><mn>2</mn></msub><mo>,</mo><mi>…</mi><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">[d_1, d_2, \dots, \theta_1, \theta_2, \dots]</annotation></semantics></math>, y <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>H</mi><annotation encoding="application/x-tex">H</annotation></semantics></math> espera los pares intercalados.</p>
+</blockquote>
+</section>
+<section id="9-rellena-el-hueco" class="level2">
+<h2>9. Rellena el hueco</h2>
+<p><strong>H1.</strong> Modelo de observación.</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>delta <span class="op">=</span> world <span class="op">-</span> from_pose[____]</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>z[<span class="dv">0</span>, :] <span class="op">=</span> np.____(delta[<span class="dv">0</span>, :]<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> delta[<span class="dv">1</span>, :]<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>z[<span class="dv">1</span>, :] <span class="op">=</span> np.____(delta[____, :], delta[____, :]) <span class="op">-</span> from_pose[____, <span class="dv">0</span>]</span></code></pre></div>
+<blockquote>
+<p><code>0:2</code>, <code>sqrt</code>, <code>arctan2</code>, <code>1</code>, <code>0</code>, <code>2</code>.</p>
+</blockquote>
+<p><strong>H2.</strong> Ruido.</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>z <span class="op">+=</span> np.____(<span class="va">self</span>.cov)<span class="op">@</span>random.____(<span class="dv">2</span>, world.shape[____])</span></code></pre></div>
+<blockquote>
+<p><code>sqrt</code>, <code>randn</code>, <code>1</code>.</p>
+</blockquote>
+<p><strong>H3.</strong> Landmark aleatorio.</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>n_landmarks <span class="op">=</span> world.shape[____]</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>rand_idx <span class="op">=</span> random.____(<span class="dv">0</span>, n_landmarks)</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>world <span class="op">=</span> world[:, ____]</span></code></pre></div>
+<blockquote>
+<p><code>1</code>, <code>randint</code>, <code>[rand_idx]</code>.</p>
+</blockquote>
+<p><strong>H4.</strong> Movimiento.</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>noisy_u <span class="op">=</span> ____ <span class="op">+</span> noise</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="va">self</span>.true_pose <span class="op">=</span> tcomp(____, noisy_u)</span></code></pre></div>
+<blockquote>
+<p><code>u</code>, <code>self.true_pose</code>.</p>
+</blockquote>
+<p><strong>H5.</strong> Jacobiano.</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>jH[ii:ii<span class="op">+</span><span class="dv">2</span>,:] <span class="op">=</span> [</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>    [____, <span class="op">-</span>dy<span class="op">/</span>d, ____],</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>    [dy<span class="op">/</span>d2, ____, ____]</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>]</span></code></pre></div>
+<blockquote>
+<p><code>-dx/d</code>, <code>0</code>, <code>-dx/d2</code>, <code>-1</code>.</p>
+</blockquote>
+<p><strong>H6.</strong> Predicción.</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>xPred <span class="op">=</span> tcomp(____, ____)</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>G <span class="op">=</span> J1(robot.xEst, u)</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>j2 <span class="op">=</span> ____(robot.xEst, u)</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>PPred <span class="op">=</span> G<span class="op">@</span>robot.PEst<span class="op">@</span>____ <span class="op">+</span> j2<span class="op">@</span>____<span class="op">@</span>j2.T</span></code></pre></div>
+<blockquote>
+<p><code>robot.xEst</code>, <code>u</code>, <code>J2</code>, <code>G.T</code>, <code>robot.cov_move</code>.</p>
+</blockquote>
+<p><strong>H7.</strong> Corrección.</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>H <span class="op">=</span> getObsJac(____, landmark, Map)</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>K <span class="op">=</span> PPred<span class="op">@</span>____<span class="op">@</span>linalg.inv(H<span class="op">@</span>PPred<span class="op">@</span>H.T <span class="op">+</span> Q_t)</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>xEst <span class="op">=</span> xPred <span class="op">+</span> K<span class="op">@</span>(z <span class="op">-</span> sensor.observe(xPred, Map[:, landmark], noisy<span class="op">=</span>____))</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>PEst <span class="op">=</span> (np.eye(____) <span class="op">-</span> K<span class="op">@</span>H)<span class="op">@</span>____</span></code></pre></div>
+<blockquote>
+<p><code>xPred</code>, <code>H.T</code>, <code>False</code>, <code>3</code>, <code>PPred</code>.</p>
+</blockquote>
+<p><strong>H8.</strong> FOV.</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>angle_limit <span class="op">=</span> <span class="va">self</span>.fov<span class="op">/</span>____</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>feats_idx <span class="op">=</span> np.____(np.asarray((z[<span class="dv">0</span>, :] <span class="op">&lt;</span> <span class="va">self</span>.____) <span class="op">&amp;</span> (np.____(z[<span class="dv">1</span>, :]) <span class="op">&lt;</span> angle_limit)))[____]</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>z <span class="op">=</span> z[:, ____]</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>z <span class="op">=</span> np.vstack(z.flatten(____))</span></code></pre></div>
+<blockquote>
+<p><code>2</code>, <code>nonzero</code>, <code>max_range</code>, <code>abs</code>, <code>0</code>, <code>feats_idx</code>, <code>'F'</code>.</p>
+</blockquote>
+</section>
+<section id="10-preguntas-de-repaso-con-solución" class="level2">
+<h2>10. Preguntas de repaso (con solución)</h2>
+<p><strong>1. ¿Por qué se usa un EKF y no un filtro de Kalman básico?</strong></p>
+<blockquote>
+<p>Porque el movimiento (composición de poses) y la observación (raíz y <code>arctan2</code>) no son lineales. El EKF los linealiza con los jacobianos <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>G</mi><mi>t</mi></msub><annotation encoding="application/x-tex">G_t</annotation></semantics></math> y <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>H</mi><mi>t</mi></msub><annotation encoding="application/x-tex">H_t</annotation></semantics></math>.</p>
+</blockquote>
+<p><strong>2. ¿Qué dimensiones tiene <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>H</mi><mi>t</mi></msub><annotation encoding="application/x-tex">H_t</annotation></semantics></math> con 3 landmarks? ¿Y <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>K</mi><mi>t</mi></msub><annotation encoding="application/x-tex">K_t</annotation></semantics></math>?</strong></p>
+<blockquote>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>H</mi><mi>t</mi></msub><annotation encoding="application/x-tex">H_t</annotation></semantics></math> es de <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>6</mn><mo>×</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">6 \times 3</annotation></semantics></math> (2 filas por landmark, 3 variables de pose) y <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>K</mi><mi>t</mi></msub><annotation encoding="application/x-tex">K_t</annotation></semantics></math>, de <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>3</mn><mo>×</mo><mn>6</mn></mrow><annotation encoding="application/x-tex">3 \times 6</annotation></semantics></math>.</p>
+</blockquote>
+<p><strong>3. ¿Por qué <code>robot.step(u)</code> recibe <code>u</code> sin ruido, si el robot se mueve con ruido?</strong></p>
+<blockquote>
+<p>Porque <code>step</code> genera el ruido dentro. <code>u</code> es lo que se manda; <code>noisy_u</code>, lo que ocurre de verdad. El filtro solo conoce <code>u</code>.</p>
+</blockquote>
+<p><strong>4. ¿Qué ocurre si aumenta <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Q</mi><annotation encoding="application/x-tex">Q</annotation></semantics></math>?</strong></p>
+<blockquote>
+<p>La ganancia baja: el filtro se fía menos de la medida, corrige menos la pose y reduce menos la incertidumbre.</p>
+</blockquote>
+<p><strong>5. ¿Qué hace el filtro cuando no ve ningún landmark?</strong></p>
+<blockquote>
+<p>Solo predice: <code>xEst = xPred</code> y <code>PEst = PPred</code>. La incertidumbre sigue creciendo y la estimación se comporta como odometría. El filtro no falla.</p>
+</blockquote>
+<p><strong>6. ¿Puede la corrección aumentar la incertidumbre?</strong></p>
+<blockquote>
+<p>No. <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi mathvariant="normal">Σ</mi><mi>t</mi></msub><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mi>I</mi><mo>−</mo><msub><mi>K</mi><mi>t</mi></msub><msub><mi>H</mi><mi>t</mi></msub><mo stretchy="false" form="postfix">)</mo><msub><mover><mi mathvariant="normal">Σ</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub></mrow><annotation encoding="application/x-tex">\Sigma_t = (I - K_t H_t)\bar\Sigma_t</annotation></semantics></math> reduce o mantiene la incertidumbre. Es la predicción la que la hace crecer.</p>
+</blockquote>
+<p><strong>7. ¿Por qué las elipses se alargan en perpendicular al rayo del landmark?</strong></p>
+<blockquote>
+<p>Porque el sensor mide bien la distancia y mal la marcación (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>σ</mi><mi>d</mi></msub><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\sigma_d = 1</annotation></semantics></math> m frente a <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>σ</mi><mi>θ</mi></msub><mo>=</mo><mn>0.7</mn></mrow><annotation encoding="application/x-tex">\sigma_\theta = 0.7</annotation></semantics></math> rad, que a 30 m son 21 m). La medida fija la pose a lo largo del rayo, pero deja bastante libertad en perpendicular.</p>
+</blockquote>
+<p><strong>8. ¿Por qué ayudan varios landmarks simultáneos?</strong></p>
+<blockquote>
+<p>Porque cada uno limita la dirección que el otro deja libre. En la ejecución del notebook, la incertidumbre más pequeña se alcanza con 3 y 4 landmarks (0.87 y 1.00 m).</p>
+</blockquote>
+<p><strong>9. ¿Es mejor el sensor FOV que el inicial?</strong></p>
+<blockquote>
+<p>Es peor de media (2.86 m frente a 1.88 m de error, con 200 semillas), porque en el 26 % de los pasos no ve nada. Pero es el realista: el inicial ve cualquier landmark a cualquier distancia y en cualquier dirección.</p>
+</blockquote>
+<p><strong>10. ¿Qué tres problemas de localización hay?</strong></p>
+<blockquote>
+<p><em>Position tracking</em> (la pose inicial se conoce aproximadamente), <em>global localization</em> (no se conoce) y <em>kidnapped robot</em> (el robot cree que la conoce, pero se equivoca). El EKF de esta práctica resuelve el primero.</p>
+</blockquote>
+</section>
+<section id="11-ideas-esenciales-para-recordar" class="level2">
+<h2>11. Ideas esenciales para recordar</h2>
+<ol type="1">
+<li><strong>Ciclo:</strong> la predicción aumenta la incertidumbre y la corrección la reduce.</li>
+<li><strong>Tres poses:</strong> <code>pose</code> es la ideal, <code>true_pose</code> la real (desde ella mide el sensor) y <code>xEst</code> la estimada (desde ella predice el filtro).</li>
+<li><strong>Puntos de evaluación:</strong> <code>G</code> y <code>j2</code> en <code>robot.xEst</code>; <code>H</code> en <code>xPred</code>.</li>
+<li><strong><code>PPred</code></strong> tiene dos sumandos, cada uno con su jacobiano y su traspuesta.</li>
+<li><strong>La ganancia</strong> equilibra predicción y sensor: más <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Q</mi><annotation encoding="application/x-tex">Q</annotation></semantics></math>, menos <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>K</mi><annotation encoding="application/x-tex">K</annotation></semantics></math>.</li>
+<li><strong>La innovación</strong> es lo medido menos lo esperado, con <code>noisy=False</code>, y su marcación hay que normalizarla.</li>
+<li><strong>Dimensiones:</strong> <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>H</mi><annotation encoding="application/x-tex">H</annotation></semantics></math> es <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mi>n</mi><mo>×</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">2n \times 3</annotation></semantics></math> y <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>K</mi><annotation encoding="application/x-tex">K</annotation></semantics></math> es <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>3</mn><mo>×</mo><mn>2</mn><mi>n</mi></mrow><annotation encoding="application/x-tex">3 \times 2n</annotation></semantics></math>; <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>Q</mi><mi>t</mi></msub><annotation encoding="application/x-tex">Q_t</annotation></semantics></math> tiene un bloque por landmark.</li>
+<li><strong>Sin landmarks</strong> no hay corrección: el filtro sigue funcionando, pero la incertidumbre crece.</li>
+<li><strong>FOV:</strong> <code>fov/2</code>, <code>np.abs</code>, <code>&amp;</code> y filtrar con la medida sin ruido.</li>
+<li><strong><code>flatten('F')</code></strong> intercala <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">[</mo><msub><mi>d</mi><mn>1</mn></msub><mo>,</mo><msub><mi>θ</mi><mn>1</mn></msub><mo>,</mo><msub><mi>d</mi><mn>2</mn></msub><mo>,</mo><msub><mi>θ</mi><mn>2</mn></msub><mo>,</mo><mi>…</mi><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">[d_1, \theta_1, d_2, \theta_2, \dots]</annotation></semantics></math>.</li>
+</ol>
+</section>
+</section>
+</article><div class="end-link"><span>Fin de esta guía</span><a href="index.html?lesson=P5.2#filters">Ahora, ponte a prueba <span aria-hidden="true">→</span></a></div></div></div>
+    </div>
+  </main>
+  <footer><div class="wrap"><span>ROBO<span>TEST</span> / P5.2</span><span>Apuntes completos · Fórmulas en MathML · Funcionamiento sin conexión</span></div></footer>
+  <a class="back-top" href="#hero-title" aria-label="Volver arriba">↑</a>
+</body>
+</html>

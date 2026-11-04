@@ -103,6 +103,13 @@ PARCIALES = [
                 "title": "Sensores con ROS 2",
                 "subtitle": "Práctica 4.3: los sensores del TurtleBot3 en MVSim, el mensaje LaserScan y el árbol tf.",
             },
+            {
+                "key": "P5.2",
+                "lesson": "L5",
+                "source": TEORIA / "Parcial-2/Guias_practicas/P5.2_EKF_Localization.md",
+                "title": "Localización con EKF",
+                "subtitle": "Práctica 5.2: predicción y corrección del filtro de Kalman extendido, línea a línea.",
+            },
         ],
     },
 ]
@@ -204,14 +211,16 @@ def related_html(page, output):
             for item in guides
         )
         return f'<section class="related"><span class="overline">APLICA LO APRENDIDO</span><h2>Guías de prácticas</h2><p>El test incluye preguntas de estas prácticas. Aquí puedes estudiar el procedimiento completo.</p><div class="related-grid">{cards}</div></section>'
-    lesson = next(item for item in parcial["lessons"] if item["key"] == page["lesson"])
+    lesson = next((item for item in parcial["lessons"] if item["key"] == page["lesson"]), None)  # La lección puede no tener resumen todavía
     companions = [item for item in parcial["guides"] if item["lesson"] == page["lesson"] and item != page]
-    cards = [f'<a class="related-card" href="{link(output, page_output(lesson))}"><span>{escape(lesson["key"])} · TEORÍA</span><strong>{escape(lesson["title"])}</strong><small>Volver al resumen ↗</small></a>']
+    cards = [f'<a class="related-card" href="{link(output, page_output(lesson))}"><span>{escape(lesson["key"])} · TEORÍA</span><strong>{escape(lesson["title"])}</strong><small>Volver al resumen ↗</small></a>'] if lesson else []
     cards.extend(
         f'<a class="related-card" href="{link(output, page_output(item))}">'
         f'<span>{escape(item["key"])} · PRÁCTICA</span><strong>{escape(item["title"])}</strong><small>Leer guía ↗</small></a>'
         for item in companions
     )
+    if not cards:
+        return ""
     return f'<section class="related"><span class="overline">SIGUE ESTUDIANDO</span><h2>Más material del bloque</h2><div class="related-grid">{"".join(cards)}</div></section>'
 
 
@@ -230,6 +239,8 @@ def build(page):
     content_feature = f"{formulas} fórmulas renderizadas" if formulas else "Apartados navegables"
     parcial = page["parcial"]
     active = page.get("lesson", page["key"])
+    if active not in {lesson["key"] for lesson in parcial["lessons"]}:
+        active = page["key"]  # Guía de una lección que aún no tiene resumen
     menu = f'<a href="{link(output, PORTAL)}">Inicio</a>' + "".join(
         f'<a href="{link(output, page_output(lesson))}"'
         f'{" aria-current=page" if lesson["key"] == active else ""}>{lesson["key"]}</a>'
@@ -239,7 +250,6 @@ def build(page):
     quiz_url = f'{quiz_link}?lesson={active}#filters'
     practice_url = f'{quiz_link}?lesson={active}&amp;kind=Pr%C3%A1ctica#filters'
     label = "GUÍA DE PRÁCTICAS" if page in parcial["guides"] else "RESUMEN DE LA LECCIÓN"
-    summary_label = next(item for item in parcial["lessons"] if item["key"] == active)
     source_link = link(output, source)
     toc = f'<nav class="toc-items" aria-label="Apartados de la página">{chapters}</nav>'
     page_html = f'''<!doctype html>
@@ -273,7 +283,7 @@ def build(page):
     <div class="reading-wrap" id="apuntes">
       <div class="reading-intro"><div><span class="overline">{escape(page["key"])} / LECTURA</span><h2>Todo el contenido, mejor organizado.</h2><p>Índice navegable, secciones cortas y fórmulas legibles. El contenido del apunte original se mantiene íntegro.</p></div><a class="original-link" href="{source_link}">Ver Markdown original ↗</a></div>
       <details class="mobile-toc"><summary>Índice de contenidos <span aria-hidden="true">⌄</span></summary>{toc}</details>
-      <div class="reading-columns"><aside class="toc-sidebar"><div class="toc-box"><span class="overline">EN ESTA PÁGINA</span><p>{escape(summary_label["key"])} · {total} bloques</p>{toc}<a class="toc-practice" href="{practice_url}">Practicar preguntas ↗</a></div></aside><div class="reading-main"><article class="notes-body">{rendered}</article>{related_html(page, output)}<div class="end-link"><span>Fin de esta guía</span><a href="{quiz_url}">Ahora, ponte a prueba <span aria-hidden="true">→</span></a></div></div></div>
+      <div class="reading-columns"><aside class="toc-sidebar"><div class="toc-box"><span class="overline">EN ESTA PÁGINA</span><p>{escape(active)} · {total} bloques</p>{toc}<a class="toc-practice" href="{practice_url}">Practicar preguntas ↗</a></div></aside><div class="reading-main"><article class="notes-body">{rendered}</article>{related_html(page, output)}<div class="end-link"><span>Fin de esta guía</span><a href="{quiz_url}">Ahora, ponte a prueba <span aria-hidden="true">→</span></a></div></div></div>
     </div>
   </main>
   <footer><div class="wrap"><span>ROBO<span>TEST</span> / {escape(page["key"])}</span><span>Apuntes completos · Fórmulas en MathML · Funcionamiento sin conexión</span></div></footer>
