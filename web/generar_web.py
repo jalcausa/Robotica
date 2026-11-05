@@ -73,12 +73,19 @@ PARCIALES = [
     {
         "key": "parcial2",
         "label": "Parcial 2",
+        "quiz_by_page": True,  # El test del parcial 2 filtra por página (L5, P5.2…), no por lección y tipo
         "lessons": [
             {
                 "key": "L4",
                 "source": TEORIA / "Parcial-2/L4-Robot-sensing/Resumen_L4_Percepcion_Robot.md",
                 "title": "Percepción del robot",
                 "subtitle": "Sensores, modelos de observación de landmarks y láser, e incertidumbre, con ejemplos numéricos resueltos.",
+            },
+            {
+                "key": "L5",
+                "source": TEORIA / "Parcial-2/L5-Robot-Localization/Resumen_L5_Localizacion_Robot.md",
+                "title": "Localización del robot",
+                "subtitle": "Mínimos cuadrados, ICP y filtros de rejilla, Kalman, EKF y partículas, con todos los cálculos resueltos paso a paso.",
             },
         ],
         "guides": [
@@ -170,8 +177,10 @@ def relink(rendered, source, output):
         if target.startswith(("#", "/", "data:", "mailto:")) or "://" in target:
             return match.group(0)
         path, _, fragment = target.partition("#")
+        path, _, query = path.partition("?")
         url = link(output, source.parent / unquote(path))
-        return f'{attribute}="{url}{"#" + escape(fragment, quote=True) if fragment else ""}"'
+        suffix = ("?" + escape(query, quote=True) if query else "") + ("#" + escape(fragment, quote=True) if fragment else "")
+        return f'{attribute}="{url}{suffix}"'
 
     return re.sub(r'\b(src|href)="([^"]*)"', fix, rendered)
 
@@ -247,8 +256,11 @@ def build(page):
         for lesson in parcial["lessons"]
     )
     quiz_link = link(output, quiz_page(parcial))
-    quiz_url = f'{quiz_link}?lesson={active}#filters'
-    practice_url = f'{quiz_link}?lesson={active}&amp;kind=Pr%C3%A1ctica#filters'
+    if parcial.get("quiz_by_page"):
+        quiz_url = practice_url = f'{quiz_link}?lesson={page["key"]}#filters'
+    else:
+        quiz_url = f'{quiz_link}?lesson={active}#filters'
+        practice_url = f'{quiz_link}?lesson={active}&amp;kind=Pr%C3%A1ctica#filters'
     label = "GUÍA DE PRÁCTICAS" if page in parcial["guides"] else "RESUMEN DE LA LECCIÓN"
     source_link = link(output, source)
     toc = f'<nav class="toc-items" aria-label="Apartados de la página">{chapters}</nav>'
