@@ -867,6 +867,7 @@ function initQuiz() {
     progress = saved && typeof saved === "object" && !Array.isArray(saved) ? saved : {};
   } catch { progress = {}; }
   let session = [];
+  let sessionTag = null;
   let responses = {};
   let current = 0;
 
@@ -936,6 +937,7 @@ function initQuiz() {
       return;
     }
     $("#filter-error").textContent = "";
+    sessionTag = null;
     if ($("#session-size").value === "all" || pool.length <= 20) {
       session = shuffle(pool);
     } else {
@@ -955,6 +957,23 @@ function initQuiz() {
     showQuestion();
     $("#quiz").scrollIntoView({ behavior: "smooth", block: "start" });
   }
+
+  window.RoboTest = {
+    questions,
+    getProgress: () => progress,
+    start(list, tag) {
+      if (!Array.isArray(list) || !list.length) return;
+      session = [...list];
+      sessionTag = tag ?? null;
+      responses = {};
+      current = 0;
+      $("#filter-error").textContent = "";
+      $("#quiz").hidden = false;
+      $("#result").hidden = true;
+      showQuestion();
+      $("#quiz").scrollIntoView({ behavior: "smooth", block: "start" });
+    },
+  };
 
   function renderChoice(q, saved, container) {
     const answer = answerList(q);
@@ -1158,6 +1177,9 @@ function initQuiz() {
     try { localStorage.setItem(storageKey, JSON.stringify(progress)); } catch {}
     updateStats();
     showQuestion();
+    document.dispatchEvent(new CustomEvent("robotest:answer", {
+      detail: { id: q.id, correct, tag: sessionTag },
+    }));
     $("#feedback").scrollIntoView({ behavior: "smooth", block: "nearest" });
   }
 
@@ -1171,6 +1193,9 @@ function initQuiz() {
       ? `Has fallado ${wrong}. Puedes repetir solo los fallos de esta sesión o elegir «Falladas» en los filtros para repasar tus errores acumulados.`
       : "¡Todas correctas! Cambia los filtros para practicar otro bloque o haz un simulacro nuevo.";
     $("#repeat-button").hidden = !wrong;
+    document.dispatchEvent(new CustomEvent("robotest:finish", {
+      detail: { tag: sessionTag, right, total: session.length },
+    }));
     $("#result").scrollIntoView({ behavior: "smooth", block: "start" });
   }
 

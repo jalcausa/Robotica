@@ -7,12 +7,15 @@
   <title>RoboTest · L4 y L5 · Segundo parcial</title>
   <link rel="stylesheet" href="../assets/robotest.css">
   <link rel="stylesheet" href="robotest2.css">
-  <script src="robotest.js?v=1" defer></script>
+  <link rel="stylesheet" href="ruta.css">
+  <script src="ruta-data.js" defer></script>
+  <script src="robotest.js?v=2" defer></script>
+  <script src="ruta.js?v=2" defer></script>
 </head>
 <body>
   <header class="topbar">
     <a class="brand" href="#inicio" aria-label="RoboTest, ir al inicio"><span class="brand-mark">R<span></span></span> ROBO<span>TEST</span></a>
-    <nav aria-label="Navegación principal"><a href="../../index.html">Inicio</a><a href="#guia">Qué estudiar</a><a href="#filters">Practicar</a></nav>
+    <nav aria-label="Navegación principal"><a href="../../index.html">Inicio</a><a href="#ruta">Ruta</a><a href="#guia">Qué estudiar</a><a href="#filters">Practicar</a></nav>
   </header>
   <main id="inicio">
     <section class="hero" aria-labelledby="hero-title">
@@ -20,13 +23,14 @@
         <div class="eyebrow"><span class="status-dot"></span> SEGUNDO PARCIAL · L4 Y L5 + PRÁCTICAS 4.1 / 4.2 / 4.3 / 5.2</div>
         <h1 id="hero-title">Calcula, completa<br><em>y encuentra el fallo.</em></h1>
         <p>El examen pide pequeños cálculos con las fórmulas del tema y preguntas muy concretas sobre el código de las prácticas. Este test entrena justo eso: resultados numéricos, huecos en el código y líneas con errores, con corrección inmediata y sin conexión.</p>
-        <div class="hero-actions"><a class="button primary" href="#filters">Empezar a practicar <span aria-hidden="true">↗</span></a><a class="button subtle" href="#guia">Ver qué estudiar</a></div>
+        <div class="hero-actions"><a class="button primary" href="#ruta">Seguir mi ruta <span aria-hidden="true">↘</span></a><a class="button subtle" href="#filters">Empezar a practicar <span aria-hidden="true">↗</span></a><a class="button subtle" href="#guia">Ver qué estudiar</a></div>
         <div class="hero-stats"><div><strong id="bank-size">—</strong><span>preguntas</span></div><div><strong id="done-count">—</strong><span>vistas</span></div><div><strong id="mastered-count">—</strong><span>dominadas</span></div></div>
       </div>
       <div class="hero-art" aria-hidden="true"><div class="grid-plane"></div><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="robot-icon"><span class="eye"></span><span class="eye"></span></div><div class="beacon beacon-a"></div><div class="beacon beacon-b"></div><span class="art-label label-a">RANGE</span><span class="art-label label-b">BEARING</span><span class="art-label label-c">p(z|x,m)</span></div>
     </section>
 
     <div class="wrap">
+      <section id="ruta" class="roadmap-section" aria-labelledby="roadmap-title"></section>
       <section class="progress-card" aria-label="Progreso guardado">
         <div><span class="overline">TU PROGRESO</span><h2>Bloque a bloque, sin agobios.</h2><p>Una pregunta cuenta como dominada si acertaste la última vez. Se guarda en este navegador, separado del Parcial 1.</p></div>
         <div class="progress-side"><div class="progress-track" aria-label="Porcentaje de preguntas dominadas"><span id="progress-fill"></span></div><div class="progress-tags"><span>L4 <b id="count-L4">—</b></span><span>L5 <b id="count-L5">—</b></span><span>P4.1 <b id="count-P4-1">—</b></span><span>P4.2 <b id="count-P4-2">—</b></span><span>P4.3 <b id="count-P4-3">—</b></span><span>P5.2 <b id="count-P5-2">—</b></span></div></div>

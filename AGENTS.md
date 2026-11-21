@@ -26,6 +26,7 @@ En la raíz solo están `Teoria/`, `Practicas/`, `web/` e `index.html`.
 - **La web se actualiza siempre.** Cada vez que se resuelva una práctica o se creen o editen apuntes, guías o preguntas del test, hay que dejarlo publicado sin esperar a que el usuario lo pida: regenerar con `python3 web/generar_web.py`, hacer commit y push a `main` (GitHub Pages publica desde `main`) y comprobar que la página ya sale en https://jalcausa.github.io/Robotica/. Sin push, el cambio no está en la web.
 - Los `.md` son la fuente; tras editarlos, regenera las páginas con `python3 web/generar_web.py` desde la raíz del proyecto. Se necesita Pandoc instalado para regenerar, no para abrir los HTML.
 - Las lecciones y guías de cada parcial se declaran en `PARCIALES` dentro de `web/generar_web.py`; el HTML se escribe en `web/<parcial>/<nombre del .md>.html` y los enlaces relativos del Markdown (imágenes, notebooks, otros `.md`) se recalculan solos. No escribir HTML generado fuera de `web/` ni sobrescribir los HTML exportados de los notebooks.
+- La ruta de estudio del Parcial 2 (`web/parcial2/ruta.js`, con `ruta-data.js` generado desde `PARCIALES` cuando `"roadmap": True`) incluye automáticamente lecciones y guías; estima los tiempos con las palabras del `.md` y el formato de las preguntas.
 - Al añadir una página nueva, enlázala también desde la portada (`index.html`) y desde el test del parcial.
 
 ## Enfoque para el Parcial 2 en adelante
