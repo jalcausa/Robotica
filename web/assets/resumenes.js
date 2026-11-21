@@ -155,6 +155,31 @@ function initStudyTracker(tracker) {
     routeCard.append(actions);
     tracker.append(page, routeCard);
 
+    let companions = [];
+    try { companions = JSON.parse(tracker.dataset.companions || "[]"); } catch {}
+    if (companions.length) {
+      const card = el("div", "tracker-card tracker-companions");
+      card.append(el("span", "overline", (tracker.dataset.companionsTitle || "").toUpperCase()));
+      const list = el("div", "companion-list");
+      companions.forEach((item) => {
+        const studied = route.marks[`study:${item.key}`] === true;
+        const tested = route.marks[`test:${item.key}`] === true;
+        const read = Array.isArray(route.blocks[item.key]) ? route.blocks[item.key].length : 0;
+        const status = studied && tested ? "✓ Completada"
+          : studied ? "Estudiada · falta el test"
+          : read ? `${read} ${read === 1 ? "bloque leído" : "bloques leídos"}`
+          : "Sin empezar";
+        const link = el("a", `companion${studied && tested ? " is-done" : studied || read ? " is-started" : ""}`);
+        link.href = item.href;
+        link.append(el("span", "companion-key", item.lesson ? `${item.key} · TEORÍA` : `${item.key} · PRÁCTICA`));
+        link.append(el("strong", "", item.title));
+        link.append(el("small", "", status));
+        list.append(link);
+      });
+      card.append(list);
+      tracker.append(card);
+    }
+
     const ids = readIds();
     blocks.forEach((section) => {
       const done = ids.has(section.id);

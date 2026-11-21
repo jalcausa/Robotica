@@ -286,10 +286,22 @@ def build(page):
         f'data-step="study:{escape(page["key"], quote=True)}" aria-pressed="false">Marcar como estudiado</button>'
         if roadmap else ""
     )
+    if page in parcial["lessons"]:
+        companions = [item for item in parcial["guides"] if item["lesson"] == page["key"]]
+        companions_title = f'Prácticas de {page["key"]}'
+    else:
+        companions = [item for item in parcial["lessons"] if item["key"] == page["lesson"]]
+        companions += [item for item in parcial["guides"] if item["lesson"] == page["lesson"] and item != page]
+        companions_title = f'Resto del tema {page["lesson"]}'
+    companions_json = json.dumps([
+        {"key": item["key"], "title": item["title"], "href": link(output, page_output(item)), "lesson": item in parcial["lessons"]}
+        for item in companions
+    ], ensure_ascii=False)
     tracker = (
         f'<section id="study-tracker" class="study-tracker" aria-label="Tu progreso" data-roadmap-key="{roadmap_key}" '
         f'data-page="{escape(page["key"], quote=True)}" data-minutes="{study_minutes(page)}" '
-        f'data-route-url="{link(output, quiz_page(parcial))}#ruta"></section>'
+        f'data-route-url="{link(output, quiz_page(parcial))}#ruta" '
+        f'data-companions-title="{escape(companions_title, quote=True)}" data-companions="{escape(companions_json, quote=True)}"></section>'
         if roadmap else ""
     )
     hero_actions = f'<div class="hero-actions"><a class="button primary" href="#apuntes">Empezar a leer <span aria-hidden="true">↘</span></a>{study_button}<a class="button subtle" href="{quiz_url}">Practicar el tema</a></div>'
