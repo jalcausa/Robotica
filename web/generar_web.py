@@ -1,3 +1,4 @@
+import hashlib
 import json
 import os
 import re
@@ -13,6 +14,7 @@ PORTAL = ROOT / "index.html"
 BASE_CSS = WEB / "assets/robotest.css"
 STYLE = WEB / "assets/resumenes.css"
 SCRIPT = WEB / "assets/resumenes.js"
+INDEX_TITLES = {"Índice", "Contenidos de la lección"}  # Bloques que no cuentan como lectura en la ruta
 TEORIA = ROOT / "Teoria"  # Teoria/Parcial-N/: lecciones, Guias_practicas/ y Examen/
 
 # Cada parcial se publica en web/<key>/: su test es index.html y los resúmenes y guías van al lado.
@@ -165,6 +167,17 @@ def page_output(page):
     return WEB / page["parcial"]["key"] / (page["source"].stem + ".html")
 
 
+def asset(output, path):
+    # La versión cambia con el contenido para que el navegador no use una copia vieja.
+    return f'{link(output, path)}?v={hashlib.md5(path.read_bytes()).hexdigest()[:8]}'
+
+
+def study_minutes(page):
+    words = len(page["source"].read_text(encoding="utf-8").split())
+    speed = 90 if page in page["parcial"]["lessons"] else 110
+    return max(5, int(words / speed / 5 + 0.5) * 5)
+
+
 def quiz_page(parcial):
     quiz = WEB / parcial["key"] / "index.html"
     return quiz if quiz.exists() else PORTAL
@@ -252,7 +265,9 @@ def build(page):
     active = page.get("lesson", page["key"])
     if active not in {lesson["key"] for lesson in parcial["lessons"]}:
         active = page["key"]  # Guía de una lección que aún no tiene resumen
-    menu = f'<a href="{link(output, PORTAL)}">Inicio</a>' + "".join(
+    roadmap = parcial.get("roadmap")
+    blocks = [identifier for level, identifier, title in outline.headings if level == 2 and title not in INDEX_TITLES]
+    menu = f'<a href="{link(output, PORTAL)}">Inicio</a>' + (f'<a href="{link(output, quiz_page(parcial))}#ruta">Mi ruta</a>' if roadmap else "") + "".join(
         f'<a href="{link(output, page_output(lesson))}"'
         f'{" aria-current=page" if lesson["key"] == active else ""}>{lesson["key"]}</a>'
         for lesson in parcial["lessons"]
@@ -269,12 +284,18 @@ def build(page):
     study_button = (
         f'<button type="button" class="button subtle study-check" data-roadmap-key="{roadmap_key}" '
         f'data-step="study:{escape(page["key"], quote=True)}" aria-pressed="false">Marcar como estudiado</button>'
-        if parcial.get("roadmap") else ""
+        if roadmap else ""
+    )
+    tracker = (
+        f'<section id="study-tracker" class="study-tracker" aria-label="Tu progreso" data-roadmap-key="{roadmap_key}" '
+        f'data-page="{escape(page["key"], quote=True)}" data-minutes="{study_minutes(page)}" '
+        f'data-route-url="{link(output, quiz_page(parcial))}#ruta"></section>'
+        if roadmap else ""
     )
     hero_actions = f'<div class="hero-actions"><a class="button primary" href="#apuntes">Empezar a leer <span aria-hidden="true">↘</span></a>{study_button}<a class="button subtle" href="{quiz_url}">Practicar el tema</a></div>'
     end_actions = (
         f'<div class="end-actions">{study_button}<a href="{quiz_url}">Ahora, ponte a prueba <span aria-hidden="true">→</span></a></div>'
-        if parcial.get("roadmap") else f'<a href="{quiz_url}">Ahora, ponte a prueba <span aria-hidden="true">→</span></a>'
+        if roadmap else f'<a href="{quiz_url}">Ahora, ponte a prueba <span aria-hidden="true">→</span></a>'
     )
     toc = f'<nav class="toc-items" aria-label="Apartados de la página">{chapters}</nav>'
     page_html = f'''<!doctype html>
@@ -284,9 +305,9 @@ def build(page):
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light">
   <title>{escape(page["key"])} · {escape(page["title"])} | RoboTest</title>
-  <link rel="stylesheet" href="{link(output, BASE_CSS)}">
-  <link rel="stylesheet" href="{link(output, STYLE)}">
-  <script src="{link(output, SCRIPT)}" defer></script>
+  <link rel="stylesheet" href="{asset(output, BASE_CSS)}">
+  <link rel="stylesheet" href="{asset(output, STYLE)}">
+  <script src="{asset(output, SCRIPT)}" defer></script>
 </head>
 <body>
   <div id="reading-progress" aria-hidden="true"></div>
@@ -301,11 +322,12 @@ def build(page):
         <h1 id="hero-title">{escape(page["title"])}<span class="hero-period">.</span></h1>
         <p>{escape(page["subtitle"])}</p>
         {hero_actions}
-        <div class="lesson-facts"><span>{total} bloques de lectura</span><span>{content_feature}</span><span>Sin conexión</span></div>
+        <div class="lesson-facts"><span>{len(blocks) if roadmap else total} bloques de lectura</span><span>{content_feature}</span><span>Sin conexión</span></div>
       </div>
       <div class="hero-art" aria-hidden="true"><div class="grid-plane"></div><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="robot-icon"><span class="eye"></span><span class="eye"></span></div><div class="beacon beacon-a"></div><div class="beacon beacon-b"></div><span class="art-label label-a">SENSE</span><span class="art-label label-b">PLAN</span><span class="art-label label-c">ACT</span></div>
     </section>
     <div class="reading-wrap" id="apuntes">
+      {tracker}
       <div class="reading-intro"><div><span class="overline">{escape(page["key"])} / LECTURA</span><h2>Todo el contenido, mejor organizado.</h2><p>Índice navegable, secciones cortas y fórmulas legibles. El contenido del apunte original se mantiene íntegro.</p></div><a class="original-link" href="{source_link}">Ver Markdown original ↗</a></div>
       <details class="mobile-toc"><summary>Índice de contenidos <span aria-hidden="true">⌄</span></summary>{toc}</details>
       <div class="reading-columns"><aside class="toc-sidebar"><div class="toc-box"><span class="overline">EN ESTA PÁGINA</span><p>{escape(active)} · {total} bloques</p>{toc}<a class="toc-practice" href="{practice_url}">Practicar preguntas ↗</a></div></aside><div class="reading-main"><article class="notes-body">{rendered}</article>{related_html(page, output)}<div class="end-link"><span>Fin de esta guía</span>{end_actions}</div></div></div>
@@ -318,7 +340,7 @@ def build(page):
 '''
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(page_html, encoding="utf-8")
-    return output, total, rendered.count('<math display="')
+    return output, total, rendered.count('<math display="'), blocks
 
 
 if __name__ == "__main__":
@@ -334,8 +356,8 @@ if __name__ == "__main__":
             item["parcial"] = parcial
         page_stats = {}
         for item in pages:
-            result, sections, formulas = build(item)
-            page_stats[item["key"]] = sections
+            result, sections, formulas, blocks = build(item)
+            page_stats[item["key"]] = blocks
             print(f"{result.relative_to(ROOT)}: {sections} bloques, {formulas} fórmulas")
         if parcial.get("roadmap"):
             ordered_pages = []
@@ -350,16 +372,14 @@ if __name__ == "__main__":
             ordered_pages.extend(item for item in parcial["guides"] if item["key"] not in added)
             data_pages = []
             for item in ordered_pages:
-                words = len(item["source"].read_text(encoding="utf-8").split())
-                speed = 90 if item in parcial["lessons"] else 110
-                minutes = max(5, int(words / speed / 5 + 0.5) * 5)
                 data_pages.append({
                     "key": item["key"],
                     "type": "lesson" if item in parcial["lessons"] else "guide",
                     "title": item["title"],
                     "href": page_output(item).name,
-                    "minutes": minutes,
-                    "blocks": page_stats[item["key"]],
+                    "minutes": study_minutes(item),
+                    "blocks": len(page_stats[item["key"]]),
+                    "sections": page_stats[item["key"]],
                 })
             route_data = {
                 "storageKey": f'robotica-ruta-{parcial["key"]}-v1',

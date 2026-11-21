@@ -89,7 +89,7 @@ function initRoadmap() {
     });
   });
 
-  const emptyRoute = () => ({ marks: {}, pass: {}, days: [], summary: {} });
+  const emptyRoute = () => ({ marks: {}, pass: {}, days: [], blocks: {}, summary: {} });
   let route = emptyRoute();
   try {
     const saved = JSON.parse(localStorage.getItem(config.storageKey) || "{}");
@@ -97,6 +97,7 @@ function initRoadmap() {
   } catch {}
   if (!route.marks || typeof route.marks !== "object" || Array.isArray(route.marks)) route.marks = {};
   if (!route.pass || typeof route.pass !== "object" || Array.isArray(route.pass)) route.pass = {};
+  if (!route.blocks || typeof route.blocks !== "object" || Array.isArray(route.blocks)) route.blocks = {};
   if (!Array.isArray(route.days)) route.days = [];
 
   const el = (tag, className, text) => {
@@ -123,6 +124,11 @@ function initRoadmap() {
   const answerCount = (key) => questionsFor(key).filter((question) => Number(progress[question.id]?.tries) > 0).length;
   const masteredCount = (key) => questionsFor(key).filter((question) => progress[question.id]?.lastCorrect === true).length;
   const passCount = () => questions.filter((question) => Object.hasOwn(route.pass, question.id)).length;
+  const readBlocks = (step) => {
+    const read = new Set(Array.isArray(route.blocks[step.key]) ? route.blocks[step.key] : []);
+    return (step.page.sections || []).filter((id) => read.has(id)).length;
+  };
+  const studyFraction = (step) => (step.page.sections?.length ? readBlocks(step) / step.page.sections.length : 0);
   const failedFor = (key) => questionsFor(key).filter((question) => progress[question.id]?.lastCorrect === false);
   const minutesForQuestions = (items) => items.reduce((sum, question) => sum + (questionMinutes[question.format] || 1), 0);
   const dateTodayOrYesterday = () => {
@@ -167,6 +173,7 @@ function initRoadmap() {
       const failedMinutes = hasUnseen ? minutesForQuestions(block) * 0.25 : minutesForQuestions(failures);
       return (pageMinutes.get(step.key) || 0) * 0.15 + failedMinutes;
     }
+    if (step.type === "study") return step.minutes * (1 - studyFraction(step));
     return step.minutes;
   };
   routeSteps.forEach((step) => {
@@ -180,7 +187,8 @@ function initRoadmap() {
   const isComplete = (step) => route.marks[step.id] === true;
   const xpFor = (step) => step.type === "pass" ? 300 : 100;
   const totalXP = () => routeSteps.reduce((sum, step) => sum + (isComplete(step) ? xpFor(step) : 0), 0)
-    + questions.filter((question) => progress[question.id]?.lastCorrect === true).length * 5;
+    + questions.filter((question) => progress[question.id]?.lastCorrect === true).length * 5
+    + routeSteps.filter((step) => step.type === "study").reduce((sum, step) => sum + readBlocks(step) * 10, 0);
   const currentLevel = (xp) => {
     let index = 0;
     for (let candidate = 1; candidate < levels.length; candidate++) {
@@ -225,7 +233,9 @@ function initRoadmap() {
   const checkAutomatic = () => {
     routeSteps.forEach((step) => {
       if (route.marks[step.id] !== undefined) return;
-      if (step.type === "test") {
+      if (step.type === "study") {
+        if (step.page.sections?.length && studyFraction(step) === 1) completeStep(step);
+      } else if (step.type === "test") {
         const block = questionsFor(step.key);
         if (block.length && block.every((question) => Number(progress[question.id]?.tries) > 0)) completeStep(step);
       } else if (step.type === "pass" && questions.length && questions.every((question) => Object.hasOwn(route.pass, question.id))) {
@@ -233,12 +243,27 @@ function initRoadmap() {
       }
     });
   };
+  // Lo empezado y sin terminar cuenta en proporción: bloques leídos, preguntas respondidas.
+  const partialFraction = (step) => {
+    if (step.type === "study") return studyFraction(step);
+    if (step.type === "test") return questionsFor(step.key).length ? answerCount(step.key) / questionsFor(step.key).length : 0;
+    if (step.type === "pass") return questions.length ? passCount() / questions.length : 0;
+    return 0;
+  };
   const completionStats = () => {
     const done = routeSteps.filter(isComplete).length;
     const weightedTotal = routeSteps.reduce((sum, step) => sum + step.minutesForTotal, 0);
-    const weightedDone = routeSteps.reduce((sum, step) => sum + (isComplete(step) ? step.minutesForTotal : 0), 0);
+    const weightedDone = routeSteps.reduce((sum, step) => sum + step.minutesForTotal * (isComplete(step) ? 1 : partialFraction(step)), 0);
     const percent = weightedTotal ? Math.round(weightedDone / weightedTotal * 100) : 0;
-    route.summary = { percent, done, total: routeSteps.length };
+    const steps = routeSteps.map((step) => ({
+      id: step.id,
+      key: step.key,
+      title: step.title,
+      weight: step.minutesForTotal,
+      frac: partialFraction(step),
+      total: step.type === "study" ? step.page.sections?.length || 0 : undefined,
+    }));
+    route.summary = { percent, done, total: routeSteps.length, steps };
     save();
     return { done, percent, weightedTotal };
   };
@@ -313,6 +338,10 @@ function initRoadmap() {
     return controls;
   };
   const stepProgress = (step) => {
+    if (step.type === "study" && step.page.sections?.length) {
+      const total = step.page.sections.length;
+      return { text: `Bloques leídos ${readBlocks(step)}/${total}`, value: studyFraction(step) * 100 };
+    }
     if (step.type === "test") {
       const total = questionsFor(step.key).length;
       const answered = answerCount(step.key);
@@ -327,7 +356,7 @@ function initRoadmap() {
     return null;
   };
   const stepMeta = (step) => {
-    if (step.type === "study") return `${step.page.blocks} bloques de lectura`;
+    if (step.type === "study") return `${step.page.blocks} bloques de lectura · márcalos al final de cada bloque`;
     if (step.type === "test" || step.type === "review") {
       const count = step.type === "test" ? questionsFor(step.key).length : failedFor(step.key).length;
       if (step.type === "review") return `${count} ${count === 1 ? "fallada" : "falladas"}`;
