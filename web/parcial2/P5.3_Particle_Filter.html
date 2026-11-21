@@ -1,0 +1,543 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>P5.3 · Filtro de partículas | RoboTest</title>
+  <link rel="stylesheet" href="../assets/robotest.css?v=83d15755">
+  <link rel="stylesheet" href="../assets/resumenes.css?v=1a06a11b">
+  <script src="../assets/resumenes.js?v=5ba61f92" defer></script>
+</head>
+<body>
+  <div id="reading-progress" aria-hidden="true"></div>
+  <header class="topbar">
+    <a class="brand" href="index.html" aria-label="RoboTest, volver al inicio"><span class="brand-mark">R<span></span></span> ROBO<span>TEST</span></a>
+    <nav aria-label="Navegación principal"><a href="../../index.html">Inicio</a><a href="index.html#ruta">Mi ruta</a><a href="Resumen_L4_Percepcion_Robot.html">L4</a><a href="Resumen_L5_Localizacion_Robot.html" aria-current=page>L5</a><a href="index.html">Test <span aria-hidden="true">↗</span></a></nav>
+  </header>
+  <main>
+    <section class="hero lesson-hero" aria-labelledby="hero-title">
+      <div class="hero-inner">
+        <div class="eyebrow"><span class="status-dot"></span> PARCIAL 2 · L5 · GUÍA DE PRÁCTICAS</div>
+        <h1 id="hero-title">Filtro de partículas<span class="hero-period">.</span></h1>
+        <p>Práctica 5.3: predicción, verosimilitudes, estimación y remuestreo SIR, línea a línea.</p>
+        <div class="hero-actions"><a class="button primary" href="#apuntes">Empezar a leer <span aria-hidden="true">↘</span></a><button type="button" class="button subtle study-check" data-roadmap-key="robotica-ruta-parcial2-v1" data-step="study:P5.3" aria-pressed="false">Marcar como estudiado</button><a class="button subtle" href="index.html?lesson=P5.3#filters">Practicar el tema</a></div>
+        <div class="lesson-facts"><span>11 bloques de lectura</span><span>58 fórmulas renderizadas</span><span>Sin conexión</span></div>
+      </div>
+      <div class="hero-art" aria-hidden="true"><div class="grid-plane"></div><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="robot-icon"><span class="eye"></span><span class="eye"></span></div><div class="beacon beacon-a"></div><div class="beacon beacon-b"></div><span class="art-label label-a">SENSE</span><span class="art-label label-b">PLAN</span><span class="art-label label-c">ACT</span></div>
+    </section>
+    <div class="reading-wrap" id="apuntes">
+      <section id="study-tracker" class="study-tracker" aria-label="Tu progreso" data-roadmap-key="robotica-ruta-parcial2-v1" data-page="P5.3" data-minutes="25" data-route-url="index.html#ruta" data-companions-title="Resto del tema L5" data-companions="[{&quot;key&quot;: &quot;L5&quot;, &quot;title&quot;: &quot;Localización del robot&quot;, &quot;href&quot;: &quot;Resumen_L5_Localizacion_Robot.html&quot;, &quot;lesson&quot;: true}, {&quot;key&quot;: &quot;P5.2&quot;, &quot;title&quot;: &quot;Localización con EKF&quot;, &quot;href&quot;: &quot;P5.2_EKF_Localization.html&quot;, &quot;lesson&quot;: false}]"></section>
+      <div class="reading-intro"><div><span class="overline">P5.3 / LECTURA</span><h2>Todo el contenido, mejor organizado.</h2><p>Índice navegable, secciones cortas y fórmulas legibles. El contenido del apunte original se mantiene íntegro.</p></div><a class="original-link" href="../../Teoria/Parcial-2/Guias_practicas/P5.3_Particle_Filter.md">Ver Markdown original ↗</a></div>
+      <details class="mobile-toc"><summary>Índice de contenidos <span aria-hidden="true">⌄</span></summary><nav class="toc-items" aria-label="Apartados de la página"><details class="toc-chapter" open><summary><span class="toc-number">·</span><span>Índice</span></summary><div class="toc-links"><a href="#índice">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">01</span><span>Qué representa una partícula</span></summary><div class="toc-links"><a href="#1-qué-representa-una-partícula">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">02</span><span>El campo de verosimilitud del mapa</span></summary><div class="toc-links"><a href="#2-el-campo-de-verosimilitud-del-mapa">Ir al bloque</a><a href="#21-construir-el-campo">2.1. Construir el campo</a><a href="#22-sample_likelihoodpoint">2.2. sample_likelihood(point)</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">03</span><span>El algoritmo del filtro de partículas</span></summary><div class="toc-links"><a href="#3-el-algoritmo-del-filtro-de-partículas">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">04</span><span>De las ecuaciones al código</span></summary><div class="toc-links"><a href="#4-de-las-ecuaciones-al-código">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">05</span><span>El notebook, celda a celda</span></summary><div class="toc-links"><a href="#5-el-notebook-celda-a-celda">Ir al bloque</a><a href="#51-inicialización-de-partículas-celdas-1516">5.1. Inicialización de partículas (celdas 15–16)</a><a href="#52-assignment-1-sample_motion_model-y-sample-celda-19">5.2. ASSIGNMENT 1: sample_motion_model() y sample() (celda 19)</a><a href="#53-assignment-2-evaluate_pointcloud-y-evaluate_pose-celda-24">5.3. ASSIGNMENT 2: evaluate_pointcloud() y evaluate_pose() (celda 24)</a><a href="#54-corrección-update_weights-celda-46">5.4. Corrección: update_weights() (celda 46)</a><a href="#55-assignment-3-current_estimation-celda-34">5.5. ASSIGNMENT 3: current_estimation() (celda 34)</a><a href="#56-assignment-4-resample-celda-40">5.6. ASSIGNMENT 4: resample() (celda 40)</a><a href="#57-el-bucle-completo-celda-48">5.7. El bucle completo (celda 48)</a><a href="#58-comparación-con-el-ekf">5.8. Comparación con el EKF</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">06</span><span>Qué se observa al ejecutarlo</span></summary><div class="toc-links"><a href="#6-qué-se-observa-al-ejecutarlo">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">07</span><span>Cálculos resueltos</span></summary><div class="toc-links"><a href="#7-cálculos-resueltos">Ir al bloque</a><a href="#71-normalizar-pesos">7.1. Normalizar pesos</a><a href="#72-cdf-y-selección-de-partículas">7.2. CDF y selección de partículas</a><a href="#73-media-y-varianzas-ponderadas">7.3. Media y varianzas ponderadas</a><a href="#74-media-circular-cerca-de-pm180circ">7.4. Media circular cerca de ±180∘</a><a href="#75-producto-de-likelihoods">7.5. Producto de likelihoods</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">08</span><span>Errores típicos en el código</span></summary><div class="toc-links"><a href="#8-errores-típicos-en-el-código">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">09</span><span>Rellena el hueco</span></summary><div class="toc-links"><a href="#9-rellena-el-hueco">Ir al bloque</a><a href="#91-predicción">9.1. Predicción</a><a href="#92-evaluación">9.2. Evaluación</a><a href="#93-estimación-circular-y-remuestreo">9.3. Estimación circular y remuestreo</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">10</span><span>Preguntas de repaso (con solución)</span></summary><div class="toc-links"><a href="#10-preguntas-de-repaso-con-solución">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">11</span><span>Ideas esenciales para recordar</span></summary><div class="toc-links"><a href="#11-ideas-esenciales-para-recordar">Ir al bloque</a></div></details></nav></details>
+      <div class="reading-columns"><aside class="toc-sidebar"><div class="toc-box"><span class="overline">EN ESTA PÁGINA</span><p>L5 · 12 bloques</p><nav class="toc-items" aria-label="Apartados de la página"><details class="toc-chapter" open><summary><span class="toc-number">·</span><span>Índice</span></summary><div class="toc-links"><a href="#índice">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">01</span><span>Qué representa una partícula</span></summary><div class="toc-links"><a href="#1-qué-representa-una-partícula">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">02</span><span>El campo de verosimilitud del mapa</span></summary><div class="toc-links"><a href="#2-el-campo-de-verosimilitud-del-mapa">Ir al bloque</a><a href="#21-construir-el-campo">2.1. Construir el campo</a><a href="#22-sample_likelihoodpoint">2.2. sample_likelihood(point)</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">03</span><span>El algoritmo del filtro de partículas</span></summary><div class="toc-links"><a href="#3-el-algoritmo-del-filtro-de-partículas">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">04</span><span>De las ecuaciones al código</span></summary><div class="toc-links"><a href="#4-de-las-ecuaciones-al-código">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">05</span><span>El notebook, celda a celda</span></summary><div class="toc-links"><a href="#5-el-notebook-celda-a-celda">Ir al bloque</a><a href="#51-inicialización-de-partículas-celdas-1516">5.1. Inicialización de partículas (celdas 15–16)</a><a href="#52-assignment-1-sample_motion_model-y-sample-celda-19">5.2. ASSIGNMENT 1: sample_motion_model() y sample() (celda 19)</a><a href="#53-assignment-2-evaluate_pointcloud-y-evaluate_pose-celda-24">5.3. ASSIGNMENT 2: evaluate_pointcloud() y evaluate_pose() (celda 24)</a><a href="#54-corrección-update_weights-celda-46">5.4. Corrección: update_weights() (celda 46)</a><a href="#55-assignment-3-current_estimation-celda-34">5.5. ASSIGNMENT 3: current_estimation() (celda 34)</a><a href="#56-assignment-4-resample-celda-40">5.6. ASSIGNMENT 4: resample() (celda 40)</a><a href="#57-el-bucle-completo-celda-48">5.7. El bucle completo (celda 48)</a><a href="#58-comparación-con-el-ekf">5.8. Comparación con el EKF</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">06</span><span>Qué se observa al ejecutarlo</span></summary><div class="toc-links"><a href="#6-qué-se-observa-al-ejecutarlo">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">07</span><span>Cálculos resueltos</span></summary><div class="toc-links"><a href="#7-cálculos-resueltos">Ir al bloque</a><a href="#71-normalizar-pesos">7.1. Normalizar pesos</a><a href="#72-cdf-y-selección-de-partículas">7.2. CDF y selección de partículas</a><a href="#73-media-y-varianzas-ponderadas">7.3. Media y varianzas ponderadas</a><a href="#74-media-circular-cerca-de-pm180circ">7.4. Media circular cerca de ±180∘</a><a href="#75-producto-de-likelihoods">7.5. Producto de likelihoods</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">08</span><span>Errores típicos en el código</span></summary><div class="toc-links"><a href="#8-errores-típicos-en-el-código">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">09</span><span>Rellena el hueco</span></summary><div class="toc-links"><a href="#9-rellena-el-hueco">Ir al bloque</a><a href="#91-predicción">9.1. Predicción</a><a href="#92-evaluación">9.2. Evaluación</a><a href="#93-estimación-circular-y-remuestreo">9.3. Estimación circular y remuestreo</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">10</span><span>Preguntas de repaso (con solución)</span></summary><div class="toc-links"><a href="#10-preguntas-de-repaso-con-solución">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">11</span><span>Ideas esenciales para recordar</span></summary><div class="toc-links"><a href="#11-ideas-esenciales-para-recordar">Ir al bloque</a></div></details></nav><a class="toc-practice" href="index.html?lesson=P5.3#filters">Practicar preguntas ↗</a></div></aside><div class="reading-main"><article class="notes-body"><section id="53-filtro-de-partículas" class="level1">
+<h1>5.3 Filtro de partículas</h1>
+<p>Guía de estudio del notebook <a href="../../Practicas/uma_robotics_2027/Chapter%2005.%20Localization/5.3%20Particle%20Filter%20for%20Robot%20Localization.ipynb">5.3 Particle Filter for Robot Localization</a>. La resolución y sus salidas están en <a href="../../Practicas/uma_robotics_2027/Chapter%2005.%20Localization/5.3%20Resoluci%C3%B3n%20y%20gu%C3%ADa%20de%20entrega.md">5.3 Resolución y guía de entrega</a>. La teoría general de localización está en el <a href="Resumen_L5_Localizacion_Robot.html">resumen de L5</a>.</p>
+<p><strong>Enfoque de examen.</strong> Las preguntas de prácticas son sobre <strong>el código</strong>: localizar la línea con el error, rellenar huecos y hacer cálculos pequeños con los valores del enunciado. Por eso esta guía sigue el flujo del notebook, aclara dimensiones y orden de argumentos, y resuelve ejemplos paso a paso.</p>
+<section id="índice" class="level2">
+<h2>Índice</h2>
+<ol type="1">
+<li><a href="#1-qué-representa-una-partícula">Qué representa una partícula</a></li>
+<li><a href="#2-el-campo-de-verosimilitud-del-mapa">El campo de verosimilitud del mapa</a></li>
+<li><a href="#3-el-algoritmo-del-filtro-de-partículas">El algoritmo del filtro de partículas</a></li>
+<li><a href="#4-de-las-ecuaciones-al-código">De las ecuaciones al código</a></li>
+<li><a href="#5-el-notebook-celda-a-celda">El notebook, celda a celda</a></li>
+<li><a href="#6-qué-se-observa-al-ejecutarlo">Qué se observa al ejecutarlo</a></li>
+<li><a href="#7-cálculos-resueltos">Cálculos resueltos</a></li>
+<li><a href="#8-errores-típicos-en-el-código">Errores típicos en el código</a></li>
+<li><a href="#9-rellena-el-hueco">Rellena el hueco</a></li>
+<li><a href="#10-preguntas-de-repaso-con-solución">Preguntas de repaso (con solución)</a></li>
+<li><a href="#11-ideas-esenciales-para-recordar">Ideas esenciales para recordar</a></li>
+</ol>
+</section>
+<section id="1-qué-representa-una-partícula" class="level2">
+<h2>1. Qué representa una partícula</h2>
+<p>Una partícula es una <strong>hipótesis concreta de pose</strong> del robot:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>𝐱</mi><mrow><mo stretchy="false" form="prefix">[</mo><mi>i</mi><mo stretchy="false" form="postfix">]</mo></mrow></msup><mo>=</mo><msup><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><msup><mi>x</mi><mrow><mo stretchy="false" form="prefix">[</mo><mi>i</mi><mo stretchy="false" form="postfix">]</mo></mrow></msup></mtd><mtd columnalign="center" style="text-align: center"><msup><mi>y</mi><mrow><mo stretchy="false" form="prefix">[</mo><mi>i</mi><mo stretchy="false" form="postfix">]</mo></mrow></msup></mtd><mtd columnalign="center" style="text-align: center"><msup><mi>θ</mi><mrow><mo stretchy="false" form="prefix">[</mo><mi>i</mi><mo stretchy="false" form="postfix">]</mo></mrow></msup></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow><mi>T</mi></msup><mo>,</mo><mspace width="2.0em"></mspace><msup><mi>w</mi><mrow><mo stretchy="false" form="prefix">[</mo><mi>i</mi><mo stretchy="false" form="postfix">]</mo></mrow></msup><mo>≥</mo><mn>0</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\mathbf{x}^{[i]} =
+\begin{bmatrix}
+x^{[i]} &amp; y^{[i]} &amp; \theta^{[i]}
+\end{bmatrix}^{T},
+\qquad w^{[i]} \geq 0.
+</annotation></semantics></math></p>
+<ul>
+<li>La pose dice dónde estaría el robot según esa hipótesis.</li>
+<li>El peso <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>w</mi><mrow><mo stretchy="false" form="prefix">[</mo><mi>i</mi><mo stretchy="false" form="postfix">]</mo></mrow></msup><annotation encoding="application/x-tex">w^{[i]}</annotation></semantics></math> indica cuánto concuerda con lo observado. Tras normalizar, todos los pesos suman 1.</li>
+<li>El conjunto de partículas representa una distribución mediante muestras. A diferencia del EKF, no obliga a resumir todas las posibilidades con una única gaussiana.</li>
+</ul>
+<p>Si dos pasillos distintos son igual de plausibles, pueden existir grupos de partículas en ambos. Una sola gaussiana los promediaría y podría colocar la pose media en una pared, donde no hay ninguna hipótesis plausible.</p>
+</section>
+<section id="2-el-campo-de-verosimilitud-del-mapa" class="level2">
+<h2>2. El campo de verosimilitud del mapa</h2>
+<section id="21-construir-el-campo" class="level3">
+<h3>2.1. Construir el campo</h3>
+<p>En la clase <code>Map</code> del notebook (celda 7), las paredes se rasterizan en <code>occupancy_img</code>. Después:</p>
+<ol type="1">
+<li><code>cv2.distanceTransform(...)</code> calcula para cada píxel su distancia a la pared más cercana.</li>
+<li>Esa distancia, en píxeles, se evalúa con una gaussiana centrada en cero:</li>
+</ol>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo stretchy="false" form="prefix">(</mo><mi>d</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>𝒩</mi><mo stretchy="false" form="prefix">(</mo><mi>d</mi><mo>;</mo><mn>0</mn><mo>,</mo><msubsup><mi>σ</mi><mtext mathvariant="normal">hit,px</mtext><mn>2</mn></msubsup><mo stretchy="false" form="postfix">)</mo><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>σ</mi><mtext mathvariant="normal">hit,px</mtext></msub><mo>=</mo><mfrac><mtext mathvariant="monospace">𝚂𝙸𝙶𝙼𝙰_𝙷𝙸𝚃_𝙼</mtext><mtext mathvariant="monospace">𝚛𝚎𝚜𝚘𝚕𝚞𝚝𝚒𝚘𝚗</mtext></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">
+p(d) = \mathcal{N}(d; 0, \sigma_{\text{hit,px}}^2),
+\qquad
+\sigma_{\text{hit,px}} = \frac{\texttt{SIGMA\_HIT\_M}}{\texttt{resolution}}.
+</annotation></semantics></math></p>
+<p>El notebook define <code>SIGMA_HIT_M = 0.5</code> m. Con <code>resolution = 0.01</code> m/píxel:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>σ</mi><mtext mathvariant="normal">hit,px</mtext></msub><mo>=</mo><mn>0.5</mn><mi>/</mi><mn>0.01</mn><mo>=</mo><mn>50</mn><mrow><mspace width="0.333em"></mspace><mtext mathvariant="normal"> píxeles</mtext></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\sigma_{\text{hit,px}} = 0.5 / 0.01 = 50\text{ píxeles}.
+</annotation></semantics></math></p>
+<p>Por último, <code>RemapRange</code> lleva el campo al intervalo <code>[MIN_LIKELIHOOD, 1]</code>. Aquí <code>MIN_LIKELIHOOD = 0.1</code>. El valor máximo (sobre una pared) queda cerca de 1 y los puntos alejados reciben valores menores.</p>
+<p>No es una densidad de probabilidad normalizada sobre todas las celdas: el propio notebook lo describe como una cantidad <strong>proporcional</strong> al likelihood. Para actualizar pesos basta con conservar la proporción y normalizarlos después.</p>
+</section>
+<section id="22-sample_likelihoodpoint" class="level3">
+<h3>2.2. <code>sample_likelihood(point)</code></h3>
+<p>La función, también en la celda 7, hace dos cosas:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> point[<span class="dv">0</span>] <span class="op">&lt;</span> <span class="va">self</span>.min_x <span class="kw">or</span> point[<span class="dv">0</span>] <span class="op">&gt;=</span> <span class="va">self</span>.max_x <span class="kw">or</span> <span class="op">\</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>   point[<span class="dv">1</span>] <span class="op">&lt;</span> <span class="va">self</span>.min_y <span class="kw">or</span> point[<span class="dv">1</span>] <span class="op">&gt;=</span> <span class="va">self</span>.max_y:</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="va">self</span>.MIN_LIKELIHOOD</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>indices <span class="op">=</span> np.rint(np.flip(point <span class="op">/</span> <span class="va">self</span>.resolution, <span class="dv">0</span>)).astype(<span class="st">&quot;int32&quot;</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>value <span class="op">=</span> <span class="va">self</span>.likelihood_field[<span class="bu">tuple</span>(indices)]</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="cf">return</span> value</span></code></pre></div>
+<ul>
+<li>Fuera del mapa devuelve el mínimo, no cero. Así una medida atípica no anula todos los pesos al multiplicar muchos likelihoods.</li>
+<li>Divide las coordenadas en metros por la resolución para obtener píxeles.</li>
+<li><code>flip</code> cambia el orden <code>[x, y]</code> al orden de ejes de la matriz <code>[fila, columna]</code>.</li>
+<li><code>rint</code> redondea al píxel más cercano; <code>tuple(indices)</code> permite indexar la matriz con ambos índices.</li>
+<li>Los límites son semiabiertos: se acepta <code>min_x ≤ x &lt; max_x</code> y <code>min_y ≤ y &lt; max_y</code>.</li>
+</ul>
+<figure>
+<img src="../../Practicas/uma_robotics_2027/Chapter%2005.%20Localization/img/5.3_captura_likelihood_scan.png" alt="Campo de likelihood con un scan" />
+<figcaption aria-hidden="true">Campo de likelihood con un scan</figcaption>
+</figure>
+</section>
+</section>
+<section id="3-el-algoritmo-del-filtro-de-partículas" class="level2">
+<h2>3. El algoritmo del filtro de partículas</h2>
+<p>En cada instante se realizan estos pasos:</p>
+<ol type="1">
+<li><strong>Predicción:</strong> mover cada partícula con una muestra del comando ruidoso.</li>
+<li><strong>Corrección:</strong> multiplicar su peso anterior por la verosimilitud del scan desde esa pose y normalizar.</li>
+<li><strong>Estimación:</strong> si hace falta una sola pose para mostrar o controlar el robot, calcular la media ponderada de las partículas.</li>
+<li><strong>Remuestreo SIR:</strong> tomar <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>M</mi><annotation encoding="application/x-tex">M</annotation></semantics></math> partículas con reemplazo según sus pesos y asignarles peso <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi>/</mi><mi>M</mi></mrow><annotation encoding="application/x-tex">1/M</annotation></semantics></math>.</li>
+</ol>
+<p>SIR viene de <em>Sampling Importance Resampling</em>: se muestrea la transición de movimiento, se pondera por la medida y se remuestrea según la importancia.</p>
+</section>
+<section id="4-de-las-ecuaciones-al-código" class="level2">
+<h2>4. De las ecuaciones al código</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Concepto</th>
+<th>Código del notebook</th>
+<th>Dimensión o detalle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pose de una partícula</td>
+<td><code>particle.pose</code></td>
+<td>Vector columna <code>(3, 1)</code></td>
+</tr>
+<tr>
+<td>Peso</td>
+<td><code>particle.weight</code></td>
+<td>Escalar; normalizados suman 1</td>
+</tr>
+<tr>
+<td>Comando</td>
+<td><code>movement</code></td>
+<td>Incremento local <code>[dx, dy, dθ]</code>, forma <code>(3, 1)</code></td>
+</tr>
+<tr>
+<td>Incertidumbre del comando</td>
+<td><code>movement_covariance</code></td>
+<td>Matriz <code>(3, 3)</code> de covarianza</td>
+</tr>
+<tr>
+<td>Scan</td>
+<td><code>z</code></td>
+<td>Dos filas: rangos y ángulos</td>
+</tr>
+<tr>
+<td>Nube de puntos global</td>
+<td><code>world_pointcloud</code></td>
+<td>Una columna <code>[x, y]</code> por haz</td>
+</tr>
+</tbody>
+</table>
+<p>La pose se compone con <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>⊕</mi><annotation encoding="application/x-tex">\oplus</annotation></semantics></math>, implementado por <code>tcomp</code>. No se suman directamente los incrementos de <code>x</code> e <code>y</code>: un movimiento local depende de la orientación actual.</p>
+</section>
+<section id="5-el-notebook-celda-a-celda" class="level2">
+<h2>5. El notebook, celda a celda</h2>
+<section id="51-inicialización-de-partículas-celdas-1516" class="level3">
+<h3>5.1. Inicialización de partículas (celdas 15–16)</h3>
+<p><code>Particle</code> guarda la pose y el peso. <code>generate_particles()</code> toma muestras de <code>stats.multivariate_normal.rvs(pose.flatten(), covariance)</code> y usa <code>np.vstack</code> para recuperar la forma <code>(3, 1)</code>. Con <code>M</code> partículas se inicia cada peso en <code>1/M</code>.</p>
+<p>La covarianza describe la dispersión inicial: no es una desviación típica, sino una matriz de <strong>varianzas y covarianzas</strong>. En el ejemplo del filtro completo es cero y todas las partículas parten de la pose inicial.</p>
+</section>
+<section id="52-assignment-1-sample_motion_model-y-sample-celda-19" class="level3">
+<h3>5.2. ASSIGNMENT 1: <code>sample_motion_model()</code> y <code>sample()</code> (celda 19)</h3>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>noisy_movement <span class="op">=</span> np.vstack(</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    stats.multivariate_normal.rvs(movement.flatten(), movement_covariance)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="cf">return</span> tcomp(pose, noisy_movement)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> particle <span class="kw">in</span> particles:</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    particle.pose <span class="op">=</span> sample_motion_model(</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>        particle.pose, movement, movement_covariance</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div>
+<ol type="1">
+<li><code>movement.flatten()</code> produce la media 1D que espera SciPy.</li>
+<li><code>rvs(media, covarianza)</code> toma <strong>una muestra</strong> de <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝒩</mi><mo stretchy="false" form="prefix">(</mo><mi>𝐮</mi><mo>,</mo><msub><mi mathvariant="normal">Σ</mi><mi>u</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\mathcal{N}(\mathbf{u}, \Sigma_u)</annotation></semantics></math>.</li>
+<li><code>np.vstack</code> la convierte de <code>(3,)</code> a <code>(3, 1)</code>.</li>
+<li><code>tcomp(pose, noisy_movement)</code> compone el movimiento local ruidoso con la pose anterior.</li>
+<li><code>sample()</code> repite el muestreo de manera independiente para cada partícula.</li>
+</ol>
+<figure>
+<img src="../../Practicas/uma_robotics_2027/Chapter%2005.%20Localization/img/5.3_captura_prediccion_particulas.png" alt="Predicción de las partículas" />
+<figcaption aria-hidden="true">Predicción de las partículas</figcaption>
+</figure>
+</section>
+<section id="53-assignment-2-evaluate_pointcloud-y-evaluate_pose-celda-24" class="level3">
+<h3>5.3. ASSIGNMENT 2: <code>evaluate_pointcloud()</code> y <code>evaluate_pose()</code> (celda 24)</h3>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>total_prob <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(pointcloud.shape[<span class="dv">1</span>]):</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    total_prob <span class="op">*=</span> <span class="bu">map</span>.sample_likelihood(pointcloud[<span class="dv">0</span>:<span class="dv">2</span>, i])</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="cf">return</span> total_prob</span></code></pre></div>
+<p><code>pointcloud</code> tiene una columna por extremo del láser. La forma <code>[0:2, i]</code> pasa las dos coordenadas de esa columna. Se <strong>multiplican</strong> los likelihoods:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo stretchy="false" form="prefix">(</mo><mi>z</mi><mo>∣</mo><msup><mi>𝐱</mi><mrow><mo stretchy="false" form="prefix">[</mo><mi>i</mi><mo stretchy="false" form="postfix">]</mo></mrow></msup><mo>,</mo><mi>ℳ</mi><mo stretchy="false" form="postfix">)</mo><mo>∝</mo><munderover><mo>∏</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>K</mi></munderover><mrow><mi mathvariant="normal">sample_likelihood</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><msub><mi>𝐩</mi><mi>j</mi></msub><mo stretchy="false" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">
+p(z \mid \mathbf{x}^{[i]}, \mathcal{M})
+\propto
+\prod_{j=1}^{K}
+\operatorname{sample\_likelihood}(\mathbf{p}_j).
+</annotation></semantics></math></p>
+<p>El producto modela los extremos como medidas independientes condicionadas a la pose. Inicializar en 1 es importante: es el elemento neutro de la multiplicación.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>world_pointcloud <span class="op">=</span> LaserUtils.express_as_global_point_cloud(z, pose)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="cf">return</span> evaluate_pointcloud(<span class="bu">map</span>, world_pointcloud)</span></code></pre></div>
+<p><code>z</code> contiene rangos y ángulos en el marco del láser. <code>express_as_global_point_cloud</code> aplica la pose candidata y transforma cada extremo al marco global. Solo entonces se puede consultar el mapa.</p>
+<p><strong>Por qué gana la partícula verde.</strong> En la celda 29, la pose verde es casi la real: al proyectar el mismo scan, sus extremos caen sobre las paredes y reciben likelihoods grandes. Las poses azul y magenta están desplazadas y giradas; muchos extremos caen lejos de las paredes, reciben valores pequeños y su producto se reduce mucho. La figura muestra precisamente esas tres proyecciones.</p>
+<figure>
+<img src="../../Practicas/uma_robotics_2027/Chapter%2005.%20Localization/img/5.3_captura_evaluacion_particulas.png" alt="Evaluación de las tres poses candidatas" />
+<figcaption aria-hidden="true">Evaluación de las tres poses candidatas</figcaption>
+</figure>
+</section>
+<section id="54-corrección-update_weights-celda-46" class="level3">
+<h3>5.4. Corrección: <code>update_weights()</code> (celda 46)</h3>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> particle <span class="kw">in</span> <span class="va">self</span>.particles:</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    particle.weight <span class="op">*=</span> evaluate_pose(<span class="bu">map</span>, z, particle.pose)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>normalize_weights(<span class="va">self</span>.particles)</span></code></pre></div>
+<p>El peso nuevo es proporcional al previo multiplicado por el likelihood:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mover><mi>w</mi><mo accent="true">̃</mo></mover><mi>t</mi><mrow><mo stretchy="false" form="prefix">[</mo><mi>i</mi><mo stretchy="false" form="postfix">]</mo></mrow></msubsup><mo>=</mo><msubsup><mi>w</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow><mrow><mo stretchy="false" form="prefix">[</mo><mi>i</mi><mo stretchy="false" form="postfix">]</mo></mrow></msubsup><mspace width="0.167em"></mspace><mi>p</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>z</mi><mi>t</mi></msub><mo>∣</mo><msubsup><mi>𝐱</mi><mi>t</mi><mrow><mo stretchy="false" form="prefix">[</mo><mi>i</mi><mo stretchy="false" form="postfix">]</mo></mrow></msubsup><mo>,</mo><mi>ℳ</mi><mo stretchy="false" form="postfix">)</mo><mo>,</mo><mspace width="2.0em"></mspace><msubsup><mi>w</mi><mi>t</mi><mrow><mo stretchy="false" form="prefix">[</mo><mi>i</mi><mo stretchy="false" form="postfix">]</mo></mrow></msubsup><mo>=</mo><mfrac><msubsup><mover><mi>w</mi><mo accent="true">̃</mo></mover><mi>t</mi><mrow><mo stretchy="false" form="prefix">[</mo><mi>i</mi><mo stretchy="false" form="postfix">]</mo></mrow></msubsup><mrow><munder><mo>∑</mo><mi>j</mi></munder><msubsup><mover><mi>w</mi><mo accent="true">̃</mo></mover><mi>t</mi><mrow><mo stretchy="false" form="prefix">[</mo><mi>j</mi><mo stretchy="false" form="postfix">]</mo></mrow></msubsup></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\tilde w_t^{[i]} = w_{t-1}^{[i]}\,p(z_t \mid \mathbf{x}_t^{[i]}, \mathcal{M}),
+\qquad
+w_t^{[i]} = \frac{\tilde w_t^{[i]}}{\sum_j \tilde w_t^{[j]}}.
+</annotation></semantics></math></p>
+<p>No se debe reemplazar el peso previo por el likelihood: el peso anterior también contiene información acumulada.</p>
+</section>
+<section id="55-assignment-3-current_estimation-celda-34" class="level3">
+<h3>5.5. ASSIGNMENT 3: <code>current_estimation()</code> (celda 34)</h3>
+<p><strong>Posición: media ponderada</strong></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>x</mi><mo accent="true">‾</mo></mover><mo>=</mo><munder><mo>∑</mo><mi>i</mi></munder><msub><mi>w</mi><mi>i</mi></msub><msub><mi>x</mi><mi>i</mi></msub><mo>,</mo><mspace width="2.0em"></mspace><mover><mi>y</mi><mo accent="true">‾</mo></mover><mo>=</mo><munder><mo>∑</mo><mi>i</mi></munder><msub><mi>w</mi><mi>i</mi></msub><msub><mi>y</mi><mi>i</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\bar x = \sum_i w_i x_i,\qquad
+\bar y = \sum_i w_i y_i.
+</annotation></semantics></math></p>
+<p>En el código, <code>position = particle.pose[0:2]</code> es <code>(2, 1)</code> y se acumula con <code>particle.weight</code>.</p>
+<p><strong>Orientación: media circular</strong></p>
+<p>No se promedian los ángulos directamente. Se promedian sus direcciones unitarias:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>c</mi><mo accent="true">‾</mo></mover><mo>=</mo><munder><mo>∑</mo><mi>i</mi></munder><msub><mi>w</mi><mi>i</mi></msub><mrow><mi mathvariant="normal">cos</mi><mo>&#8289;</mo></mrow><msub><mi>θ</mi><mi>i</mi></msub><mo>,</mo><mspace width="2.0em"></mspace><mover><mi>s</mi><mo accent="true">‾</mo></mover><mo>=</mo><munder><mo>∑</mo><mi>i</mi></munder><msub><mi>w</mi><mi>i</mi></msub><mrow><mi mathvariant="normal">sin</mi><mo>&#8289;</mo></mrow><msub><mi>θ</mi><mi>i</mi></msub><mo>,</mo><mspace width="2.0em"></mspace><mover><mi>θ</mi><mo accent="true">‾</mo></mover><mo>=</mo><mrow><mi mathvariant="normal">atan2</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mover><mi>s</mi><mo accent="true">‾</mo></mover><mo>,</mo><mover><mi>c</mi><mo accent="true">‾</mo></mover><mo stretchy="false" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\bar c = \sum_i w_i \cos\theta_i,\qquad
+\bar s = \sum_i w_i \sin\theta_i,\qquad
+\bar\theta = \operatorname{atan2}(\bar s,\bar c).
+</annotation></semantics></math></p>
+<p>El orden de argumentos es <code>np.atan2(y, x)</code>, es decir, <code>np.atan2(expected_value_direction[1], expected_value_direction[0])</code>.</p>
+<p><strong>Covarianza diagonal</strong></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>σ</mi><mi>x</mi><mn>2</mn></msubsup><mo>=</mo><munder><mo>∑</mo><mi>i</mi></munder><msub><mi>w</mi><mi>i</mi></msub><mo stretchy="false" form="prefix">(</mo><msub><mi>x</mi><mi>i</mi></msub><mo>−</mo><mover><mi>x</mi><mo accent="true">‾</mo></mover><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup><mo>,</mo><mspace width="2.0em"></mspace><msubsup><mi>σ</mi><mi>y</mi><mn>2</mn></msubsup><mo>=</mo><munder><mo>∑</mo><mi>i</mi></munder><msub><mi>w</mi><mi>i</mi></msub><mo stretchy="false" form="prefix">(</mo><msub><mi>y</mi><mi>i</mi></msub><mo>−</mo><mover><mi>y</mi><mo accent="true">‾</mo></mover><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup><mo>,</mo><mspace width="2.0em"></mspace><msubsup><mi>σ</mi><mi>θ</mi><mn>2</mn></msubsup><mo>=</mo><mn>1</mn><mo>−</mo><mi>R</mi><mo>,</mo></mrow><annotation encoding="application/x-tex">
+\sigma_x^2 = \sum_i w_i(x_i-\bar x)^2,\qquad
+\sigma_y^2 = \sum_i w_i(y_i-\bar y)^2,\qquad
+\sigma_\theta^2 = 1 - R,
+</annotation></semantics></math></p>
+<p>donde <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mo>=</mo><msqrt><mrow><msup><mover><mi>c</mi><mo accent="true">‾</mo></mover><mn>2</mn></msup><mo>+</mo><msup><mover><mi>s</mi><mo accent="true">‾</mo></mover><mn>2</mn></msup></mrow></msqrt></mrow><annotation encoding="application/x-tex">R = \sqrt{\bar c^2+\bar s^2}</annotation></semantics></math> es la longitud del vector medio. Si las direcciones coinciden, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mo>≈</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">R\approx1</annotation></semantics></math> y la varianza circular es casi cero; si se cancelan, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mo>≈</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">R\approx0</annotation></semantics></math> y la orientación es muy incierta. El notebook omite covarianzas cruzadas entre <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>x</mi><annotation encoding="application/x-tex">x</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>y</mi><annotation encoding="application/x-tex">y</annotation></semantics></math> y <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>θ</mi><annotation encoding="application/x-tex">\theta</annotation></semantics></math>.</p>
+</section>
+<section id="56-assignment-4-resample-celda-40" class="level3">
+<h3>5.6. ASSIGNMENT 4: <code>resample()</code> (celda 40)</h3>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>cumulative <span class="op">=</span> np.cumsum([particle.weight <span class="cf">for</span> particle <span class="kw">in</span> particles])</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>cumulative[<span class="op">-</span><span class="dv">1</span>] <span class="op">=</span> <span class="fl">1.</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>r <span class="op">=</span> np.random.uniform(<span class="dv">0</span>, <span class="dv">1</span>, M)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>selected <span class="op">=</span> np.searchsorted(cumulative, r)</span></code></pre></div>
+<p>La suma acumulada <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>C</mi><mi>k</mi></msub><mo>=</mo><msubsup><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>k</mi></msubsup><msub><mi>w</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">C_k = \sum_{i=1}^{k}w_i</annotation></semantics></math> define los intervalos. Con <code>side="left"</code> (el valor por defecto), <code>searchsorted</code> devuelve el primer índice cuyo acumulado es mayor o igual que <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>r</mi><annotation encoding="application/x-tex">r</annotation></semantics></math>. En notación de índices desde 1, selecciona <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math> cuando:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>C</mi><mrow><mi>k</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>&lt;</mo><mi>r</mi><mo>≤</mo><msub><mi>C</mi><mi>k</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">
+C_{k-1} &lt; r \leq C_k.
+</annotation></semantics></math></p>
+<p>La igualdad en el límite derecho corresponde a la partícula anterior; como <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>r</mi><annotation encoding="application/x-tex">r</annotation></semantics></math> es continuo, caer exactamente en un límite tiene probabilidad cero. <code>cumulative[-1] = 1.</code> evita que errores de redondeo dejen un hueco al final del intervalo <code>[0, 1)</code>. Las partículas elegidas se copian y reciben peso uniforme <code>1/M</code>.</p>
+<figure>
+<img src="../../Practicas/uma_robotics_2027/Chapter%2005.%20Localization/img/5.3_captura_remuestreo.png" alt="Remuestreo de partículas" />
+<figcaption aria-hidden="true">Remuestreo de partículas</figcaption>
+</figure>
+</section>
+<section id="57-el-bucle-completo-celda-48" class="level3">
+<h3>5.7. El bucle completo (celda 48)</h3>
+<p>En cada movimiento, el orden es:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>sample(pf.particles, move, cov)                 <span class="co"># 1. Predicción</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>pf.update_weights(occupancy_map, z)              <span class="co"># 2. Corrección</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>estimated_pose, estimated_covariance <span class="op">=</span> <span class="op">\</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    current_estimation(pf.particles)              <span class="co"># 3. Estimación</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>pf.particles <span class="op">=</span> resample(pf.particles)             <span class="co"># 4. Remuestreo</span></span></code></pre></div>
+<p>La estimación se calcula <strong>antes</strong> del remuestreo, cuando las partículas todavía representan pesos distintos. Tras el remuestreo todos vuelven a peso <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi>/</mi><mi>M</mi></mrow><annotation encoding="application/x-tex">1/M</annotation></semantics></math>. El siguiente movimiento vuelve a dispersar las copias.</p>
+</section>
+<section id="58-comparación-con-el-ekf" class="level3">
+<h3>5.8. Comparación con el EKF</h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Filtro de partículas</th>
+<th>EKF</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Representa la creencia con muchas poses y sus pesos</td>
+<td>Representa la creencia con una media y una covarianza</td>
+</tr>
+<tr>
+<td>Puede conservar varios grupos o hipótesis de pose</td>
+<td>Mantiene una hipótesis gaussiana local</td>
+</tr>
+<tr>
+<td>Predice cada muestra y corrige su peso con el mapa</td>
+<td>Linealiza los modelos con jacobianos y corrige la gaussiana</td>
+</tr>
+<tr>
+<td>Más partículas aumentan el coste de evaluación y remuestreo</td>
+<td>El coste depende principalmente de operaciones matriciales pequeñas</td>
+</tr>
+</tbody>
+</table>
+<p>El filtro de partículas es más flexible ante distribuciones multimodales, pero necesita suficientes partículas y puede perder hipótesis si el remuestreo elimina un grupo. El EKF es eficiente cuando una única gaussiana aproxima bien la incertidumbre.</p>
+</section>
+</section>
+<section id="6-qué-se-observa-al-ejecutarlo" class="level2">
+<h2>6. Qué se observa al ejecutarlo</h2>
+<ul>
+<li><strong>Predicción:</strong> las muestras se separan porque cada partícula recibe un movimiento aleatorio distinto.</li>
+<li><strong>Evaluación:</strong> los extremos del scan verde se alinean mejor con las paredes que los azul y magenta.</li>
+<li><strong>Estimación:</strong> la posición sigue el centro ponderado de las partículas y la orientación, la dirección circular media.</li>
+<li><strong>Remuestreo:</strong> se repiten las partículas de peso alto y desaparecen algunas de peso bajo.</li>
+<li><strong>Filtro completo:</strong> tras cada giro o avance, la nube vuelve a concentrarse alrededor de una pose compatible con el scan.</li>
+</ul>
+<p>En el entorno utilizado, <code>Likelihood of point cloud</code> dio <code>0.7653936384712728</code> y la evaluación de la partícula verde <code>0.2699737678772269</code>. Las partículas azul y magenta obtuvieron valores del orden de <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>10</mn><mrow><mi>−</mi><mn>5</mn></mrow></msup><annotation encoding="application/x-tex">10^{-5}</annotation></semantics></math> y <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>10</mn><mrow><mi>−</mi><mn>6</mn></mrow></msup><annotation encoding="application/x-tex">10^{-6}</annotation></semantics></math>. Hay diferencias pequeñas en sus últimos decimales frente al ejemplo esperado; la resolución las explica y no se alteró la semilla para forzar los valores.</p>
+</section>
+<section id="7-cálculos-resueltos" class="level2">
+<h2>7. Cálculos resueltos</h2>
+<section id="71-normalizar-pesos" class="level3">
+<h3>7.1. Normalizar pesos</h3>
+<p>Sean los pesos sin normalizar <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">[</mo><mn>2</mn><mo>,</mo><mn>5</mn><mo>,</mo><mn>3</mn><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">[2,5,3]</annotation></semantics></math>. Su suma es:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mo>=</mo><mn>2</mn><mo>+</mo><mn>5</mn><mo>+</mo><mn>3</mn><mo>=</mo><mn>10</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">
+S=2+5+3=10.
+</annotation></semantics></math></p>
+<p>Dividiendo cada uno por 10:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝐰</mi><mo>=</mo><mo stretchy="false" form="prefix">[</mo><mn>0.2</mn><mo>,</mo><mspace width="0.222em"></mspace><mn>0.5</mn><mo>,</mo><mspace width="0.222em"></mspace><mn>0.3</mn><mo stretchy="false" form="postfix">]</mo><mo>,</mo><mspace width="2.0em"></mspace><munder><mo>∑</mo><mi>i</mi></munder><msub><mi>w</mi><mi>i</mi></msub><mo>=</mo><mn>1</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\mathbf{w}=[0.2,\ 0.5,\ 0.3],\qquad \sum_i w_i=1.
+</annotation></semantics></math></p>
+</section>
+<section id="72-cdf-y-selección-de-partículas" class="level3">
+<h3>7.2. CDF y selección de partículas</h3>
+<p>Con esos pesos:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝐂</mi><mo>=</mo><mrow><mi mathvariant="normal">cumsum</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>𝐰</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mo stretchy="false" form="prefix">[</mo><mn>0.2</mn><mo>,</mo><mspace width="0.222em"></mspace><mn>0.7</mn><mo>,</mo><mspace width="0.222em"></mspace><mn>1.0</mn><mo stretchy="false" form="postfix">]</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\mathbf{C}=\operatorname{cumsum}(\mathbf{w})=[0.2,\ 0.7,\ 1.0].
+</annotation></semantics></math></p>
+<p>Para <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>r</mi><mo>=</mo><mo stretchy="false" form="prefix">[</mo><mn>0.05</mn><mo>,</mo><mspace width="0.222em"></mspace><mn>0.21</mn><mo>,</mo><mspace width="0.222em"></mspace><mn>0.65</mn><mo>,</mo><mspace width="0.222em"></mspace><mn>0.71</mn><mo>,</mo><mspace width="0.222em"></mspace><mn>0.99</mn><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">r=[0.05,\ 0.21,\ 0.65,\ 0.71,\ 0.99]</annotation></semantics></math>, <code>np.searchsorted(C, r)</code> da índices base cero <code>[0, 1, 1, 2, 2]</code>, o partículas <code>[1, 2, 2, 3, 3]</code> si se cuentan desde 1. La partícula 2 aparece dos veces. Por ejemplo, <code>r=0.65</code> cae en <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>0.2</mn><mo>,</mo><mn>0.7</mn><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">(0.2,0.7]</annotation></semantics></math> y selecciona la partícula 2.</p>
+</section>
+<section id="73-media-y-varianzas-ponderadas" class="level3">
+<h3>7.3. Media y varianzas ponderadas</h3>
+<p>Usamos las posiciones <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>,</mo><mn>2</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(1,2)</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>4</mn><mo>,</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(4,1)</annotation></semantics></math> y <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>7</mn><mo>,</mo><mn>5</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(7,5)</annotation></semantics></math> con los pesos anteriores:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>x</mi><mo accent="true">‾</mo></mover><mo>=</mo><mn>0.2</mn><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo><mo>+</mo><mn>0.5</mn><mo stretchy="false" form="prefix">(</mo><mn>4</mn><mo stretchy="false" form="postfix">)</mo><mo>+</mo><mn>0.3</mn><mo stretchy="false" form="prefix">(</mo><mn>7</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>4.3</mn><mo>,</mo><mspace width="2.0em"></mspace><mover><mi>y</mi><mo accent="true">‾</mo></mover><mo>=</mo><mn>0.2</mn><mo stretchy="false" form="prefix">(</mo><mn>2</mn><mo stretchy="false" form="postfix">)</mo><mo>+</mo><mn>0.5</mn><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo><mo>+</mo><mn>0.3</mn><mo stretchy="false" form="prefix">(</mo><mn>5</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>2.4</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\bar x=0.2(1)+0.5(4)+0.3(7)=4.3,\qquad
+\bar y=0.2(2)+0.5(1)+0.3(5)=2.4.
+</annotation></semantics></math></p>
+<p>Para <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>x</mi><annotation encoding="application/x-tex">x</annotation></semantics></math>:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>σ</mi><mi>x</mi><mn>2</mn></msubsup><mo>=</mo><mn>0.2</mn><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mn>4.3</mn><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup><mo>+</mo><mn>0.5</mn><mo stretchy="false" form="prefix">(</mo><mn>4</mn><mo>−</mo><mn>4.3</mn><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup><mo>+</mo><mn>0.3</mn><mo stretchy="false" form="prefix">(</mo><mn>7</mn><mo>−</mo><mn>4.3</mn><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup><mo>=</mo><mn>2.178</mn><mo>+</mo><mn>0.045</mn><mo>+</mo><mn>2.187</mn><mo>=</mo><mn>4.41</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\sigma_x^2 =
+0.2(1-4.3)^2+0.5(4-4.3)^2+0.3(7-4.3)^2
+=2.178+0.045+2.187=4.41.
+</annotation></semantics></math></p>
+<p>Para <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>y</mi><annotation encoding="application/x-tex">y</annotation></semantics></math>:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>σ</mi><mi>y</mi><mn>2</mn></msubsup><mo>=</mo><mn>0.2</mn><mo stretchy="false" form="prefix">(</mo><mn>2</mn><mo>−</mo><mn>2.4</mn><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup><mo>+</mo><mn>0.5</mn><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mn>2.4</mn><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup><mo>+</mo><mn>0.3</mn><mo stretchy="false" form="prefix">(</mo><mn>5</mn><mo>−</mo><mn>2.4</mn><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup><mo>=</mo><mn>0.032</mn><mo>+</mo><mn>0.98</mn><mo>+</mo><mn>2.028</mn><mo>=</mo><mn>3.04</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\sigma_y^2 =
+0.2(2-2.4)^2+0.5(1-2.4)^2+0.3(5-2.4)^2
+=0.032+0.98+2.028=3.04.
+</annotation></semantics></math></p>
+</section>
+<section id="74-media-circular-cerca-de-pm180circ" class="level3">
+<h3>7.4. Media circular cerca de <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>±</mi><msup><mn>180</mn><mo>∘</mo></msup></mrow><annotation encoding="application/x-tex">\pm180^\circ</annotation></semantics></math></h3>
+<p>Dos ángulos de igual peso, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>179</mn><mo>∘</mo></msup><annotation encoding="application/x-tex">179^\circ</annotation></semantics></math> y <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><msup><mn>179</mn><mo>∘</mo></msup></mrow><annotation encoding="application/x-tex">-179^\circ</annotation></semantics></math>, están casi juntos, aunque su media aritmética es <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>0</mn><mo>∘</mo></msup><annotation encoding="application/x-tex">0^\circ</annotation></semantics></math>, que apunta en sentido contrario.</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>c</mi><mo accent="true">‾</mo></mover><mo>=</mo><mfrac><mrow><mrow><mi mathvariant="normal">cos</mi><mo>&#8289;</mo></mrow><msup><mn>179</mn><mo>∘</mo></msup><mo>+</mo><mrow><mi mathvariant="normal">cos</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>−</mi><msup><mn>179</mn><mo>∘</mo></msup><mo stretchy="false" form="postfix">)</mo></mrow><mn>2</mn></mfrac><mo>=</mo><mi>−</mi><mn>0.9998476952</mn><mo>,</mo><mspace width="2.0em"></mspace><mover><mi>s</mi><mo accent="true">‾</mo></mover><mo>=</mo><mfrac><mrow><mrow><mi mathvariant="normal">sin</mi><mo>&#8289;</mo></mrow><msup><mn>179</mn><mo>∘</mo></msup><mo>+</mo><mrow><mi mathvariant="normal">sin</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>−</mi><msup><mn>179</mn><mo>∘</mo></msup><mo stretchy="false" form="postfix">)</mo></mrow><mn>2</mn></mfrac><mo>=</mo><mn>0</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\bar c = \frac{\cos179^\circ+\cos(-179^\circ)}{2}
+= -0.9998476952,
+\qquad
+\bar s = \frac{\sin179^\circ+\sin(-179^\circ)}{2}=0.
+</annotation></semantics></math></p>
+<p>Así:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>θ</mi><mo accent="true">‾</mo></mover><mo>=</mo><mrow><mi mathvariant="normal">atan2</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo>,</mo><mi>−</mi><mn>0.9998476952</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>π</mi><mo>=</mo><msup><mn>180</mn><mo>∘</mo></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\bar\theta=\operatorname{atan2}(0,-0.9998476952)=\pi
+=180^\circ.
+</annotation></semantics></math></p>
+<p>La norma es <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mo>=</mo><mn>0.9998476952</mn></mrow><annotation encoding="application/x-tex">R=0.9998476952</annotation></semantics></math>, por lo que la varianza circular es:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>σ</mi><mi>θ</mi><mn>2</mn></msubsup><mo>=</mo><mn>1</mn><mo>−</mo><mi>R</mi><mo>=</mo><mn>0.0001523048</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\sigma_\theta^2=1-R=0.0001523048.
+</annotation></semantics></math></p>
+<p>El ejemplo se ha comprobado con NumPy; el ángulo se devuelve en radianes, como en el código.</p>
+</section>
+<section id="75-producto-de-likelihoods" class="level3">
+<h3>7.5. Producto de likelihoods</h3>
+<p>Si tres extremos del scan reciben likelihoods <code>0.8</code>, <code>0.25</code> y <code>0.5</code>:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo stretchy="false" form="prefix">(</mo><mi>z</mi><mo>∣</mo><mi>x</mi><mo>,</mo><mi>ℳ</mi><mo stretchy="false" form="postfix">)</mo><mo>∝</mo><mn>0.8</mn><mo>⋅</mo><mn>0.25</mn><mo>⋅</mo><mn>0.5</mn><mo>=</mo><mn>0.1</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">
+p(z\mid x,\mathcal{M}) \propto 0.8\cdot0.25\cdot0.5=0.1.
+</annotation></semantics></math></p>
+<p>El producto es menor que cada factor: añadir medidas poco compatibles reduce la probabilidad conjunta. En la implementación real hay un factor por cada extremo, no solo tres.</p>
+<p>Todos los resultados de esta sección se comprobaron con Python/NumPy.</p>
+</section>
+</section>
+<section id="8-errores-típicos-en-el-código" class="level2">
+<h2>8. Errores típicos en el código</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Error</th>
+<th>Por qué falla</th>
+<th>Correcto</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>rvs(covariance, mean)</code></td>
+<td>SciPy espera media antes que covarianza</td>
+<td><code>rvs(movement.flatten(), movement_covariance)</code></td>
+</tr>
+<tr>
+<td><code>pose + noisy_movement</code></td>
+<td>El comando es local; hay que rotarlo con la orientación</td>
+<td><code>tcomp(pose, noisy_movement)</code></td>
+</tr>
+<tr>
+<td>Evaluar <code>z</code> directamente en el mapa</td>
+<td><code>z</code> contiene rangos y ángulos, no coordenadas globales</td>
+<td><code>express_as_global_point_cloud(z, pose)</code></td>
+</tr>
+<tr>
+<td>Sumar los likelihoods del scan</td>
+<td>No calcula la verosimilitud conjunta independiente</td>
+<td>Multiplicar cada factor desde <code>total_prob = 1</code></td>
+</tr>
+<tr>
+<td>Consultar un punto fuera del mapa con valor 0</td>
+<td>Una sola muestra anularía el producto y todos los pesos</td>
+<td>Devolver <code>MIN_LIKELIHOOD</code></td>
+</tr>
+<tr>
+<td>Promediar ángulos como números</td>
+<td>Falla en el salto entre <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>π</mi><annotation encoding="application/x-tex">\pi</annotation></semantics></math> y <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mi>π</mi></mrow><annotation encoding="application/x-tex">-\pi</annotation></semantics></math></td>
+<td>Media de cosenos/senos y <code>atan2(s, c)</code></td>
+</tr>
+<tr>
+<td><code>atan2(c, s)</code></td>
+<td>Invierte el orden de argumentos</td>
+<td><code>atan2(s, c)</code></td>
+</tr>
+<tr>
+<td>Calcular la varianza alrededor de cada partícula</td>
+<td>No mide dispersión respecto de la estimación</td>
+<td>Restar <code>expected_pose</code></td>
+</tr>
+<tr>
+<td>Usar <code>searchsorted(r, cumulative)</code></td>
+<td>Invierte consulta y tabla de límites</td>
+<td><code>searchsorted(cumulative, r)</code></td>
+</tr>
+<tr>
+<td>No fijar <code>cumulative[-1]</code></td>
+<td>Un residuo de redondeo puede dejar valores de <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>r</mi><annotation encoding="application/x-tex">r</annotation></semantics></math> sin intervalo</td>
+<td>Asignar <code>1.</code> al último acumulado</td>
+</tr>
+<tr>
+<td>Estimar después de remuestrear</td>
+<td>Se pierde la diferencia entre pesos al resumir</td>
+<td>Estimar antes; remuestrear después</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="9-rellena-el-hueco" class="level2">
+<h2>9. Rellena el hueco</h2>
+<p>Completa los fragmentos sin mirar las soluciones.</p>
+<section id="91-predicción" class="level3">
+<h3>9.1. Predicción</h3>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>noisy_movement <span class="op">=</span> np.vstack(</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    stats.multivariate_normal.rvs(movement.________(), movement_covariance)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="cf">return</span> __________(pose, noisy_movement)</span></code></pre></div>
+</section>
+<section id="92-evaluación" class="level3">
+<h3>9.2. Evaluación</h3>
+<div class="sourceCode" id="cb9"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>total_prob <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(pointcloud.shape[<span class="dv">1</span>]):</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    total_prob ____ <span class="bu">map</span>.sample_likelihood(pointcloud[<span class="dv">0</span>:<span class="dv">2</span>, i])</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>world_pointcloud <span class="op">=</span> LaserUtils.__________________________(z, pose)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="cf">return</span> evaluate_pointcloud(____, world_pointcloud)</span></code></pre></div>
+</section>
+<section id="93-estimación-circular-y-remuestreo" class="level3">
+<h3>9.3. Estimación circular y remuestreo</h3>
+<div class="sourceCode" id="cb11"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>expected_angle <span class="op">=</span> np.atan2(</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    expected_value_direction[___], expected_value_direction[___]</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>angular_variance <span class="op">=</span> <span class="dv">1</span> <span class="op">-</span> np.linalg.____(expected_value_direction)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>cumulative <span class="op">=</span> np.____([particle.weight <span class="cf">for</span> particle <span class="kw">in</span> particles])</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>selected <span class="op">=</span> np.___________(cumulative, r)</span></code></pre></div>
+<p><strong>Soluciones:</strong> <code>flatten</code>; <code>tcomp</code>; <code>*=</code>; <code>express_as_global_point_cloud</code>; <code>map</code>; índices <code>1</code> y <code>0</code>; <code>norm</code>; <code>cumsum</code>; <code>searchsorted</code>.</p>
+</section>
+</section>
+<section id="10-preguntas-de-repaso-con-solución" class="level2">
+<h2>10. Preguntas de repaso (con solución)</h2>
+<ol type="1">
+<li><strong>¿Qué representa el peso?</strong> La importancia relativa de la hipótesis. Tras normalizar, los pesos suman 1.</li>
+<li><strong>¿Por qué <code>MIN_LIKELIHOOD</code> debe ser positivo?</strong> Para que un punto atípico no convierta en cero el producto de toda la nube.</li>
+<li><strong>¿Qué contiene <code>z</code> y qué contiene el point cloud global?</strong> <code>z</code> contiene rangos y ángulos; el point cloud contiene coordenadas globales <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo>,</mo><mi>y</mi></mrow><annotation encoding="application/x-tex">x,y</annotation></semantics></math>.</li>
+<li><strong>¿Por qué se multiplica la verosimilitud por el peso anterior?</strong> Para combinar la observación nueva con la importancia acumulada.</li>
+<li><strong>¿Qué hace <code>side="left"</code> en <code>searchsorted</code>?</strong> Encuentra el primer acumulado mayor o igual que <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>r</mi><annotation encoding="application/x-tex">r</annotation></semantics></math>, equivalente a <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>C</mi><mrow><mi>k</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>&lt;</mo><mi>r</mi><mo>≤</mo><msub><mi>C</mi><mi>k</mi></msub></mrow><annotation encoding="application/x-tex">C_{k-1}&lt;r\leq C_k</annotation></semantics></math>.</li>
+<li><strong>¿Por qué estimar antes de remuestrear?</strong> La estimación debe conservar los pesos desiguales de la corrección; después todos valen <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi>/</mi><mi>M</mi></mrow><annotation encoding="application/x-tex">1/M</annotation></semantics></math>.</li>
+<li><strong>¿Qué añade el remuestreo y qué riesgo tiene?</strong> Concentra muestras en hipótesis probables, pero puede eliminar grupos de bajo peso que luego serían útiles.</li>
+<li><strong>¿Cuándo puede preferirse un filtro de partículas al EKF?</strong> Cuando la creencia puede ser multimodal o muy no gaussiana y se pueden mantener suficientes partículas.</li>
+</ol>
+</section>
+<section id="11-ideas-esenciales-para-recordar" class="level2">
+<h2>11. Ideas esenciales para recordar</h2>
+<ul>
+<li><strong>Predice:</strong> muestrea un movimiento y compón con <code>tcomp</code>.</li>
+<li><strong>Corrige:</strong> transforma cada scan a coordenadas globales, multiplica likelihoods y normaliza pesos.</li>
+<li><strong>Resume:</strong> usa media ponderada para la posición y media circular para el ángulo.</li>
+<li><strong>Remuestrea:</strong> forma la CDF, limita el final a 1 y busca cada <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>r</mi><annotation encoding="application/x-tex">r</annotation></semantics></math> con <code>searchsorted</code>.</li>
+<li><strong>Orden:</strong> predicción → corrección → estimación → remuestreo.</li>
+<li><strong>Partículas frente a EKF:</strong> muestras ponderadas y varias hipótesis frente a una única aproximación gaussiana.</li>
+</ul>
+</section>
+</section>
+</article><section class="related"><span class="overline">SIGUE ESTUDIANDO</span><h2>Más material del bloque</h2><div class="related-grid"><a class="related-card" href="Resumen_L5_Localizacion_Robot.html"><span>L5 · TEORÍA</span><strong>Localización del robot</strong><small>Volver al resumen ↗</small></a><a class="related-card" href="P5.2_EKF_Localization.html"><span>P5.2 · PRÁCTICA</span><strong>Localización con EKF</strong><small>Leer guía ↗</small></a></div></section><div class="end-link"><span>Fin de esta guía</span><div class="end-actions"><button type="button" class="button subtle study-check" data-roadmap-key="robotica-ruta-parcial2-v1" data-step="study:P5.3" aria-pressed="false">Marcar como estudiado</button><a href="index.html?lesson=P5.3#filters">Ahora, ponte a prueba <span aria-hidden="true">→</span></a></div></div></div></div>
+    </div>
+  </main>
+  <footer><div class="wrap"><span>ROBO<span>TEST</span> / P5.3</span><span>Apuntes completos · Fórmulas en MathML · Funcionamiento sin conexión</span></div></footer>
+  <a class="back-top" href="#hero-title" aria-label="Volver arriba">↑</a>
+</body>
+</html>

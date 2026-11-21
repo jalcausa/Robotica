@@ -121,6 +121,13 @@ PARCIALES = [
                 "title": "Localización con EKF",
                 "subtitle": "Práctica 5.2: predicción y corrección del filtro de Kalman extendido, línea a línea.",
             },
+            {
+                "key": "P5.3",
+                "lesson": "L5",
+                "source": TEORIA / "Parcial-2/Guias_practicas/P5.3_Particle_Filter.md",
+                "title": "Filtro de partículas",
+                "subtitle": "Práctica 5.3: predicción, verosimilitudes, estimación y remuestreo SIR, línea a línea.",
+            },
         ],
     },
 ]
