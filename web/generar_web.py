@@ -128,6 +128,13 @@ PARCIALES = [
                 "title": "Filtro de partículas",
                 "subtitle": "Práctica 5.3: predicción, verosimilitudes, estimación y remuestreo SIR, línea a línea.",
             },
+            {
+                "key": "P5.4",
+                "lesson": "L5",
+                "source": TEORIA / "Parcial-2/Guias_practicas/P5.4_AMCL_ROS2.md",
+                "title": "AMCL en ROS 2",
+                "subtitle": "Práctica 5.4: comandos ROS 2, tópicos, tf, partículas y recuperación de AMCL.",
+            },
         ],
     },
 ]
