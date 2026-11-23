@@ -143,6 +143,13 @@ PARCIALES = [
                 "subtitle": "Práctica 6.3: extremos de los haces, Bresenham, modelo inverso del sensor y log odds, línea a línea.",
             },
         ],
+        # Repaso de todo el parcial: va en el menú y como último paso de estudio de la ruta, antes de la pasada completa.
+        "review": {
+            "key": "Repaso",
+            "source": TEORIA / "Parcial-2/Resumen_General_Parcial2.md",
+            "title": "Resumen general del Parcial 2",
+            "subtitle": "Lo imprescindible de L4, L5 y las siete prácticas en un solo sitio, con un ejercicio tipo resuelto de cada clase de pregunta.",
+        },
     },
 ]
 
@@ -195,7 +202,7 @@ def asset(output, path):
 
 def study_minutes(page):
     words = len(page["source"].read_text(encoding="utf-8").split())
-    speed = 90 if page in page["parcial"]["lessons"] else 110
+    speed = 110 if page in page["parcial"]["guides"] else 90
     return max(5, int(words / speed / 5 + 0.5) * 5)
 
 
@@ -245,6 +252,14 @@ def toc_html(headings):
 
 def related_html(page, output):
     parcial = page["parcial"]
+    if page is parcial.get("review"):
+        cards = "".join(
+            f'<a class="related-card" href="{link(output, page_output(item))}">'
+            f'<span>{escape(item["key"])} · {"TEORÍA" if item in parcial["lessons"] else "PRÁCTICA"}</span><strong>{escape(item["title"])}</strong>'
+            '<small>Ver el detalle <span aria-hidden="true">↗</span></small></a>'
+            for item in parcial["lessons"] + parcial["guides"]
+        )
+        return f'<section class="related"><span class="overline">EL DETALLE DE CADA TEMA</span><h2>Resúmenes y guías</h2><p>Si un ejercicio se te atasca, aquí está la explicación completa.</p><div class="related-grid">{cards}</div></section>'
     if page in parcial["lessons"]:
         guides = [item for item in parcial["guides"] if item["lesson"] == page["key"]]
         if not guides:
@@ -288,18 +303,22 @@ def build(page):
         active = page["key"]  # Guía de una lección que aún no tiene resumen
     roadmap = parcial.get("roadmap")
     blocks = [identifier for level, identifier, title in outline.headings if level == 2 and title not in INDEX_TITLES]
+    review = parcial.get("review")
+    is_review = page is review
     menu = f'<a href="{link(output, PORTAL)}">Inicio</a>' + (f'<a href="{link(output, quiz_page(parcial))}#ruta">Mi ruta</a>' if roadmap else "") + "".join(
-        f'<a href="{link(output, page_output(lesson))}"'
-        f'{" aria-current=page" if lesson["key"] == active else ""}>{lesson["key"]}</a>'
-        for lesson in parcial["lessons"]
+        f'<a href="{link(output, page_output(item))}"'
+        f'{" aria-current=page" if item["key"] == active else ""}>{item["key"]}</a>'
+        for item in parcial["lessons"] + ([review] if review else [])
     )
     quiz_link = link(output, quiz_page(parcial))
-    if parcial.get("quiz_by_page"):
+    if is_review:
+        quiz_url = practice_url = f'{quiz_link}#filters'
+    elif parcial.get("quiz_by_page"):
         quiz_url = practice_url = f'{quiz_link}?lesson={page["key"]}#filters'
     else:
         quiz_url = f'{quiz_link}?lesson={active}#filters'
         practice_url = f'{quiz_link}?lesson={active}&amp;kind=Pr%C3%A1ctica#filters'
-    label = "GUÍA DE PRÁCTICAS" if page in parcial["guides"] else "RESUMEN DE LA LECCIÓN"
+    label = "RESUMEN GENERAL" if is_review else "GUÍA DE PRÁCTICAS" if page in parcial["guides"] else "RESUMEN DE LA LECCIÓN"
     source_link = link(output, source)
     roadmap_key = f'robotica-ruta-{parcial["key"]}-v1'
     study_button = (
@@ -307,7 +326,10 @@ def build(page):
         f'data-step="study:{escape(page["key"], quote=True)}" aria-pressed="false">Marcar como estudiado</button>'
         if roadmap else ""
     )
-    if page in parcial["lessons"]:
+    if is_review:
+        companions = parcial["lessons"] + parcial["guides"]
+        companions_title = "Todo el parcial"
+    elif page in parcial["lessons"]:
         companions = [item for item in parcial["guides"] if item["lesson"] == page["key"]]
         companions_title = f'Prácticas de {page["key"]}'
     else:
@@ -384,7 +406,10 @@ if __name__ == "__main__":
                 if not item["source"].exists():
                     print(f"Omitida (falta {item['source'].relative_to(ROOT)})")
             parcial[group] = [item for item in parcial[group] if item["source"].exists()]
-        pages = parcial["lessons"] + parcial["guides"]
+        if parcial.get("review") and not parcial["review"]["source"].exists():
+            print(f"Omitida (falta {parcial['review']['source'].relative_to(ROOT)})")
+            del parcial["review"]
+        pages = parcial["lessons"] + parcial["guides"] + ([parcial["review"]] if parcial.get("review") else [])
         for item in pages:
             item["parcial"] = parcial
         page_stats = {}
@@ -419,6 +444,17 @@ if __name__ == "__main__":
                 "quizKey": f'robotica-practica-{parcial["key"]}-v1',
                 "pages": data_pages,
             }
+            if parcial.get("review"):
+                review = parcial["review"]
+                route_data["review"] = {
+                    "key": review["key"],
+                    "type": "review",
+                    "title": review["title"],
+                    "href": page_output(review).name,
+                    "minutes": study_minutes(review),
+                    "blocks": len(page_stats[review["key"]]),
+                    "sections": page_stats[review["key"]],
+                }
             output = WEB / parcial["key"] / "ruta-data.js"
             output.write_text(
                 "window.RUTA = " + json.dumps(route_data, ensure_ascii=False) + ";\n",

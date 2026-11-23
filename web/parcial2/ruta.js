@@ -69,6 +69,16 @@ function initRoadmap() {
     });
   });
   phases.push({ title: "Estudio general", steps: [] });
+  if (config.review) {
+    addStep({
+      id: `study:${config.review.key}`,
+      type: "study",
+      key: config.review.key,
+      page: config.review,
+      title: "Leer el resumen general y hacer los ejercicios tipo",
+      minutes: config.review.minutes,
+    });
+  }
   addStep({
     id: "pass",
     type: "pass",
@@ -297,7 +307,7 @@ function initRoadmap() {
   };
   const answerButton = (step) => {
     if (step.type === "study") {
-      return linkButton(step.page.type === "lesson" ? "Abrir resumen ↗" : "Abrir guía ↗", step.page.href);
+      return linkButton(step.page.type === "guide" ? "Abrir guía ↗" : "Abrir resumen ↗", step.page.href);
     }
     if (step.type === "test") {
       const total = questionsFor(step.key).length;
