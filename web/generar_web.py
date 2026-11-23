@@ -135,6 +135,13 @@ PARCIALES = [
                 "title": "AMCL en ROS 2",
                 "subtitle": "Práctica 5.4: comandos ROS 2, tópicos, tf, partículas y recuperación de AMCL.",
             },
+            {
+                "key": "P6.3",
+                "lesson": "L6",
+                "source": TEORIA / "Parcial-2/Guias_practicas/P6.3_Occupancy_grid_mapping.md",
+                "title": "Mapas de rejilla de ocupación",
+                "subtitle": "Práctica 6.3: extremos de los haces, Bresenham, modelo inverso del sensor y log odds, línea a línea.",
+            },
         ],
     },
 ]
