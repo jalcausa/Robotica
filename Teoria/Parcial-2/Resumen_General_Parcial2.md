@@ -262,7 +262,7 @@ Representa la creencia con $M$ muestras ponderadas $\{\mathbf{x}^{[i]}, w^{[i]}\
 
 - `to_world_frame(x1_w, Qx1_w, z1_p_r, W1)`: polares → cartesianas con `Jac_pol_car = [[c, -r*s], [s, r*c]]` y `Jac_pol_car@W1@Jac_pol_car.T`; amplía el punto con un 0 (`np.vstack([z1_car_rel[0], 0])`) para usar `J1`, `J2` y `tcomp`; recorta `J1(...)[0:2,:]` (2×3) y `J2(...)[0:2,0:2]` (2×2); `z1_w = tcomp(x1_w, z1_ext)[0:2,[0]]`; `Wz1 = Jac_ap@Qx1_w@Jac_ap.T + Jac_aa@z1_car_rel[1]@Jac_aa.T`.
 - `combine_pdfs()`: $\Sigma = (\Sigma_1^{-1} + \Sigma_2^{-1})^{-1}$, $\mathbf{m} = \Sigma(\Sigma_1^{-1}\mathbf{m}_1 + \Sigma_2^{-1}\mathbf{m}_2)$: se suman las informaciones.
-- Opcional: pose relativa con `tcomp(tinv(x1_w), x2_w)`; bearing predicho con `np.arctan2(dy, dx) - theta`; `Jac_car_pol = [[c, s], [-s/r, c/r]]`.
+- El paso inverso, cartesianas → polares, usa `Jac_car_pol = [[c, s], [-s/r, c/r]]`: es de la parte opcional, pero ya cayó en un examen.
 - Dimensiones: `Qx1_w` 3×3, `W1` 2×2, `Jac_ap` 2×3, `Jac_aa` y `Wz1` 2×2. Pose exacta: `Qx1_w = np.zeros((3, 3))`.
 
 ### 5.2. Práctica 4.2 · Escáner láser
