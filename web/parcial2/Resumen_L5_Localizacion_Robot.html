@@ -6,7 +6,7 @@
   <meta name="color-scheme" content="light">
   <title>L5 · Localización del robot | RoboTest</title>
   <link rel="stylesheet" href="../assets/robotest.css?v=83d15755">
-  <link rel="stylesheet" href="../assets/resumenes.css?v=1a06a11b">
+  <link rel="stylesheet" href="../assets/resumenes.css?v=cd58c869">
   <script src="../assets/resumenes.js?v=5ba61f92" defer></script>
 </head>
 <body>
@@ -1840,17 +1840,17 @@
 <section id="83-predicción-muestrear-el-modelo-de-movimiento" class="level3">
 <h3>8.3. Predicción: muestrear el modelo de movimiento</h3>
 <p>Cada partícula se mueve con <strong>su propia muestra de ruido</strong>:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sample_motion_model(x, u, R):</span>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> <span class="fu">sample_motion_model</span>(x, u, R):</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># x: (3,) pose anterior de la partícula [x, y, theta]</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># u: (3,) incremento nominal de movimiento [dx, dy, dtheta]</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># R: (3,3) covarianza de la incertidumbre del movimiento</span></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># devuelve: (3,) nueva pose muestreada</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    noise <span class="op">=</span> np.random.multivariate_normal(np.zeros(<span class="dv">3</span>), R)</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> compose(x, u <span class="op">+</span> noise)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    noise <span class="op">=</span> np.random.<span class="fu">multivariate_normal</span>(np.<span class="fu">zeros</span>(<span class="dv">3</span>), R)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="fu">compose</span>(x, u <span class="op">+</span> noise)</span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co"># particles: array (N,3) con las N poses de las partículas</span></span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(N):</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    particles[i] <span class="op">=</span> sample_motion_model(particles[i], u_t, R_t)</span></code></pre></div>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    particles[i] <span class="op">=</span> <span class="fu">sample_motion_model</span>(particles[i], u_t, R_t)</span></code></pre></div>
 <blockquote>
 <p><strong>Ojo:</strong> el ruido es imprescindible. Sin él, las copias creadas al remuestrear seguirían siempre juntas, y el conjunto colapsaría en unas pocas poses.</p>
 </blockquote>
@@ -1887,9 +1887,9 @@
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># z_t: rango observado; sigma_z: desviación típica del sensor</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># weights: (N,) pesos de las partículas</span></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(N):</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    z_pred <span class="op">=</span> range_sensor_model(particles[i], landmark)  <span class="co"># observación predicha</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    z_pred <span class="op">=</span> <span class="fu">range_sensor_model</span>(particles[i], landmark)  <span class="co"># observación predicha</span></span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    innov <span class="op">=</span> z_t <span class="op">-</span> z_pred                                 <span class="co"># innovación</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    weights[i] <span class="op">=</span> np.exp(<span class="op">-</span><span class="fl">0.5</span> <span class="op">*</span> innov<span class="op">**</span><span class="dv">2</span> <span class="op">/</span> sigma_z<span class="op">**</span><span class="dv">2</span>)    <span class="co"># verosimilitud</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    weights[i] <span class="op">=</span> np.<span class="fu">exp</span>(<span class="op">-</span><span class="fl">0.5</span> <span class="op">*</span> innov<span class="op">**</span><span class="dv">2</span> <span class="op">/</span> sigma_z<span class="op">**</span><span class="dv">2</span>)    <span class="co"># verosimilitud</span></span>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>weights <span class="op">/=</span> np.<span class="bu">sum</span>(weights)                               <span class="co"># normalizar</span></span></code></pre></div>
 <blockquote>
 <p><strong>Detalles:</strong> la constante <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mi>σ</mi><msqrt><mrow><mn>2</mn><mi>π</mi></mrow></msqrt><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">1/(\sigma\sqrt{2\pi})</annotation></semantics></math> no hace falta, porque se cancela al normalizar. Y si el sensor mide marcación, como en la figura, la innovación es un ángulo y <strong>hay que normalizarla</strong> a <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">[</mo><mi>−</mi><mi>π</mi><mo>,</mo><mi>π</mi><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">[-\pi, \pi]</annotation></semantics></math>.</p>

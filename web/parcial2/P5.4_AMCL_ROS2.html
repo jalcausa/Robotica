@@ -6,7 +6,7 @@
   <meta name="color-scheme" content="light">
   <title>P5.4 · AMCL en ROS 2 | RoboTest</title>
   <link rel="stylesheet" href="../assets/robotest.css?v=83d15755">
-  <link rel="stylesheet" href="../assets/resumenes.css?v=1a06a11b">
+  <link rel="stylesheet" href="../assets/resumenes.css?v=cd58c869">
   <script src="../assets/resumenes.js?v=5ba61f92" defer></script>
 </head>
 <body>
@@ -22,15 +22,15 @@
         <h1 id="hero-title">AMCL en ROS 2<span class="hero-period">.</span></h1>
         <p>Práctica 5.4: comandos ROS 2, tópicos, tf, partículas y recuperación de AMCL.</p>
         <div class="hero-actions"><a class="button primary" href="#apuntes">Empezar a leer <span aria-hidden="true">↘</span></a><button type="button" class="button subtle study-check" data-roadmap-key="robotica-ruta-parcial2-v1" data-step="study:P5.4" aria-pressed="false">Marcar como estudiado</button><a class="button subtle" href="index.html?lesson=P5.4#filters">Practicar el tema</a></div>
-        <div class="lesson-facts"><span>15 bloques de lectura</span><span>42 fórmulas renderizadas</span><span>Sin conexión</span></div>
+        <div class="lesson-facts"><span>14 bloques de lectura</span><span>49 fórmulas renderizadas</span><span>Sin conexión</span></div>
       </div>
       <div class="hero-art" aria-hidden="true"><div class="grid-plane"></div><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="robot-icon"><span class="eye"></span><span class="eye"></span></div><div class="beacon beacon-a"></div><div class="beacon beacon-b"></div><span class="art-label label-a">SENSE</span><span class="art-label label-b">PLAN</span><span class="art-label label-c">ACT</span></div>
     </section>
     <div class="reading-wrap" id="apuntes">
-      <section id="study-tracker" class="study-tracker" aria-label="Tu progreso" data-roadmap-key="robotica-ruta-parcial2-v1" data-page="P5.4" data-minutes="30" data-route-url="index.html#ruta" data-companions-title="Resto del tema L5" data-companions="[{&quot;key&quot;: &quot;L5&quot;, &quot;title&quot;: &quot;Localización del robot&quot;, &quot;href&quot;: &quot;Resumen_L5_Localizacion_Robot.html&quot;, &quot;lesson&quot;: true}, {&quot;key&quot;: &quot;P5.2&quot;, &quot;title&quot;: &quot;Localización con EKF&quot;, &quot;href&quot;: &quot;P5.2_EKF_Localization.html&quot;, &quot;lesson&quot;: false}, {&quot;key&quot;: &quot;P5.3&quot;, &quot;title&quot;: &quot;Filtro de partículas&quot;, &quot;href&quot;: &quot;P5.3_Particle_Filter.html&quot;, &quot;lesson&quot;: false}]"></section>
+      <section id="study-tracker" class="study-tracker" aria-label="Tu progreso" data-roadmap-key="robotica-ruta-parcial2-v1" data-page="P5.4" data-minutes="35" data-route-url="index.html#ruta" data-companions-title="Resto del tema L5" data-companions="[{&quot;key&quot;: &quot;L5&quot;, &quot;title&quot;: &quot;Localización del robot&quot;, &quot;href&quot;: &quot;Resumen_L5_Localizacion_Robot.html&quot;, &quot;lesson&quot;: true}, {&quot;key&quot;: &quot;P5.2&quot;, &quot;title&quot;: &quot;Localización con EKF&quot;, &quot;href&quot;: &quot;P5.2_EKF_Localization.html&quot;, &quot;lesson&quot;: false}, {&quot;key&quot;: &quot;P5.3&quot;, &quot;title&quot;: &quot;Filtro de partículas&quot;, &quot;href&quot;: &quot;P5.3_Particle_Filter.html&quot;, &quot;lesson&quot;: false}]"></section>
       <div class="reading-intro"><div><span class="overline">P5.4 / LECTURA</span><h2>Todo el contenido, mejor organizado.</h2><p>Índice navegable, secciones cortas y fórmulas legibles. El contenido del apunte original se mantiene íntegro.</p></div><a class="original-link" href="../../Teoria/Parcial-2/Guias_practicas/P5.4_AMCL_ROS2.md">Ver Markdown original ↗</a></div>
-      <details class="mobile-toc"><summary>Índice de contenidos <span aria-hidden="true">⌄</span></summary><nav class="toc-items" aria-label="Apartados de la página"><details class="toc-chapter" open><summary><span class="toc-number">·</span><span>Índice</span></summary><div class="toc-links"><a href="#índice">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">01</span><span>Objetivo y relación con la práctica 5.3</span></summary><div class="toc-links"><a href="#1-objetivo-y-relación-con-la-práctica-53">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">02</span><span>Qué es AMCL y qué añade al filtro de partículas</span></summary><div class="toc-links"><a href="#2-qué-es-amcl-y-qué-añade-al-filtro-de-partículas">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">03</span><span>La demo de ROS 2 y sus nodos</span></summary><div class="toc-links"><a href="#3-la-demo-de-ros-2-y-sus-nodos">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">04</span><span>Topics de entrada y salida de /amcl</span></summary><div class="toc-links"><a href="#4-topics-de-entrada-y-salida-de-amcl">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">05</span><span>Cuándo actualiza y cómo calcula la verosimilitud</span></summary><div class="toc-links"><a href="#5-cuándo-actualiza-y-cómo-calcula-la-verosimilitud">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">06</span><span>KLD-sampling y Augmented MCL</span></summary><div class="toc-links"><a href="#6-kld-sampling-y-augmented-mcl">Ir al bloque</a><a href="#61-kld-sampling-número-adaptativo-de-partículas">6.1. KLD-sampling: número adaptativo de partículas</a><a href="#62-augmented-mcl-recuperación-cuando-la-verosimilitud-cae">6.2. Augmented MCL: recuperación cuando la verosimilitud cae</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">07</span><span>Árbol tf y composición de poses</span></summary><div class="toc-links"><a href="#7-árbol-tf-y-composición-de-poses">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">08</span><span>Comandos de ROS 2 que hay que saber</span></summary><div class="toc-links"><a href="#8-comandos-de-ros-2-que-hay-que-saber">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">09</span><span>Pose, cuaternión y covarianza</span></summary><div class="toc-links"><a href="#9-pose-cuaternión-y-covarianza">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">10</span><span>Resultados de la práctica</span></summary><div class="toc-links"><a href="#10-resultados-de-la-práctica">Ir al bloque</a><a href="#101-odometría-frente-a-amcl">10.1. Odometría frente a AMCL</a><a href="#102-incertidumbre-y-número-de-partículas">10.2. Incertidumbre y número de partículas</a><a href="#103-global-localization-y-secuestro">10.3. Global localization y secuestro</a><a href="#104-solo-20-partículas">10.4. Solo 20 partículas</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">11</span><span>Cálculos resueltos</span></summary><div class="toc-links"><a href="#11-cálculos-resueltos">Ir al bloque</a><a href="#111-error-euclídeo-de-las-poses">11.1. Error euclídeo de las poses</a><a href="#112-desviaciones-típicas-desde-la-covarianza">11.2. Desviaciones típicas desde la covarianza</a><a href="#113-yaw-de-un-cuaternión">11.3. Yaw de un cuaternión</a><a href="#114-correlación-entre-x-e-y">11.4. Correlación entre x e y</a><a href="#115-peso-tras-el-remuestreo">11.5. Peso tras el remuestreo</a><a href="#116-composición-de-poses">11.6. Composición de poses</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">12</span><span>Errores típicos</span></summary><div class="toc-links"><a href="#12-errores-típicos">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">13</span><span>Rellena el hueco</span></summary><div class="toc-links"><a href="#13-rellena-el-hueco">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">14</span><span>Preguntas de repaso con solución</span></summary><div class="toc-links"><a href="#14-preguntas-de-repaso-con-solución">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">15</span><span>Ideas esenciales para recordar</span></summary><div class="toc-links"><a href="#15-ideas-esenciales-para-recordar">Ir al bloque</a></div></details></nav></details>
-      <div class="reading-columns"><aside class="toc-sidebar"><div class="toc-box"><span class="overline">EN ESTA PÁGINA</span><p>L5 · 16 bloques</p><nav class="toc-items" aria-label="Apartados de la página"><details class="toc-chapter" open><summary><span class="toc-number">·</span><span>Índice</span></summary><div class="toc-links"><a href="#índice">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">01</span><span>Objetivo y relación con la práctica 5.3</span></summary><div class="toc-links"><a href="#1-objetivo-y-relación-con-la-práctica-53">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">02</span><span>Qué es AMCL y qué añade al filtro de partículas</span></summary><div class="toc-links"><a href="#2-qué-es-amcl-y-qué-añade-al-filtro-de-partículas">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">03</span><span>La demo de ROS 2 y sus nodos</span></summary><div class="toc-links"><a href="#3-la-demo-de-ros-2-y-sus-nodos">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">04</span><span>Topics de entrada y salida de /amcl</span></summary><div class="toc-links"><a href="#4-topics-de-entrada-y-salida-de-amcl">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">05</span><span>Cuándo actualiza y cómo calcula la verosimilitud</span></summary><div class="toc-links"><a href="#5-cuándo-actualiza-y-cómo-calcula-la-verosimilitud">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">06</span><span>KLD-sampling y Augmented MCL</span></summary><div class="toc-links"><a href="#6-kld-sampling-y-augmented-mcl">Ir al bloque</a><a href="#61-kld-sampling-número-adaptativo-de-partículas">6.1. KLD-sampling: número adaptativo de partículas</a><a href="#62-augmented-mcl-recuperación-cuando-la-verosimilitud-cae">6.2. Augmented MCL: recuperación cuando la verosimilitud cae</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">07</span><span>Árbol tf y composición de poses</span></summary><div class="toc-links"><a href="#7-árbol-tf-y-composición-de-poses">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">08</span><span>Comandos de ROS 2 que hay que saber</span></summary><div class="toc-links"><a href="#8-comandos-de-ros-2-que-hay-que-saber">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">09</span><span>Pose, cuaternión y covarianza</span></summary><div class="toc-links"><a href="#9-pose-cuaternión-y-covarianza">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">10</span><span>Resultados de la práctica</span></summary><div class="toc-links"><a href="#10-resultados-de-la-práctica">Ir al bloque</a><a href="#101-odometría-frente-a-amcl">10.1. Odometría frente a AMCL</a><a href="#102-incertidumbre-y-número-de-partículas">10.2. Incertidumbre y número de partículas</a><a href="#103-global-localization-y-secuestro">10.3. Global localization y secuestro</a><a href="#104-solo-20-partículas">10.4. Solo 20 partículas</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">11</span><span>Cálculos resueltos</span></summary><div class="toc-links"><a href="#11-cálculos-resueltos">Ir al bloque</a><a href="#111-error-euclídeo-de-las-poses">11.1. Error euclídeo de las poses</a><a href="#112-desviaciones-típicas-desde-la-covarianza">11.2. Desviaciones típicas desde la covarianza</a><a href="#113-yaw-de-un-cuaternión">11.3. Yaw de un cuaternión</a><a href="#114-correlación-entre-x-e-y">11.4. Correlación entre x e y</a><a href="#115-peso-tras-el-remuestreo">11.5. Peso tras el remuestreo</a><a href="#116-composición-de-poses">11.6. Composición de poses</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">12</span><span>Errores típicos</span></summary><div class="toc-links"><a href="#12-errores-típicos">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">13</span><span>Rellena el hueco</span></summary><div class="toc-links"><a href="#13-rellena-el-hueco">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">14</span><span>Preguntas de repaso con solución</span></summary><div class="toc-links"><a href="#14-preguntas-de-repaso-con-solución">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">15</span><span>Ideas esenciales para recordar</span></summary><div class="toc-links"><a href="#15-ideas-esenciales-para-recordar">Ir al bloque</a></div></details></nav><a class="toc-practice" href="index.html?lesson=P5.4#filters">Practicar preguntas ↗</a></div></aside><div class="reading-main"><article class="notes-body"><section id="54-amcl-en-ros-2-localización-monte-carlo-en-nav2" class="level1">
+      <details class="mobile-toc"><summary>Índice de contenidos <span aria-hidden="true">⌄</span></summary><nav class="toc-items" aria-label="Apartados de la página"><details class="toc-chapter" open><summary><span class="toc-number">·</span><span>Índice</span></summary><div class="toc-links"><a href="#índice">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">01</span><span>Objetivo y relación con la práctica 5.3</span></summary><div class="toc-links"><a href="#1-objetivo-y-relación-con-la-práctica-53">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">02</span><span>Qué es AMCL y qué añade al filtro de partículas</span></summary><div class="toc-links"><a href="#2-qué-es-amcl-y-qué-añade-al-filtro-de-partículas">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">03</span><span>La demo de ROS 2 y sus nodos</span></summary><div class="toc-links"><a href="#3-la-demo-de-ros-2-y-sus-nodos">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">04</span><span>Topics de entrada y salida de /amcl</span></summary><div class="toc-links"><a href="#4-topics-de-entrada-y-salida-de-amcl">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">05</span><span>Cuándo actualiza y cómo calcula la verosimilitud</span></summary><div class="toc-links"><a href="#5-cuándo-actualiza-y-cómo-calcula-la-verosimilitud">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">06</span><span>KLD-sampling y Augmented MCL</span></summary><div class="toc-links"><a href="#6-kld-sampling-y-augmented-mcl">Ir al bloque</a><a href="#61-kld-sampling-número-adaptativo-de-partículas">6.1. KLD-sampling: número adaptativo de partículas</a><a href="#62-augmented-mcl-recuperación-cuando-la-verosimilitud-cae">6.2. Augmented MCL: recuperación cuando la verosimilitud cae</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">07</span><span>Árbol tf y composición de poses</span></summary><div class="toc-links"><a href="#7-árbol-tf-y-composición-de-poses">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">08</span><span>Comandos de ROS 2 que hay que saber</span></summary><div class="toc-links"><a href="#8-comandos-de-ros-2-que-hay-que-saber">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">09</span><span>Pose, cuaternión y covarianza</span></summary><div class="toc-links"><a href="#9-pose-cuaternión-y-covarianza">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">10</span><span>El notebook, ejercicio a ejercicio</span></summary><div class="toc-links"><a href="#10-el-notebook-ejercicio-a-ejercicio">Ir al bloque</a><a href="#101-assignment-1-lanzar-la-demo-y-conocer-amcl">10.1. Assignment 1: lanzar la demo y conocer AMCL</a><a href="#102-assignment-2-quién-sabe-dónde-está-el-robot">10.2. Assignment 2: ¿quién sabe dónde está el robot?</a><a href="#103-assignment-3-las-partículas">10.3. Assignment 3: las partículas</a><a href="#104-assignment-4-la-covarianza">10.4. Assignment 4: la covarianza</a><a href="#105-assignment-5-perderse-y-volver-a-encontrarse">10.5. Assignment 5: perderse y volver a encontrarse</a><a href="#106-assignment-6-cuántas-partículas-hacen-falta">10.6. Assignment 6: ¿cuántas partículas hacen falta?</a><a href="#107-thinking-about-it-y-opcionales">10.7. Thinking about it y opcionales</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">11</span><span>Cálculos resueltos</span></summary><div class="toc-links"><a href="#11-cálculos-resueltos">Ir al bloque</a><a href="#111-error-euclídeo-de-las-poses">11.1. Error euclídeo de las poses</a><a href="#112-desviaciones-típicas-desde-la-covarianza">11.2. Desviaciones típicas desde la covarianza</a><a href="#113-yaw-de-un-cuaternión">11.3. Yaw de un cuaternión</a><a href="#114-correlación-entre-x-e-y">11.4. Correlación entre x e y</a><a href="#115-peso-tras-el-remuestreo">11.5. Peso tras el remuestreo</a><a href="#116-composición-de-poses">11.6. Composición de poses</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">12</span><span>Confusiones frecuentes</span></summary><div class="toc-links"><a href="#12-confusiones-frecuentes">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">13</span><span>Preguntas de repaso con solución</span></summary><div class="toc-links"><a href="#13-preguntas-de-repaso-con-solución">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">14</span><span>Ideas esenciales para recordar</span></summary><div class="toc-links"><a href="#14-ideas-esenciales-para-recordar">Ir al bloque</a></div></details></nav></details>
+      <div class="reading-columns"><aside class="toc-sidebar"><div class="toc-box"><span class="overline">EN ESTA PÁGINA</span><p>L5 · 15 bloques</p><nav class="toc-items" aria-label="Apartados de la página"><details class="toc-chapter" open><summary><span class="toc-number">·</span><span>Índice</span></summary><div class="toc-links"><a href="#índice">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">01</span><span>Objetivo y relación con la práctica 5.3</span></summary><div class="toc-links"><a href="#1-objetivo-y-relación-con-la-práctica-53">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">02</span><span>Qué es AMCL y qué añade al filtro de partículas</span></summary><div class="toc-links"><a href="#2-qué-es-amcl-y-qué-añade-al-filtro-de-partículas">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">03</span><span>La demo de ROS 2 y sus nodos</span></summary><div class="toc-links"><a href="#3-la-demo-de-ros-2-y-sus-nodos">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">04</span><span>Topics de entrada y salida de /amcl</span></summary><div class="toc-links"><a href="#4-topics-de-entrada-y-salida-de-amcl">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">05</span><span>Cuándo actualiza y cómo calcula la verosimilitud</span></summary><div class="toc-links"><a href="#5-cuándo-actualiza-y-cómo-calcula-la-verosimilitud">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">06</span><span>KLD-sampling y Augmented MCL</span></summary><div class="toc-links"><a href="#6-kld-sampling-y-augmented-mcl">Ir al bloque</a><a href="#61-kld-sampling-número-adaptativo-de-partículas">6.1. KLD-sampling: número adaptativo de partículas</a><a href="#62-augmented-mcl-recuperación-cuando-la-verosimilitud-cae">6.2. Augmented MCL: recuperación cuando la verosimilitud cae</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">07</span><span>Árbol tf y composición de poses</span></summary><div class="toc-links"><a href="#7-árbol-tf-y-composición-de-poses">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">08</span><span>Comandos de ROS 2 que hay que saber</span></summary><div class="toc-links"><a href="#8-comandos-de-ros-2-que-hay-que-saber">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">09</span><span>Pose, cuaternión y covarianza</span></summary><div class="toc-links"><a href="#9-pose-cuaternión-y-covarianza">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">10</span><span>El notebook, ejercicio a ejercicio</span></summary><div class="toc-links"><a href="#10-el-notebook-ejercicio-a-ejercicio">Ir al bloque</a><a href="#101-assignment-1-lanzar-la-demo-y-conocer-amcl">10.1. Assignment 1: lanzar la demo y conocer AMCL</a><a href="#102-assignment-2-quién-sabe-dónde-está-el-robot">10.2. Assignment 2: ¿quién sabe dónde está el robot?</a><a href="#103-assignment-3-las-partículas">10.3. Assignment 3: las partículas</a><a href="#104-assignment-4-la-covarianza">10.4. Assignment 4: la covarianza</a><a href="#105-assignment-5-perderse-y-volver-a-encontrarse">10.5. Assignment 5: perderse y volver a encontrarse</a><a href="#106-assignment-6-cuántas-partículas-hacen-falta">10.6. Assignment 6: ¿cuántas partículas hacen falta?</a><a href="#107-thinking-about-it-y-opcionales">10.7. Thinking about it y opcionales</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">11</span><span>Cálculos resueltos</span></summary><div class="toc-links"><a href="#11-cálculos-resueltos">Ir al bloque</a><a href="#111-error-euclídeo-de-las-poses">11.1. Error euclídeo de las poses</a><a href="#112-desviaciones-típicas-desde-la-covarianza">11.2. Desviaciones típicas desde la covarianza</a><a href="#113-yaw-de-un-cuaternión">11.3. Yaw de un cuaternión</a><a href="#114-correlación-entre-x-e-y">11.4. Correlación entre x e y</a><a href="#115-peso-tras-el-remuestreo">11.5. Peso tras el remuestreo</a><a href="#116-composición-de-poses">11.6. Composición de poses</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">12</span><span>Confusiones frecuentes</span></summary><div class="toc-links"><a href="#12-confusiones-frecuentes">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">13</span><span>Preguntas de repaso con solución</span></summary><div class="toc-links"><a href="#13-preguntas-de-repaso-con-solución">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">14</span><span>Ideas esenciales para recordar</span></summary><div class="toc-links"><a href="#14-ideas-esenciales-para-recordar">Ir al bloque</a></div></details></nav><a class="toc-practice" href="index.html?lesson=P5.4#filters">Practicar preguntas ↗</a></div></aside><div class="reading-main"><article class="notes-body"><section id="54-amcl-en-ros-2-localización-monte-carlo-en-nav2" class="level1">
 <h1>5.4 AMCL en ROS 2: localización Monte Carlo en Nav2</h1>
 <p>Guía de estudio del notebook <a href="../../Practicas/uma_robotics_2027/Chapter%2005.%20Localization/5.4%20Trying%20AMCL%20in%20ROS2.ipynb">5.4 Trying AMCL in ROS2</a>. Las salidas y respuestas recogidas en la VM están en la <a href="../../Practicas/uma_robotics_2027/Chapter%2005.%20Localization/5.4%20Resoluci%C3%B3n%20y%20gu%C3%ADa%20de%20entrega.md">resolución y guía de entrega</a>. La guía teórica de partida es <a href="../../Teoria/Parcial-2/L5-Robot-Localization/Resumen_L5_Localizacion_Robot.md">L5 · Localización del robot</a>.</p>
 <p><strong>Enfoque de examen.</strong> Esta práctica no tiene código Python propio: se trabaja con comandos de ROS 2, los mensajes que recibe y publica AMCL, el árbol tf y las salidas de RViz2. Las preguntas probables son:</p>
@@ -40,7 +40,7 @@
 <li>leer la covarianza de una pose, convertir un cuaternión a yaw y comparar poses;</li>
 <li>explicar el número y los pesos de las partículas, KLD-sampling y la recuperación de Augmented MCL.</li>
 </ul>
-<p>Los cálculos de esta guía se comprobaron con Python a partir de los datos anotados en el notebook. Se usan las capturas de la VM cuando ayudan a interpretar los resultados.</p>
+<p>El apartado 10 recorre el notebook ejercicio a ejercicio (qué se pide, cómo se resuelve y para qué sirve cada comando). Para entrenar las preguntas de examen (completar o corregir un comando), usa el <a href="index.html?lesson=P5.4#filters">test de la práctica 5.4</a>. Los cálculos de esta guía se comprobaron con Python a partir de los datos anotados en el notebook. Se usan las capturas de la VM cuando ayudan a interpretar los resultados.</p>
 <section id="índice" class="level2">
 <h2>Índice</h2>
 <ol type="1">
@@ -53,12 +53,11 @@
 <li><a href="#7-árbol-tf-y-composición-de-poses">Árbol tf y composición de poses</a></li>
 <li><a href="#8-comandos-de-ros-2-que-hay-que-saber">Comandos de ROS 2 que hay que saber</a></li>
 <li><a href="#9-pose-cuaternión-y-covarianza">Pose, cuaternión y covarianza</a></li>
-<li><a href="#10-resultados-de-la-práctica">Resultados de la práctica</a></li>
+<li><a href="#10-el-notebook-ejercicio-a-ejercicio">El notebook, ejercicio a ejercicio</a></li>
 <li><a href="#11-cálculos-resueltos">Cálculos resueltos</a></li>
-<li><a href="#12-errores-típicos">Errores típicos</a></li>
-<li><a href="#13-rellena-el-hueco">Rellena el hueco</a></li>
-<li><a href="#14-preguntas-de-repaso-con-solución">Preguntas de repaso con solución</a></li>
-<li><a href="#15-ideas-esenciales-para-recordar">Ideas esenciales para recordar</a></li>
+<li><a href="#12-confusiones-frecuentes">Confusiones frecuentes</a></li>
+<li><a href="#13-preguntas-de-repaso-con-solución">Preguntas de repaso con solución</a></li>
+<li><a href="#14-ideas-esenciales-para-recordar">Ideas esenciales para recordar</a></li>
 </ol>
 </section>
 <section id="1-objetivo-y-relación-con-la-práctica-53" class="level2">
@@ -364,44 +363,200 @@
 </annotation></semantics></math></p>
 <p>No se debe usar <code>atan2(z,w)</code> sin duplicar el ángulo. Esta fórmula supone roll y pitch nulos, como en la pose plana de la práctica.</p>
 </section>
-<section id="10-resultados-de-la-práctica" class="level2">
-<h2>10. Resultados de la práctica</h2>
-<section id="101-odometría-frente-a-amcl" class="level3">
-<h3>10.1. Odometría frente a AMCL</h3>
-<p>En el segundo intento del Assignment 2, la posición real era aproximadamente <code>(2.944, −0.175) m</code>, la de odometría <code>(1.633, −3.545) m</code> y la de AMCL <code>(2.988, −0.064) m</code>. Los errores fueron <strong>3.62 m</strong> para odometría y <strong>0.12 m</strong> para AMCL. El primer intento de AMCL, tras conducir demasiado rápido, acabó a unos 13 m de la pose real, con <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>σ</mi><mi>θ</mi></msub><mo>≈</mo><msup><mn>50</mn><mo>∘</mo></msup></mrow><annotation encoding="application/x-tex">\sigma_\theta \approx 50^\circ</annotation></semantics></math>; se relanzó la demo y se condujo más despacio.</p>
+<section id="10-el-notebook-ejercicio-a-ejercicio" class="level2">
+<h2>10. El notebook, ejercicio a ejercicio</h2>
+<p>Como la 4.3, este notebook es una guía de laboratorio: los comandos se ejecutan en la VM y en el notebook se pegan sus salidas y capturas.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Parte</th>
+<th>Qué se pide</th>
+<th>Con qué se hace</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Assignment 1</td>
+<td>Lanzar la demo, ver los nodos, las entradas y salidas de AMCL y el árbol tf</td>
+<td><code>ros2 launch</code>, <code>ros2 node list/info</code>, <code>view_frames</code></td>
+</tr>
+<tr>
+<td>Assignment 2</td>
+<td>Comparar la pose real, la odometría y AMCL</td>
+<td><code>ros2 topic echo --field pose.pose</code></td>
+</tr>
+<tr>
+<td>Assignment 3</td>
+<td>Ver cuántas partículas usa AMCL y sus pesos</td>
+<td><code>echo --no-arr</code>, <code>| head -c 2000</code></td>
+</tr>
+<tr>
+<td>Assignment 4</td>
+<td>Leer la covarianza de la pose</td>
+<td><code>ros2 topic echo --once /amcl_pose</code></td>
+</tr>
+<tr>
+<td>Assignment 5</td>
+<td>Localización global y robot secuestrado</td>
+<td><code>ros2 service call</code>, <em>2D Pose Estimate</em></td>
+</tr>
+<tr>
+<td>Assignment 6</td>
+<td>Qué pasa con muy pocas partículas</td>
+<td><code>ros2 param set</code></td>
+</tr>
+<tr>
+<td>Thinking about it y opcionales</td>
+<td>Por qué hace falta AMCL; más partículas; navegar con Nav2</td>
+<td>Razonamiento</td>
+</tr>
+</tbody>
+</table>
+<p>En cada uno se explica <strong>qué pide el enunciado</strong>, <strong>cómo se resuelve</strong>, <strong>para qué sirve cada comando</strong> y qué salió en la VM.</p>
+<section id="101-assignment-1-lanzar-la-demo-y-conocer-amcl" class="level3">
+<h3>10.1. Assignment 1: lanzar la demo y conocer AMCL</h3>
+<p><strong>Qué se pide.</strong> (1) Lanzar la demo y conducir el robot; (2) listar los nodos y averiguar los topics de entrada y salida de AMCL; (3) generar el árbol tf; (4) explicar por qué AMCL publica <code>map → noisy_odom</code> y no <code>map → base_link</code>.</p>
+<p><strong>Cómo se resuelve.</strong></p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Comando</th>
+<th>Para qué sirve</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>colcon build</code> y <code>source install/setup.bash</code></td>
+<td>Compilar el workspace de la demo y cargarlo en la terminal</td>
+</tr>
+<tr>
+<td><code>ros2 launch particle_filter_demo demo_warehouse.launch.py</code></td>
+<td>Arrancar el simulador, el mapa, AMCL, la odometría y RViz2</td>
+</tr>
+<tr>
+<td><code>ros2 node list</code></td>
+<td>Ver los nodos activos (apartado 3)</td>
+</tr>
+<tr>
+<td><code>ros2 node info /amcl</code></td>
+<td>Sus suscripciones (entradas) y publicaciones (salidas) (apartado 4)</td>
+</tr>
+<tr>
+<td><code>ros2 run tf2_tools view_frames</code></td>
+<td>El diagrama del árbol tf (apartado 7)</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> launch particle_filter_demo demo_warehouse.launch.py</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> node list                 <span class="co"># /amcl, /map_server, /mvsim, /odom_sim, /rviz2, ...</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> node info /amcl           <span class="co"># Subscribers: /initialpose, /map, /scanner1, ...  Publishers: /amcl_pose, /particle_cloud, /tf</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> run tf2_tools view_frames</span></code></pre></div>
+<p><strong>Qué sale.</strong> El árbol <code>map → noisy_odom → base_link → {scanner1, base_footprint}</code>. AMCL no puede publicar <code>map → base_link</code> porque <code>base_link</code> ya tiene un padre (<code>noisy_odom</code>) y cada frame solo puede tener uno: publica la corrección <code>map → noisy_odom</code>, y la composición de los dos tramos da la pose en el mapa.</p>
+</section>
+<section id="102-assignment-2-quién-sabe-dónde-está-el-robot" class="level3">
+<h3>10.2. Assignment 2: ¿quién sabe dónde está el robot?</h3>
+<p><strong>Qué se pide.</strong> Activar <code>pose_GT</code> en RViz2, conducir un par de minutos girando mucho, parar y comparar la pose real (<code>/base_pose_ground_truth</code>), la odometría (<code>/noisy_odom</code>) y AMCL (<code>/amcl_pose</code>), con el error de cada una.</p>
+<p><strong>Cómo se resuelve.</strong> Se imprime solo la pose de cada mensaje con <code>--field pose.pose</code> y se calcula la distancia euclídea a la real (cálculo 11.1).</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> topic echo <span class="at">--once</span> /base_pose_ground_truth <span class="at">--field</span> pose.pose   <span class="co"># (2.944, -0.175)</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> topic echo <span class="at">--once</span> /noisy_odom <span class="at">--field</span> pose.pose               <span class="co"># (1.633, -3.545)</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> topic echo <span class="at">--once</span> /amcl_pose <span class="at">--field</span> pose.pose                <span class="co"># (2.988, -0.064)</span></span></code></pre></div>
+<p><strong>Qué sale.</strong> Error de <strong>3.62 m</strong> para la odometría y <strong>0.12 m</strong> para AMCL. El de la odometría crece sin límite, porque nada lo corrige; el de AMCL queda acotado, porque el láser y el mapa lo corrigen cada poco. Un primer intento, conduciendo demasiado rápido, acabó a unos 13 m: se relanzó y se condujo más despacio.</p>
 <figure>
 <img src="../../Practicas/uma_robotics_2027/Chapter%2005.%20Localization/img/5.4_captura_assignment2_tres_poses.png" alt="Comparación de las poses real, odométrica y AMCL" />
 <figcaption aria-hidden="true">Comparación de las poses real, odométrica y AMCL</figcaption>
 </figure>
 </section>
-<section id="102-incertidumbre-y-número-de-partículas" class="level3">
-<h3>10.2. Incertidumbre y número de partículas</h3>
-<p>Con la configuración normal, AMCL publicó 501 partículas de pesos iguales. La covarianza de la pose bien localizada corresponde a incertidumbres de unos 7 cm en <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>x</mi><annotation encoding="application/x-tex">x</annotation></semantics></math>, 11 cm en <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>y</mi><annotation encoding="application/x-tex">y</annotation></semantics></math> y 6° en yaw.</p>
+<section id="103-assignment-3-las-partículas" class="level3">
+<h3>10.3. Assignment 3: las partículas</h3>
+<p><strong>Qué se pide.</strong> (1) Ver cuántas partículas <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>M</mi><annotation encoding="application/x-tex">M</annotation></semantics></math> usa AMCL y por qué; (2) imprimir las partículas y fijarse en sus pesos.</p>
+<p><strong>Cómo se resuelve.</strong> El mensaje es muy largo: <code>--no-arr</code> lo resume y <code>| head -c 2000</code> corta la salida a los primeros 2000 caracteres.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> topic echo <span class="at">--once</span> <span class="at">--no-arr</span> /particle_cloud          <span class="co"># summary of the message</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> topic echo <span class="at">--once</span> /particle_cloud <span class="kw">|</span> <span class="fu">head</span> <span class="at">-c</span> 2000   <span class="co"># first particles: pose and weight</span></span></code></pre></div>
+<p><strong>Qué sale.</strong> 501 partículas, con <code>min_particles: 500</code>: KLD-sampling adapta el número y con la creencia concentrada se queda en el mínimo (más una). Todos los pesos valen <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi>/</mi><mn>501</mn><mo>=</mo><mn>0.001996</mn></mrow><annotation encoding="application/x-tex">1/501 = 0.001996</annotation></semantics></math>, porque el mensaje se publica justo después del remuestreo (cálculo 11.5).</p>
+</section>
+<section id="104-assignment-4-la-covarianza" class="level3">
+<h3>10.4. Assignment 4: la covarianza</h3>
+<p><strong>Qué se pide.</strong> Imprimir <code>/amcl_pose</code>, calcular <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>σ</mi><mi>x</mi></msub><annotation encoding="application/x-tex">\sigma_x</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>σ</mi><mi>y</mi></msub><annotation encoding="application/x-tex">\sigma_y</annotation></semantics></math> y <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>σ</mi><mi>θ</mi></msub><annotation encoding="application/x-tex">\sigma_\theta</annotation></semantics></math> y compararlas con la elipse y el cono de RViz2.</p>
+<p><strong>Cómo se resuelve.</strong> La covarianza son 36 valores de una matriz 6×6 sobre <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mi>x</mi><mo>,</mo><mi>y</mi><mo>,</mo><mi>z</mi><mo>,</mo><mtext mathvariant="normal">roll</mtext><mo>,</mo><mtext mathvariant="normal">pitch</mtext><mo>,</mo><mtext mathvariant="normal">yaw</mtext><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(x, y, z, \text{roll}, \text{pitch}, \text{yaw})</annotation></semantics></math>, fila a fila: las varianzas están en los índices 0, 7 y 35 (apartado 9). La desviación típica es la raíz.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> topic echo <span class="at">--once</span> /amcl_pose</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co"># covariance: [0] = 0.0055382 (var x), [1] = [6] = 0.000123 (cov xy), [7] = 0.0129898 (var y), [35] = 0.0118166 (var yaw)</span></span></code></pre></div>
+<p><strong>Qué sale.</strong> <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>σ</mi><mi>x</mi></msub><mo>=</mo><mn>0.074</mn></mrow><annotation encoding="application/x-tex">\sigma_x = 0.074</annotation></semantics></math> m, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>σ</mi><mi>y</mi></msub><mo>=</mo><mn>0.114</mn></mrow><annotation encoding="application/x-tex">\sigma_y = 0.114</annotation></semantics></math> m y <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>σ</mi><mi>θ</mi></msub><mo>=</mo><mn>0.109</mn></mrow><annotation encoding="application/x-tex">\sigma_\theta = 0.109</annotation></semantics></math> rad <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>=</mo><mn>6.2</mn><mi>°</mi></mrow><annotation encoding="application/x-tex">= 6.2°</annotation></semantics></math> (cálculo 11.2), del tamaño de la elipse y el cono.</p>
 <figure>
 <img src="../../Practicas/uma_robotics_2027/Chapter%2005.%20Localization/img/5.4_captura_assignment4_elipse.png" alt="Elipse de incertidumbre y orientación en RViz2" />
 <figcaption aria-hidden="true">Elipse de incertidumbre y orientación en RViz2</figcaption>
 </figure>
 </section>
-<section id="103-global-localization-y-secuestro" class="level3">
-<h3>10.3. Global localization y secuestro</h3>
-<p>La localización global comenzó con hasta 5000 partículas. En este almacén repetitivo, AMCL convergió a un pasillo equivocado, a <strong>21.4 m</strong> de la pose real. Es un resultado contemplado por el enunciado: muchos pasillos generan observaciones láser similares.</p>
+<section id="105-assignment-5-perderse-y-volver-a-encontrarse" class="level3">
+<h3>10.5. Assignment 5: perderse y volver a encontrarse</h3>
+<p><strong>Qué se pide.</strong> (1) <strong>Localización global</strong>: averiguar el tipo del servicio <code>/reinitialize_global_localization</code>, llamarlo y conducir hasta que las partículas converjan. ¿Convergen al sitio correcto? (2) <strong>Robot secuestrado</strong>: con <em>2D Pose Estimate</em> de RViz2, decirle a AMCL que el robot está en otro sitio y ver si se recupera.</p>
+<p><strong>Cómo se resuelve.</strong></p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Comando o herramienta</th>
+<th>Para qué sirve</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ros2 service type /reinitialize_global_localization</code></td>
+<td>Saber qué tipo de petición espera: <code>std_srvs/srv/Empty</code>, sin datos</td>
+</tr>
+<tr>
+<td><code>ros2 service call ... std_srvs/srv/Empty</code></td>
+<td>Repartir las partículas por todo el espacio libre del mapa</td>
+</tr>
+<tr>
+<td><em>2D Pose Estimate</em> (RViz2)</td>
+<td>Publicar en <code>/initialpose</code> una pose falsa con su covarianza</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> service type /reinitialize_global_localization       <span class="co"># std_srvs/srv/Empty</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> service call /reinitialize_global_localization std_srvs/srv/Empty</span></code></pre></div>
+<p><strong>Qué sale.</strong> La global empieza con hasta 5000 partículas (<code>max_particles</code>), repartidas por los pasillos. En este almacén repetitivo convergió a un pasillo equivocado, a <strong>21.4 m</strong> de la pose real: muchos pasillos dan scans parecidos. El secuestro se probó partiendo de AMCL ya perdido y no se recuperó (quedó a 23.6 m); además, <code>odom_simulator</code> también escucha <code>/initialpose</code> y reinicia la odometría.</p>
 <figure>
 <img src="../../Practicas/uma_robotics_2027/Chapter%2005.%20Localization/img/5.4_captura_assignment5_global_convergido.png" alt="Convergencia de la localización global al pasillo equivocado" />
 <figcaption aria-hidden="true">Convergencia de la localización global al pasillo equivocado</figcaption>
 </figure>
-<p>El secuestro se probó partiendo de AMCL ya perdido tras la globalización. No se cronometró y no se recuperó durante la prueba: la pose quedó a <strong>23.6 m</strong> de la real. Además, <code>odom_simulator</code> también está suscrito a <code>/initialpose</code> y reinicia la odometría al recibir la pose falsa.</p>
 <figure>
 <img src="../../Practicas/uma_robotics_2027/Chapter%2005.%20Localization/img/5.4_captura_assignment5_secuestro_despues.png" alt="AMCL después del secuestro, concentrado en un pasillo equivocado" />
 <figcaption aria-hidden="true">AMCL después del secuestro, concentrado en un pasillo equivocado</figcaption>
 </figure>
 </section>
-<section id="104-solo-20-partículas" class="level3">
-<h3>10.4. Solo 20 partículas</h3>
-<p>Al limitar la nube a 20 partículas, el error de posición fue de <strong>0.80 m</strong>. La covarianza subestimaba el error real; la distancia de Mahalanobis fue aproximadamente 4.9. Con tan pocas partículas, la diversidad se pierde con facilidad y muchas partículas pueden ser copias concentradas en una pose incorrecta.</p>
+<section id="106-assignment-6-cuántas-partículas-hacen-falta" class="level3">
+<h3>10.6. Assignment 6: ¿cuántas partículas hacen falta?</h3>
+<p><strong>Qué se pide.</strong> Bajar a <code>min_particles = 10</code> y <code>max_particles = 20</code>, dar a AMCL la pose correcta, conducir girando y comparar <code>pose_AMCL</code> con <code>pose_GT</code>. ¿Mejor o peor? ¿La elipse refleja el error real?</p>
+<p><strong>Cómo se resuelve.</strong> Los parámetros se cambian en el nodo en marcha con <code>ros2 param set</code>, y el error se mide como en el Assignment 2.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> param set /amcl min_particles 10</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> param set /amcl max_particles 20</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> topic echo <span class="at">--once</span> /base_pose_ground_truth <span class="at">--field</span> pose.pose.position</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> topic echo <span class="at">--once</span> /amcl_pose</span></code></pre></div>
+<p><strong>Qué sale.</strong> Un error de <strong>0.80 m</strong>, peor que con los valores por defecto, y una covarianza demasiado optimista: la distancia de Mahalanobis del error es unos 4.9. Con tan pocas partículas se pierde la diversidad y muchas son copias de una pose incorrecta (cálculo 11.4).</p>
 <figure>
 <img src="../../Practicas/uma_robotics_2027/Chapter%2005.%20Localization/img/5.4_captura_assignment6_pocas_particulas.png" alt="Estimación con un máximo de 20 partículas" />
 <figcaption aria-hidden="true">Estimación con un máximo de 20 partículas</figcaption>
 </figure>
+</section>
+<section id="107-thinking-about-it-y-opcionales" class="level3">
+<h3>10.7. Thinking about it y opcionales</h3>
+<ul>
+<li><strong>¿Por qué hace falta AMCL si al principio la odometría es igual de buena?</strong> Porque el error de la odometría crece sin límite y AMCL lo mantiene acotado corrigiendo con el láser y el mapa. Además, AMCL da la pose en el marco del <strong>mapa</strong>.</li>
+<li><strong>Opcionales</strong> (no se hicieron en la práctica). Con más partículas para la global (<code>max_particles = 20000</code>) cabe esperar que converja al sitio correcto más a menudo, a cambio de más cómputo por actualización. Con Nav2 (<code>nav2:=True</code>), un planificador calcula la ruta sobre un costmap y un controlador envía las velocidades, usando la pose de AMCL.</li>
+</ul>
 </section>
 </section>
 <section id="11-cálculos-resueltos" class="level2">
@@ -479,8 +634,8 @@ y=2+\sin(\pi/2)\cdot2+\cos(\pi/2)\cdot0=4,\qquad
 <p>Todos los valores anteriores se comprobaron con Python usando las cifras del notebook.</p>
 </section>
 </section>
-<section id="12-errores-típicos" class="level2">
-<h2>12. Errores típicos</h2>
+<section id="12-confusiones-frecuentes" class="level2">
+<h2>12. Confusiones frecuentes</h2>
 <ul>
 <li>Confundir AMCL con la odometría: la odometría predice el movimiento; AMCL además corrige con scan y mapa.</li>
 <li>Suponer que AMCL actualiza con cada muestra de odometría: espera a superar <code>update_min_d</code> o <code>update_min_a</code>.</li>
@@ -494,24 +649,8 @@ y=2+\sin(\pi/2)\cdot2+\cos(\pi/2)\cdot0=4,\qquad
 <li>Concluir que el secuestro falló solo por el algoritmo: en esta prueba se partió de AMCL ya perdido y el simulador de odometría también respondió a <code>/initialpose</code>.</li>
 </ul>
 </section>
-<section id="13-rellena-el-hueco" class="level2">
-<h2>13. Rellena el hueco</h2>
-<p>Completa cada comando o expresión:</p>
-<ol type="1">
-<li>Inspeccionar suscripciones y publicadores de AMCL: <code>ros2 node _____ /amcl</code>.</li>
-<li>Leer la nube sin desplegar todos los elementos: <code>ros2 topic echo --once /particle_cloud _____</code>.</li>
-<li>Extraer solo la posición: <code>ros2 topic echo --once /amcl_pose --field _____</code>.</li>
-<li>Consultar el tipo del servicio: <code>ros2 service _____ /reinitialize_global_localization</code>.</li>
-<li>Ejecutar la localización global: <code>ros2 service call /reinitialize_global_localization _____</code>.</li>
-<li>Cambiar el máximo de partículas: <code>ros2 param set /amcl _____ 20</code>.</li>
-<li>Crear un diagrama del árbol: <code>ros2 run tf2_tools _____</code>.</li>
-<li>Combinar la pose de AMCL: <code>x_AMCL = (map → _____) ⊕ (_____ → base_link)</code>.</li>
-<li>Recuperar el yaw plano de un cuaternión: <code>yaw = 2 · atan2(_____, _____)</code>.</li>
-</ol>
-<p><strong>Soluciones:</strong> 1) <code>info</code>; 2) <code>--no-arr</code>; 3) <code>pose.pose.position</code>; 4) <code>type</code>; 5) <code>std_srvs/srv/Empty</code>; 6) <code>max_particles</code>; 7) <code>view_frames</code>; 8) <code>noisy_odom</code>, <code>noisy_odom</code>; 9) <code>z</code>, <code>w</code>.</p>
-</section>
-<section id="14-preguntas-de-repaso-con-solución" class="level2">
-<h2>14. Preguntas de repaso con solución</h2>
+<section id="13-preguntas-de-repaso-con-solución" class="level2">
+<h2>13. Preguntas de repaso con solución</h2>
 <ol type="1">
 <li><strong>¿Qué añade AMCL al filtro de partículas de la 5.3?</strong> KLD-sampling para adaptar el número de partículas y Augmented MCL para inyectar poses aleatorias si cae la verosimilitud reciente.</li>
 <li><strong>¿Qué hace <code>/initialpose</code>?</strong> Da una pose inicial con covarianza a AMCL. En esta demo también la recibe <code>odom_simulator</code>.</li>
@@ -523,8 +662,8 @@ y=2+\sin(\pi/2)\cdot2+\cos(\pi/2)\cdot0=4,\qquad
 <li><strong>¿Por qué conservar odometría si deriva?</strong> Proporciona una buena predicción a corto plazo; las observaciones del láser y el mapa corrigen la deriva acumulada.</li>
 </ol>
 </section>
-<section id="15-ideas-esenciales-para-recordar" class="level2">
-<h2>15. Ideas esenciales para recordar</h2>
+<section id="14-ideas-esenciales-para-recordar" class="level2">
+<h2>14. Ideas esenciales para recordar</h2>
 <ul>
 <li>AMCL combina odometría, un mapa y un láser para localizar un robot con partículas.</li>
 <li>KLD-sampling adapta el número de partículas; Augmented MCL inyecta poses aleatorias si la calidad reciente cae.</li>

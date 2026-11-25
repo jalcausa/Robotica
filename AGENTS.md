@@ -34,4 +34,5 @@ En la raíz solo están `Teoria/`, `Practicas/`, `web/` e `index.html`.
 
 - Cada lección lleva su **resumen completo** de teoría además de preguntas.
 - Teoría: el examen pide **pequeños cálculos aplicando las fórmulas** → fórmulas destacadas y ejemplos numéricos resueltos paso a paso.
-- Prácticas: el examen pregunta sobre **el código del notebook** (detectar la línea con el error, rellenar huecos) → las guías recorren el código línea a línea y el test incluye preguntas numéricas, de huecos en código y de localizar errores.
+- Prácticas: el examen pregunta sobre **el código del notebook** (detectar la línea con el error, rellenar huecos). Las guías recorren el notebook **ejercicio a ejercicio**: qué pide el enunciado, cómo se resuelve, para qué sirve cada bloque del código (en una tabla) y después el código con lo que debe salir. Los ejercicios de **encontrar el error y rellenar huecos van solo en el test**, no en las guías; al quitarlos de una guía, comprobar que cada uno está en el test.
+- Los bloques de código de la web tienen resaltado de sintaxis: Pandoc marca los tokens, `mark_python_calls()` en `generar_web.py` marca las llamadas a funciones y los colores están en `web/assets/resumenes.css`. Todo bloque de código del Markdown debe llevar su lenguaje (`python`, `bash`, `xml` o `text` para salidas).

@@ -6,7 +6,7 @@
   <meta name="color-scheme" content="light">
   <title>P3.2 · Modelo basado en velocidad | RoboTest</title>
   <link rel="stylesheet" href="../assets/robotest.css?v=83d15755">
-  <link rel="stylesheet" href="../assets/resumenes.css?v=1a06a11b">
+  <link rel="stylesheet" href="../assets/resumenes.css?v=cd58c869">
   <script src="../assets/resumenes.js?v=5ba61f92" defer></script>
 </head>
 <body>
@@ -359,17 +359,17 @@
 </section>
 <section id="13-cómo-se-implementa-en-el-notebook" class="level2">
 <h2>13. Cómo se implementa en el notebook</h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> next_pose(x, u, dt, cov<span class="op">=</span><span class="va">None</span>):</span>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> <span class="fu">next_pose</span>(x, u, dt, cov<span class="op">=</span><span class="va">None</span>):</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> cov <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>        u <span class="op">+=</span> np.sqrt(cov) <span class="op">@</span> random.randn(<span class="dv">2</span>, <span class="dv">1</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>        u <span class="op">+=</span> np.<span class="fu">sqrt</span>(cov) <span class="op">@</span> random.<span class="fu">randn</span>(<span class="dv">2</span>, <span class="dv">1</span>)</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> u[<span class="dv">1</span>] <span class="op">==</span> <span class="dv">0</span>:</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>        next_x <span class="op">=</span> np.vstack([x[<span class="dv">0</span>] <span class="op">+</span> u[<span class="dv">0</span>]<span class="op">*</span>dt<span class="op">*</span>np.cos(x[<span class="dv">2</span>]),</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>                            x[<span class="dv">1</span>] <span class="op">+</span> u[<span class="dv">0</span>]<span class="op">*</span>dt<span class="op">*</span>np.sin(x[<span class="dv">2</span>]),</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>        next_x <span class="op">=</span> np.<span class="fu">vstack</span>([x[<span class="dv">0</span>] <span class="op">+</span> u[<span class="dv">0</span>]<span class="op">*</span>dt<span class="op">*</span>np.<span class="fu">cos</span>(x[<span class="dv">2</span>]),</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>                            x[<span class="dv">1</span>] <span class="op">+</span> u[<span class="dv">0</span>]<span class="op">*</span>dt<span class="op">*</span>np.<span class="fu">sin</span>(x[<span class="dv">2</span>]),</span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>                            x[<span class="dv">2</span>]])</span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>        R <span class="op">=</span> u[<span class="dv">0</span>]<span class="op">/</span>u[<span class="dv">1</span>]</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>        next_x <span class="op">=</span> np.vstack([x[<span class="dv">0</span>] <span class="op">-</span> R<span class="op">*</span>np.sin(x[<span class="dv">2</span>]) <span class="op">+</span> R<span class="op">*</span>np.sin(x[<span class="dv">2</span>] <span class="op">+</span> u[<span class="dv">1</span>]<span class="op">*</span>dt),</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>                            x[<span class="dv">1</span>] <span class="op">+</span> R<span class="op">*</span>np.cos(x[<span class="dv">2</span>]) <span class="op">-</span> R<span class="op">*</span>np.cos(x[<span class="dv">2</span>] <span class="op">+</span> u[<span class="dv">1</span>]<span class="op">*</span>dt),</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>        next_x <span class="op">=</span> np.<span class="fu">vstack</span>([x[<span class="dv">0</span>] <span class="op">-</span> R<span class="op">*</span>np.<span class="fu">sin</span>(x[<span class="dv">2</span>]) <span class="op">+</span> R<span class="op">*</span>np.<span class="fu">sin</span>(x[<span class="dv">2</span>] <span class="op">+</span> u[<span class="dv">1</span>]<span class="op">*</span>dt),</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>                            x[<span class="dv">1</span>] <span class="op">+</span> R<span class="op">*</span>np.<span class="fu">cos</span>(x[<span class="dv">2</span>]) <span class="op">-</span> R<span class="op">*</span>np.<span class="fu">cos</span>(x[<span class="dv">2</span>] <span class="op">+</span> u[<span class="dv">1</span>]<span class="op">*</span>dt),</span>
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>                            x[<span class="dv">2</span>] <span class="op">+</span> u[<span class="dv">1</span>]<span class="op">*</span>dt])</span>
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> next_x</span></code></pre></div>
 <ul>

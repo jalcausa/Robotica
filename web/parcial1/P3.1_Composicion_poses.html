@@ -6,7 +6,7 @@
   <meta name="color-scheme" content="light">
   <title>P3.1 · Composición de poses | RoboTest</title>
   <link rel="stylesheet" href="../assets/robotest.css?v=83d15755">
-  <link rel="stylesheet" href="../assets/resumenes.css?v=1a06a11b">
+  <link rel="stylesheet" href="../assets/resumenes.css?v=cd58c869">
   <script src="../assets/resumenes.js?v=5ba61f92" defer></script>
 </head>
 <body>
@@ -218,9 +218,9 @@ y_1+\Delta x\sin\theta_1+\Delta y\cos\theta_1\\
 <section id="10-cómo-se-representa-en-el-notebook" class="level2">
 <h2>10. Cómo se representa en el notebook</h2>
 <p>Las poses y los incrementos se guardan como vectores columna de NumPy, con forma <code>(3, 1)</code>:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>pose <span class="op">=</span> np.vstack([<span class="fl">0.0</span>, <span class="fl">0.0</span>, np.pi <span class="op">/</span> <span class="dv">2</span>])</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>u <span class="op">=</span> np.vstack([<span class="fl">2.0</span>, <span class="fl">0.0</span>, <span class="fl">0.0</span>])</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>new_pose <span class="op">=</span> tcomp(pose, u)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>pose <span class="op">=</span> np.<span class="fu">vstack</span>([<span class="fl">0.0</span>, <span class="fl">0.0</span>, np.pi <span class="op">/</span> <span class="dv">2</span>])</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>u <span class="op">=</span> np.<span class="fu">vstack</span>([<span class="fl">2.0</span>, <span class="fl">0.0</span>, <span class="fl">0.0</span>])</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>new_pose <span class="op">=</span> <span class="fu">tcomp</span>(pose, u)</span></code></pre></div>
 <ul>
 <li><code>pose</code>: pose global estimada.</li>
 <li><code>u</code>: incremento expresado en los ejes locales de la pose actual.</li>

@@ -6,7 +6,7 @@
   <meta name="color-scheme" content="light">
   <title>P3.3 · Modelo basado en odometría | RoboTest</title>
   <link rel="stylesheet" href="../assets/robotest.css?v=83d15755">
-  <link rel="stylesheet" href="../assets/resumenes.css?v=1a06a11b">
+  <link rel="stylesheet" href="../assets/resumenes.css?v=cd58c869">
   <script src="../assets/resumenes.js?v=5ba61f92" defer></script>
 </head>
 <body>
@@ -441,10 +441,10 @@ J_u = \frac{\partial g_o}{\partial\Delta\mathbf{x}} = \begin{bmatrix}
 <h2>15. Cómo se implementa en el notebook</h2>
 <p><strong><code>Robot</code> (forma analítica):</strong></p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>prev_pose <span class="op">=</span> <span class="va">self</span>.pose</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="va">self</span>.pose <span class="op">=</span> tcomp(prev_pose, u)                                      <span class="co"># mean</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>noisy_u <span class="op">=</span> np.vstack(stats.multivariate_normal.rvs(mean<span class="op">=</span>u.ravel(), cov<span class="op">=</span><span class="va">self</span>.Q))</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="va">self</span>.true_pose <span class="op">=</span> tcomp(<span class="va">self</span>.true_pose, noisy_u)                      <span class="co"># simulated ground truth</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>JacF_x, JacF_u <span class="op">=</span> J1(prev_pose, u), J2(prev_pose, u)                  <span class="co"># at the previous pose</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="va">self</span>.pose <span class="op">=</span> <span class="fu">tcomp</span>(prev_pose, u)                                      <span class="co"># mean</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>noisy_u <span class="op">=</span> np.<span class="fu">vstack</span>(stats.multivariate_normal.<span class="fu">rvs</span>(mean<span class="op">=</span>u.<span class="fu">ravel</span>(), cov<span class="op">=</span><span class="va">self</span>.Q))</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="va">self</span>.true_pose <span class="op">=</span> <span class="fu">tcomp</span>(<span class="va">self</span>.true_pose, noisy_u)                      <span class="co"># simulated ground truth</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>JacF_x, JacF_u <span class="op">=</span> <span class="fu">J1</span>(prev_pose, u), <span class="fu">J2</span>(prev_pose, u)                  <span class="co"># at the previous pose</span></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="va">self</span>.P <span class="op">=</span> JacF_x <span class="op">@</span> <span class="va">self</span>.P <span class="op">@</span> JacF_x.T <span class="op">+</span> JacF_u <span class="op">@</span> <span class="va">self</span>.Q <span class="op">@</span> JacF_u.T     <span class="co"># covariance</span></span></code></pre></div>
 <ul>
 <li>La <strong>pose real</strong> es una simulación de lo que «de verdad» le pasa al robot: un incremento muestreado de <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝒩</mi><mo stretchy="false" form="prefix">(</mo><mi>𝐮</mi><mo>,</mo><mi>Q</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\mathcal{N}(\mathbf{u}, Q)</annotation></semantics></math>, compuesto sobre la pose real anterior. En un robot real no se conoce; aquí sirve para comprobar que la elipse la contiene.</li>

@@ -98,7 +98,7 @@ PARCIALES = [
                 "lesson": "L4",
                 "source": TEORIA / "Parcial-2/Guias_practicas/P4.1_Landmarks.md",
                 "title": "Modelos basados en landmarks",
-                "subtitle": "Práctica 4.1: observaciones rango-bearing, cambio de coordenadas e incertidumbre, línea a línea.",
+                "subtitle": "Práctica 4.1: observaciones rango-bearing, cambio de coordenadas e incertidumbre, ejercicio a ejercicio.",
             },
             {
                 "key": "P4.2",
@@ -119,14 +119,14 @@ PARCIALES = [
                 "lesson": "L5",
                 "source": TEORIA / "Parcial-2/Guias_practicas/P5.2_EKF_Localization.md",
                 "title": "Localización con EKF",
-                "subtitle": "Práctica 5.2: predicción y corrección del filtro de Kalman extendido, línea a línea.",
+                "subtitle": "Práctica 5.2: predicción y corrección del filtro de Kalman extendido, ejercicio a ejercicio.",
             },
             {
                 "key": "P5.3",
                 "lesson": "L5",
                 "source": TEORIA / "Parcial-2/Guias_practicas/P5.3_Particle_Filter.md",
                 "title": "Filtro de partículas",
-                "subtitle": "Práctica 5.3: predicción, verosimilitudes, estimación y remuestreo SIR, línea a línea.",
+                "subtitle": "Práctica 5.3: predicción, verosimilitudes, estimación y remuestreo SIR, ejercicio a ejercicio.",
             },
             {
                 "key": "P5.4",
@@ -140,7 +140,7 @@ PARCIALES = [
                 "lesson": "L6",
                 "source": TEORIA / "Parcial-2/Guias_practicas/P6.3_Occupancy_grid_mapping.md",
                 "title": "Mapas de rejilla de ocupación",
-                "subtitle": "Práctica 6.3: extremos de los haces, Bresenham, modelo inverso del sensor y log odds, línea a línea.",
+                "subtitle": "Práctica 6.3: extremos de los haces, Bresenham, modelo inverso del sensor y log odds, ejercicio a ejercicio.",
             },
         ],
         # Repaso de todo el parcial: va en el menú y como último paso de estudio de la ruta, antes de la pasada completa.
@@ -228,6 +228,30 @@ def relink(rendered, source, output):
     return re.sub(r'\b(src|href)="([^"]*)"', fix, rendered)
 
 
+PYTHON_BLOCK = re.compile(r'(<code class="sourceCode python">)(.*?)(</code>)', re.S)
+TOKEN_SPAN = re.compile(r'<span class="\w\w">')
+CALL = re.compile(r'\b([A-Za-z_]\w*)(?=\s*\()')
+
+
+def mark_python_calls(rendered):
+    # Pandoc no marca las llamadas a funciones en Python; se envuelven en <span class="fu"> para colorearlas.
+    # Solo se toca el texto que no está ya dentro de un token (comentarios, cadenas, palabras clave...).
+    def block(match):
+        parts, depth = [], 0
+        for piece in re.split(r'(<[^>]+>)', match.group(2)):
+            if piece.startswith("<"):
+                if TOKEN_SPAN.fullmatch(piece):
+                    depth += 1
+                elif piece == "</span>" and depth:
+                    depth -= 1
+                parts.append(piece)
+            else:
+                parts.append(piece if depth else CALL.sub(r'<span class="fu">\1</span>', piece))
+        return match.group(1) + "".join(parts) + match.group(3)
+
+    return PYTHON_BLOCK.sub(block, rendered)
+
+
 def toc_html(headings):
     groups = []
     for level, identifier, title in headings:
@@ -292,6 +316,7 @@ def build(page):
         capture_output=True, text=True, check=True,
     ).stdout
     rendered = relink(rendered, source, output)
+    rendered = mark_python_calls(rendered)
     outline = Outline()
     outline.feed(rendered)
     chapters, total = toc_html(outline.headings)

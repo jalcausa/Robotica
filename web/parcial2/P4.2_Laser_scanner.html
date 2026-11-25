@@ -6,7 +6,7 @@
   <meta name="color-scheme" content="light">
   <title>P4.2 · Escáner láser | RoboTest</title>
   <link rel="stylesheet" href="../assets/robotest.css?v=83d15755">
-  <link rel="stylesheet" href="../assets/resumenes.css?v=1a06a11b">
+  <link rel="stylesheet" href="../assets/resumenes.css?v=cd58c869">
   <script src="../assets/resumenes.js?v=5ba61f92" defer></script>
 </head>
 <body>
@@ -22,18 +22,18 @@
         <h1 id="hero-title">Escáner láser<span class="hero-period">.</span></h1>
         <p>Práctica 4.2: simulación de un láser 2D, del barrido polar a puntos en el mapa.</p>
         <div class="hero-actions"><a class="button primary" href="#apuntes">Empezar a leer <span aria-hidden="true">↘</span></a><button type="button" class="button subtle study-check" data-roadmap-key="robotica-ruta-parcial2-v1" data-step="study:P4.2" aria-pressed="false">Marcar como estudiado</button><a class="button subtle" href="index.html?lesson=P4.2#filters">Practicar el tema</a></div>
-        <div class="lesson-facts"><span>14 bloques de lectura</span><span>270 fórmulas renderizadas</span><span>Sin conexión</span></div>
+        <div class="lesson-facts"><span>12 bloques de lectura</span><span>298 fórmulas renderizadas</span><span>Sin conexión</span></div>
       </div>
       <div class="hero-art" aria-hidden="true"><div class="grid-plane"></div><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="robot-icon"><span class="eye"></span><span class="eye"></span></div><div class="beacon beacon-a"></div><div class="beacon beacon-b"></div><span class="art-label label-a">SENSE</span><span class="art-label label-b">PLAN</span><span class="art-label label-c">ACT</span></div>
     </section>
     <div class="reading-wrap" id="apuntes">
       <section id="study-tracker" class="study-tracker" aria-label="Tu progreso" data-roadmap-key="robotica-ruta-parcial2-v1" data-page="P4.2" data-minutes="55" data-route-url="index.html#ruta" data-companions-title="Resto del tema L4" data-companions="[{&quot;key&quot;: &quot;L4&quot;, &quot;title&quot;: &quot;Percepción del robot&quot;, &quot;href&quot;: &quot;Resumen_L4_Percepcion_Robot.html&quot;, &quot;lesson&quot;: true}, {&quot;key&quot;: &quot;P4.1&quot;, &quot;title&quot;: &quot;Modelos basados en landmarks&quot;, &quot;href&quot;: &quot;P4.1_Landmarks.html&quot;, &quot;lesson&quot;: false}, {&quot;key&quot;: &quot;P4.3&quot;, &quot;title&quot;: &quot;Sensores con ROS 2&quot;, &quot;href&quot;: &quot;P4.3_Playing_with_ROS2.html&quot;, &quot;lesson&quot;: false}]"></section>
       <div class="reading-intro"><div><span class="overline">P4.2 / LECTURA</span><h2>Todo el contenido, mejor organizado.</h2><p>Índice navegable, secciones cortas y fórmulas legibles. El contenido del apunte original se mantiene íntegro.</p></div><a class="original-link" href="../../Teoria/Parcial-2/Guias_practicas/P4.2_Laser_scanner.md">Ver Markdown original ↗</a></div>
-      <details class="mobile-toc"><summary>Índice de contenidos <span aria-hidden="true">⌄</span></summary><nav class="toc-items" aria-label="Apartados de la página"><details class="toc-chapter" open><summary><span class="toc-number">·</span><span>Índice</span></summary><div class="toc-links"><a href="#índice">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">01</span><span>Objetivo y lugar en el temario</span></summary><div class="toc-links"><a href="#1-objetivo-y-lugar-en-el-temario">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">02</span><span>El láser 2D y sus parámetros</span></summary><div class="toc-links"><a href="#2-el-láser-2d-y-sus-parámetros">Ir al bloque</a><a href="#21-tiempo-de-vuelo">2.1. Tiempo de vuelo</a><a href="#22-parámetros">2.2. Parámetros</a><a href="#23-número-de-haces-y-sus-ángulos">2.3. Número de haces y sus ángulos</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">03</span><span>La observación: alcances y ángulos</span></summary><div class="toc-links"><a href="#3-la-observación-alcances-y-ángulos">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">04</span><span>De polares a cartesianas, y de local a global</span></summary><div class="toc-links"><a href="#4-de-polares-a-cartesianas-y-de-local-a-global">Ir al bloque</a><a href="#41-polares--cartesianas-marco-del-sensor">4.1. Polares → cartesianas (marco del sensor)</a><a href="#42-local--global-composición">4.2. Local → global (composición)</a><a href="#43-cómo-se-hace-con-tcomp">4.3. Cómo se hace con tcomp</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">05</span><span>El mapa como polilíneas separadas por NaN</span></summary><div class="toc-links"><a href="#5-el-mapa-como-polilíneas-separadas-por-nan">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">06</span><span>Cómo funciona Laser2D por dentro</span></summary><div class="toc-links"><a href="#6-cómo-funciona-laser2d-por-dentro">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">07</span><span>El notebook, celda a celda</span></summary><div class="toc-links"><a href="#7-el-notebook-celda-a-celda">Ir al bloque</a><a href="#71-importaciones">7.1. Importaciones</a><a href="#72-create_laser_at_origin">7.2. create_laser_at_origin()</a><a href="#73-assignment-1-plot_observations">7.3. ASSIGNMENT 1: plot_observations()</a><a href="#74-run_laser_and_plot-y-test_laser">7.4. run_laser_and_plot() y test_laser()</a><a href="#75-assignment-2-explore_environment">7.5. ASSIGNMENT 2: explore_environment()</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">08</span><span>Incertidumbre de cada punto medido</span></summary><div class="toc-links"><a href="#8-incertidumbre-de-cada-punto-medido">Ir al bloque</a><a href="#81-propagación-con-el-jacobiano">8.1. Propagación con el jacobiano</a><a href="#82-interpretación-geométrica">8.2. Interpretación geométrica</a><a href="#83-pasarla-al-mapa-con-la-pose-conocida">8.3. Pasarla al mapa con la pose conocida</a><a href="#84-rango-o-ángulo-en-la-simulación-y-en-la-realidad">8.4. ¿Rango o ángulo? En la simulación y en la realidad</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">09</span><span>Cuando la pose también es incierta</span></summary><div class="toc-links"><a href="#9-cuando-la-pose-también-es-incierta">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">10</span><span>Cálculos resueltos</span></summary><div class="toc-links"><a href="#10-cálculos-resueltos">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">11</span><span>Errores típicos en el código</span></summary><div class="toc-links"><a href="#11-errores-típicos-en-el-código">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">12</span><span>Rellena el hueco</span></summary><div class="toc-links"><a href="#12-rellena-el-hueco">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">13</span><span>Preguntas de repaso (con solución)</span></summary><div class="toc-links"><a href="#13-preguntas-de-repaso-con-solución">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">14</span><span>Ideas esenciales para recordar</span></summary><div class="toc-links"><a href="#14-ideas-esenciales-para-recordar">Ir al bloque</a></div></details></nav></details>
-      <div class="reading-columns"><aside class="toc-sidebar"><div class="toc-box"><span class="overline">EN ESTA PÁGINA</span><p>L4 · 15 bloques</p><nav class="toc-items" aria-label="Apartados de la página"><details class="toc-chapter" open><summary><span class="toc-number">·</span><span>Índice</span></summary><div class="toc-links"><a href="#índice">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">01</span><span>Objetivo y lugar en el temario</span></summary><div class="toc-links"><a href="#1-objetivo-y-lugar-en-el-temario">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">02</span><span>El láser 2D y sus parámetros</span></summary><div class="toc-links"><a href="#2-el-láser-2d-y-sus-parámetros">Ir al bloque</a><a href="#21-tiempo-de-vuelo">2.1. Tiempo de vuelo</a><a href="#22-parámetros">2.2. Parámetros</a><a href="#23-número-de-haces-y-sus-ángulos">2.3. Número de haces y sus ángulos</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">03</span><span>La observación: alcances y ángulos</span></summary><div class="toc-links"><a href="#3-la-observación-alcances-y-ángulos">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">04</span><span>De polares a cartesianas, y de local a global</span></summary><div class="toc-links"><a href="#4-de-polares-a-cartesianas-y-de-local-a-global">Ir al bloque</a><a href="#41-polares--cartesianas-marco-del-sensor">4.1. Polares → cartesianas (marco del sensor)</a><a href="#42-local--global-composición">4.2. Local → global (composición)</a><a href="#43-cómo-se-hace-con-tcomp">4.3. Cómo se hace con tcomp</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">05</span><span>El mapa como polilíneas separadas por NaN</span></summary><div class="toc-links"><a href="#5-el-mapa-como-polilíneas-separadas-por-nan">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">06</span><span>Cómo funciona Laser2D por dentro</span></summary><div class="toc-links"><a href="#6-cómo-funciona-laser2d-por-dentro">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">07</span><span>El notebook, celda a celda</span></summary><div class="toc-links"><a href="#7-el-notebook-celda-a-celda">Ir al bloque</a><a href="#71-importaciones">7.1. Importaciones</a><a href="#72-create_laser_at_origin">7.2. create_laser_at_origin()</a><a href="#73-assignment-1-plot_observations">7.3. ASSIGNMENT 1: plot_observations()</a><a href="#74-run_laser_and_plot-y-test_laser">7.4. run_laser_and_plot() y test_laser()</a><a href="#75-assignment-2-explore_environment">7.5. ASSIGNMENT 2: explore_environment()</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">08</span><span>Incertidumbre de cada punto medido</span></summary><div class="toc-links"><a href="#8-incertidumbre-de-cada-punto-medido">Ir al bloque</a><a href="#81-propagación-con-el-jacobiano">8.1. Propagación con el jacobiano</a><a href="#82-interpretación-geométrica">8.2. Interpretación geométrica</a><a href="#83-pasarla-al-mapa-con-la-pose-conocida">8.3. Pasarla al mapa con la pose conocida</a><a href="#84-rango-o-ángulo-en-la-simulación-y-en-la-realidad">8.4. ¿Rango o ángulo? En la simulación y en la realidad</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">09</span><span>Cuando la pose también es incierta</span></summary><div class="toc-links"><a href="#9-cuando-la-pose-también-es-incierta">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">10</span><span>Cálculos resueltos</span></summary><div class="toc-links"><a href="#10-cálculos-resueltos">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">11</span><span>Errores típicos en el código</span></summary><div class="toc-links"><a href="#11-errores-típicos-en-el-código">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">12</span><span>Rellena el hueco</span></summary><div class="toc-links"><a href="#12-rellena-el-hueco">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">13</span><span>Preguntas de repaso (con solución)</span></summary><div class="toc-links"><a href="#13-preguntas-de-repaso-con-solución">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">14</span><span>Ideas esenciales para recordar</span></summary><div class="toc-links"><a href="#14-ideas-esenciales-para-recordar">Ir al bloque</a></div></details></nav><a class="toc-practice" href="index.html?lesson=P4.2#filters">Practicar preguntas ↗</a></div></aside><div class="reading-main"><article class="notes-body"><section id="42-escáner-láser-2d" class="level1">
+      <details class="mobile-toc"><summary>Índice de contenidos <span aria-hidden="true">⌄</span></summary><nav class="toc-items" aria-label="Apartados de la página"><details class="toc-chapter" open><summary><span class="toc-number">·</span><span>Índice</span></summary><div class="toc-links"><a href="#índice">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">01</span><span>Objetivo y lugar en el temario</span></summary><div class="toc-links"><a href="#1-objetivo-y-lugar-en-el-temario">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">02</span><span>El láser 2D y sus parámetros</span></summary><div class="toc-links"><a href="#2-el-láser-2d-y-sus-parámetros">Ir al bloque</a><a href="#21-tiempo-de-vuelo">2.1. Tiempo de vuelo</a><a href="#22-parámetros">2.2. Parámetros</a><a href="#23-número-de-haces-y-sus-ángulos">2.3. Número de haces y sus ángulos</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">03</span><span>La observación: alcances y ángulos</span></summary><div class="toc-links"><a href="#3-la-observación-alcances-y-ángulos">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">04</span><span>De polares a cartesianas, y de local a global</span></summary><div class="toc-links"><a href="#4-de-polares-a-cartesianas-y-de-local-a-global">Ir al bloque</a><a href="#41-polares--cartesianas-marco-del-sensor">4.1. Polares → cartesianas (marco del sensor)</a><a href="#42-local--global-composición">4.2. Local → global (composición)</a><a href="#43-cómo-se-hace-con-tcomp">4.3. Cómo se hace con tcomp</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">05</span><span>El mapa como polilíneas separadas por NaN</span></summary><div class="toc-links"><a href="#5-el-mapa-como-polilíneas-separadas-por-nan">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">06</span><span>Cómo funciona Laser2D por dentro</span></summary><div class="toc-links"><a href="#6-cómo-funciona-laser2d-por-dentro">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">07</span><span>El notebook, ejercicio a ejercicio</span></summary><div class="toc-links"><a href="#7-el-notebook-ejercicio-a-ejercicio">Ir al bloque</a><a href="#71-preparación-el-láser-el-mapa-y-el-dibujo">7.1. Preparación: el láser, el mapa y el dibujo</a><a href="#72-assignment-1-dibujar-un-scan-en-el-mapa">7.2. Assignment 1: dibujar un scan en el mapa</a><a href="#73-el-experimento-de-incertidumbre-y-el-thinking-about-it">7.3. El experimento de incertidumbre y el Thinking about it</a><a href="#74-assignment-2-explorar-la-habitación">7.4. Assignment 2: explorar la habitación</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">08</span><span>Incertidumbre de cada punto medido</span></summary><div class="toc-links"><a href="#8-incertidumbre-de-cada-punto-medido">Ir al bloque</a><a href="#81-propagación-con-el-jacobiano">8.1. Propagación con el jacobiano</a><a href="#82-interpretación-geométrica">8.2. Interpretación geométrica</a><a href="#83-pasarla-al-mapa-con-la-pose-conocida">8.3. Pasarla al mapa con la pose conocida</a><a href="#84-rango-o-ángulo-en-la-simulación-y-en-la-realidad">8.4. ¿Rango o ángulo? En la simulación y en la realidad</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">09</span><span>Cuando la pose también es incierta</span></summary><div class="toc-links"><a href="#9-cuando-la-pose-también-es-incierta">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">10</span><span>Cálculos resueltos</span></summary><div class="toc-links"><a href="#10-cálculos-resueltos">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">11</span><span>Preguntas de repaso (con solución)</span></summary><div class="toc-links"><a href="#11-preguntas-de-repaso-con-solución">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">12</span><span>Ideas esenciales para recordar</span></summary><div class="toc-links"><a href="#12-ideas-esenciales-para-recordar">Ir al bloque</a></div></details></nav></details>
+      <div class="reading-columns"><aside class="toc-sidebar"><div class="toc-box"><span class="overline">EN ESTA PÁGINA</span><p>L4 · 13 bloques</p><nav class="toc-items" aria-label="Apartados de la página"><details class="toc-chapter" open><summary><span class="toc-number">·</span><span>Índice</span></summary><div class="toc-links"><a href="#índice">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">01</span><span>Objetivo y lugar en el temario</span></summary><div class="toc-links"><a href="#1-objetivo-y-lugar-en-el-temario">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">02</span><span>El láser 2D y sus parámetros</span></summary><div class="toc-links"><a href="#2-el-láser-2d-y-sus-parámetros">Ir al bloque</a><a href="#21-tiempo-de-vuelo">2.1. Tiempo de vuelo</a><a href="#22-parámetros">2.2. Parámetros</a><a href="#23-número-de-haces-y-sus-ángulos">2.3. Número de haces y sus ángulos</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">03</span><span>La observación: alcances y ángulos</span></summary><div class="toc-links"><a href="#3-la-observación-alcances-y-ángulos">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">04</span><span>De polares a cartesianas, y de local a global</span></summary><div class="toc-links"><a href="#4-de-polares-a-cartesianas-y-de-local-a-global">Ir al bloque</a><a href="#41-polares--cartesianas-marco-del-sensor">4.1. Polares → cartesianas (marco del sensor)</a><a href="#42-local--global-composición">4.2. Local → global (composición)</a><a href="#43-cómo-se-hace-con-tcomp">4.3. Cómo se hace con tcomp</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">05</span><span>El mapa como polilíneas separadas por NaN</span></summary><div class="toc-links"><a href="#5-el-mapa-como-polilíneas-separadas-por-nan">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">06</span><span>Cómo funciona Laser2D por dentro</span></summary><div class="toc-links"><a href="#6-cómo-funciona-laser2d-por-dentro">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">07</span><span>El notebook, ejercicio a ejercicio</span></summary><div class="toc-links"><a href="#7-el-notebook-ejercicio-a-ejercicio">Ir al bloque</a><a href="#71-preparación-el-láser-el-mapa-y-el-dibujo">7.1. Preparación: el láser, el mapa y el dibujo</a><a href="#72-assignment-1-dibujar-un-scan-en-el-mapa">7.2. Assignment 1: dibujar un scan en el mapa</a><a href="#73-el-experimento-de-incertidumbre-y-el-thinking-about-it">7.3. El experimento de incertidumbre y el Thinking about it</a><a href="#74-assignment-2-explorar-la-habitación">7.4. Assignment 2: explorar la habitación</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">08</span><span>Incertidumbre de cada punto medido</span></summary><div class="toc-links"><a href="#8-incertidumbre-de-cada-punto-medido">Ir al bloque</a><a href="#81-propagación-con-el-jacobiano">8.1. Propagación con el jacobiano</a><a href="#82-interpretación-geométrica">8.2. Interpretación geométrica</a><a href="#83-pasarla-al-mapa-con-la-pose-conocida">8.3. Pasarla al mapa con la pose conocida</a><a href="#84-rango-o-ángulo-en-la-simulación-y-en-la-realidad">8.4. ¿Rango o ángulo? En la simulación y en la realidad</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">09</span><span>Cuando la pose también es incierta</span></summary><div class="toc-links"><a href="#9-cuando-la-pose-también-es-incierta">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">10</span><span>Cálculos resueltos</span></summary><div class="toc-links"><a href="#10-cálculos-resueltos">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">11</span><span>Preguntas de repaso (con solución)</span></summary><div class="toc-links"><a href="#11-preguntas-de-repaso-con-solución">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">12</span><span>Ideas esenciales para recordar</span></summary><div class="toc-links"><a href="#12-ideas-esenciales-para-recordar">Ir al bloque</a></div></details></nav><a class="toc-practice" href="index.html?lesson=P4.2#filters">Practicar preguntas ↗</a></div></aside><div class="reading-main"><article class="notes-body"><section id="42-escáner-láser-2d" class="level1">
 <h1>4.2 Escáner láser 2D</h1>
 <p>Guía de estudio del notebook <a href="../../Practicas/uma_robotics_2027/Chapter%2004.Robot%20sensing/4.2%20Laser%20Scanner.ipynb">4.2 Laser Scanner</a>. La resolución concreta y los resultados de los experimentos están en <a href="../../Practicas/uma_robotics_2027/Chapter%2004.Robot%20sensing/4.2%20Resoluci%C3%B3n%20y%20gu%C3%ADa%20de%20entrega.md">4.2 Resolución y guía de entrega.md</a>, y la teoría del tema, en el <a href="../../Teoria/Parcial-2/L4-Robot-sensing/Resumen_L4_Percepcion_Robot.md">resumen de L4</a>.</p>
-<p><strong>Enfoque de examen.</strong> En el Parcial 1 las preguntas de prácticas fueron sobre <strong>el código</strong>: localizar la línea con el error y rellenar huecos. Por eso esta guía recorre el código línea a línea, con dimensiones y orden de argumentos. Al final hay una sección de errores típicos, otra de huecos para rellenar y varios cálculos numéricos resueltos.</p>
+<p><strong>Cómo está organizada.</strong> Primero la teoría que usa el notebook (apartados 1–6). Después, ejercicio a ejercicio, <strong>qué pide el enunciado, cómo se resuelve, para qué sirve cada bloque del código</strong> y qué debe salir (apartado 7). Al final, la incertidumbre de cada punto y cálculos resueltos. Para entrenar las preguntas de examen sobre el código (encontrar la línea con el error y rellenar huecos), usa el <a href="index.html?lesson=P4.2#filters">test de la práctica 4.2</a>.</p>
 <section id="índice" class="level2">
 <h2>Índice</h2>
 <ol type="1">
@@ -43,14 +43,12 @@
 <li><a href="#4-de-polares-a-cartesianas-y-de-local-a-global">De polares a cartesianas, y de local a global</a></li>
 <li><a href="#5-el-mapa-como-polilíneas-separadas-por-nan">El mapa como polilíneas separadas por NaN</a></li>
 <li><a href="#6-cómo-funciona-laser2d-por-dentro">Cómo funciona <code>Laser2D</code> por dentro</a></li>
-<li><a href="#7-el-notebook-celda-a-celda">El notebook, celda a celda</a></li>
+<li><a href="#7-el-notebook-ejercicio-a-ejercicio">El notebook, ejercicio a ejercicio</a></li>
 <li><a href="#8-incertidumbre-de-cada-punto-medido">Incertidumbre de cada punto medido</a></li>
 <li><a href="#9-cuando-la-pose-también-es-incierta">Cuando la pose también es incierta</a></li>
 <li><a href="#10-cálculos-resueltos">Cálculos resueltos</a></li>
-<li><a href="#11-errores-típicos-en-el-código">Errores típicos en el código</a></li>
-<li><a href="#12-rellena-el-hueco">Rellena el hueco</a></li>
-<li><a href="#13-preguntas-de-repaso-con-solución">Preguntas de repaso (con solución)</a></li>
-<li><a href="#14-ideas-esenciales-para-recordar">Ideas esenciales para recordar</a></li>
+<li><a href="#11-preguntas-de-repaso-con-solución">Preguntas de repaso (con solución)</a></li>
+<li><a href="#12-ideas-esenciales-para-recordar">Ideas esenciales para recordar</a></li>
 </ol>
 </section>
 <section id="1-objetivo-y-lugar-en-el-temario" class="level2">
@@ -148,7 +146,7 @@ r = \frac{c\,\Delta t}{2}, \qquad c \approx 3\cdot 10^8 \text{ m/s}
 </section>
 <section id="23-número-de-haces-y-sus-ángulos" class="level3">
 <h3>2.3. Número de haces y sus ángulos</h3>
-<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>n_beams <span class="op">=</span> math.floor(<span class="va">self</span>.FOV <span class="op">/</span> <span class="va">self</span>.resolution) <span class="op">+</span> <span class="dv">1</span></span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>n_beams <span class="op">=</span> math.<span class="fu">floor</span>(<span class="va">self</span>.FOV <span class="op">/</span> <span class="va">self</span>.resolution) <span class="op">+</span> <span class="dv">1</span></span></code></pre></div>
 <p>El <code>+1</code> existe porque se cuentan los dos extremos. Por ejemplo, 3 haces cubren 2 intervalos.</p>
 <table>
 <thead>
@@ -226,7 +224,7 @@ r = \frac{c\,\Delta t}{2}, \qquad c \approx 3\cdot 10^8 \text{ m/s}
 </section>
 <section id="43-cómo-se-hace-con-tcomp" class="level3">
 <h3>4.3. Cómo se hace con <code>tcomp</code></h3>
-<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>pose_obs_global <span class="op">=</span> tcomp(pose, np.vstack([x_local, y_local, <span class="dv">0</span>]))</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>pose_obs_global <span class="op">=</span> <span class="fu">tcomp</span>(pose, np.<span class="fu">vstack</span>([x_local, y_local, <span class="dv">0</span>]))</span></code></pre></div>
 <ul>
 <li><code>tcomp(tab, tbc)</code> compone dos <strong>poses</strong> columna <code>(3, 1)</code> y comprueba que ambas tengan 3 filas. Por eso el punto se convierte en «pose» añadiéndole un ángulo 0.</li>
 <li><strong>El orden es <code>tcomp(pose_del_sensor, punto)</code></strong>: «desde el sensor, avanza lo que dice el punto».</li>
@@ -236,7 +234,7 @@ r = \frac{c\,\Delta t}{2}, \qquad c \approx 3\cdot 10^8 \text{ m/s}
 </section>
 <section id="5-el-mapa-como-polilíneas-separadas-por-nan" class="level2">
 <h2>5. El mapa como polilíneas separadas por NaN</h2>
-<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>walls <span class="op">=</span> np.array([[<span class="dv">2</span>, <span class="dv">12</span>, <span class="dv">12</span>, <span class="dv">10</span>, <span class="dv">10</span>, <span class="fl">9.5</span>, <span class="fl">9.5</span>, <span class="dv">2</span>, <span class="dv">2</span>, np.nan],</span>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>walls <span class="op">=</span> np.<span class="fu">array</span>([[<span class="dv">2</span>, <span class="dv">12</span>, <span class="dv">12</span>, <span class="dv">10</span>, <span class="dv">10</span>, <span class="fl">9.5</span>, <span class="fl">9.5</span>, <span class="dv">2</span>, <span class="dv">2</span>, np.nan],</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>                  [<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">10</span>, <span class="dv">10</span>, <span class="dv">8</span>, <span class="dv">8</span>, <span class="dv">10</span>, <span class="dv">10</span>, <span class="dv">2</span>, np.nan]])</span></code></pre></div>
 <ul>
 <li><strong>Fila 0:</strong> las <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>x</mi><annotation encoding="application/x-tex">x</annotation></semantics></math> de los vértices. <strong>Fila 1:</strong> las <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>y</mi><annotation encoding="application/x-tex">y</annotation></semantics></math>. Cada columna es un vértice.</li>
@@ -249,11 +247,11 @@ r = \frac{c\,\Delta t}{2}, \qquad c \approx 3\cdot 10^8 \text{ m/s}
 <section id="6-cómo-funciona-laser2d-por-dentro" class="level2">
 <h2>6. Cómo funciona <code>Laser2D</code> por dentro</h2>
 <p>Archivo: <code>utils/laser/laser2D.py</code>.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Laser2D():</span>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> <span class="fu">Laser2D</span>():</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, FOV, resolution, max_distance, noise_cov, pose):</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">def</span> set_pose(<span class="va">self</span>, pose):            <span class="co"># cambia self.pose</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">def</span> take_observation(<span class="va">self</span>, <span class="bu">map</span>):     <span class="co"># devuelve z (2 x n_beams)</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">def</span> draw_observation(<span class="va">self</span>, z, pose, fig, ax):</span></code></pre></div>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">def</span> <span class="fu">set_pose</span>(<span class="va">self</span>, pose):            <span class="co"># cambia self.pose</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">def</span> <span class="fu">take_observation</span>(<span class="va">self</span>, <span class="bu">map</span>):     <span class="co"># devuelve z (2 x n_beams)</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">def</span> <span class="fu">draw_observation</span>(<span class="va">self</span>, z, pose, fig, ax):</span></code></pre></div>
 <p><strong>Orden de los argumentos del constructor:</strong> <code>FOV, resolution, max_distance, noise_cov, pose</code>. Es un orden habitual en las preguntas de huecos.</p>
 <p><code>take_observation(map)</code> hace, para cada haz:</p>
 <ol type="1">
@@ -269,8 +267,8 @@ r = \frac{c\,\Delta t}{2}, \qquad c \approx 3\cdot 10^8 \text{ m/s}
 </ul></li>
 <li><strong>Se añade ruido y se guarda:</strong></li>
 </ol>
-<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>z[<span class="dv">0</span>, i_beam] <span class="op">=</span> d <span class="op">+</span> np.random.normal(<span class="dv">0</span>, np.sqrt(<span class="va">self</span>.noise_cov[<span class="dv">0</span>][<span class="dv">0</span>]))</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>z[<span class="dv">1</span>, i_beam] <span class="op">=</span> i_beam<span class="op">*</span><span class="va">self</span>.resolution <span class="op">-</span> (<span class="va">self</span>.FOV<span class="op">/</span><span class="dv">2</span>) <span class="op">+</span> np.random.normal(<span class="dv">0</span>, np.sqrt(<span class="va">self</span>.noise_cov[<span class="dv">1</span>][<span class="dv">1</span>]))</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>z[<span class="dv">0</span>, i_beam] <span class="op">=</span> d <span class="op">+</span> np.random.<span class="fu">normal</span>(<span class="dv">0</span>, np.<span class="fu">sqrt</span>(<span class="va">self</span>.noise_cov[<span class="dv">0</span>][<span class="dv">0</span>]))</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>z[<span class="dv">1</span>, i_beam] <span class="op">=</span> i_beam<span class="op">*</span><span class="va">self</span>.resolution <span class="op">-</span> (<span class="va">self</span>.FOV<span class="op">/</span><span class="dv">2</span>) <span class="op">+</span> np.random.<span class="fu">normal</span>(<span class="dv">0</span>, np.<span class="fu">sqrt</span>(<span class="va">self</span>.noise_cov[<span class="dv">1</span>][<span class="dv">1</span>]))</span></code></pre></div>
 <p>Hay que fijarse en tres cosas:</p>
 <ul>
 <li>El ángulo guardado <strong>no incluye <code>self.pose[2]</code></strong>: es relativo al sensor.</li>
@@ -280,41 +278,159 @@ r = \frac{c\,\Delta t}{2}, \qquad c \approx 3\cdot 10^8 \text{ m/s}
 <p><strong>Coste:</strong> K haces × S segmentos, con bucles de Python. Con 95 haces y 35 segmentos son 3325 intersecciones por scan.</p>
 <p><strong>Arreglo para NumPy 2.4.</strong> Como la pose es una columna <code>(3, 1)</code>, <code>self.pose[0]</code> es un array de un elemento, y NumPy 2.4 ya no lo convierte en escalar de forma implícita. Se añadió <code>.item()</code> en dos líneas (<code>phi_m</code> y <code>d = d_to_intersect</code>). No cambia el algoritmo.</p>
 </section>
-<section id="7-el-notebook-celda-a-celda" class="level2">
-<h2>7. El notebook, celda a celda</h2>
-<section id="71-importaciones" class="level3">
-<h3>7.1. Importaciones</h3>
+<section id="7-el-notebook-ejercicio-a-ejercicio" class="level2">
+<h2>7. El notebook, ejercicio a ejercicio</h2>
+<p>El notebook prepara un láser simulado y un mapa, y después pide dos ejercicios:</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Parte</th>
+<th>Qué se pide</th>
+<th>Qué se programa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Preparación</td>
+<td>Crear el láser y el mapa, y dibujar el mapa</td>
+<td>Nada: las funciones vienen dadas</td>
+</tr>
+<tr>
+<td>Assignment 1</td>
+<td>Dibujar en el mapa los puntos de un scan</td>
+<td><code>plot_observations()</code></td>
+</tr>
+<tr>
+<td>Comprobación y experimento</td>
+<td>Verificar el Assignment 1 y estudiar la incertidumbre de un punto</td>
+<td>Celdas añadidas en la resolución</td>
+</tr>
+<tr>
+<td>Thinking about it</td>
+<td>¿Qué ruido pesa más? ¿Cómo se calcula la incertidumbre de un punto?</td>
+<td>Respuestas</td>
+</tr>
+<tr>
+<td>Assignment 2</td>
+<td>Moverse por la habitación y superponer los scans</td>
+<td>La lista de incrementos de <code>explore_environment()</code></td>
+</tr>
+</tbody>
+</table>
+<p>En cada parte se explica primero <strong>qué pide el enunciado</strong>, después <strong>cómo se resuelve</strong>, luego <strong>para qué sirve cada bloque</strong> del código y, por último, el código con lo que debe salir.</p>
+<section id="71-preparación-el-láser-el-mapa-y-el-dibujo" class="level3">
+<h3>7.1. Preparación: el láser, el mapa y el dibujo</h3>
+<p><strong>Para qué sirven estas celdas.</strong> Antes de los ejercicios, el notebook deja listas tres piezas: el sensor, el entorno y una figura donde dibujar.</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Celda</th>
+<th>Para qué sirve</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Imports</td>
+<td>NumPy, Matplotlib, <code>ipywidgets</code> (para los deslizadores) y, con <code>sys.path.append("..")</code>, las utilidades <code>Laser2D</code>, <code>DrawRobot</code> y <code>tcomp</code></td>
+</tr>
+<tr>
+<td><code>create_laser_at_origin()</code></td>
+<td>Crear un <code>Laser2D</code> con los parámetros dados, colocado en el origen. Después se mueve con <code>set_pose()</code></td>
+</tr>
+<tr>
+<td><code>create_room_map()</code></td>
+<td>Definir la habitación como polígonos (paredes, cocina, sofá, mueble y mesa) separados por NaN (apartado 5)</td>
+</tr>
+<tr>
+<td><code>plot_virtual_map()</code></td>
+<td>Crear la figura con el mapa y 2 m de margen. Con <code>dimensions_only=True</code>, solo fija los límites</td>
+</tr>
+</tbody>
+</table>
 <div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sys</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>sys.path.append(<span class="st">&quot;..&quot;</span>)</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> utils.laser.laser2D <span class="im">import</span> Laser2D</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>sys.path.<span class="fu">append</span>(<span class="st">&quot;..&quot;</span>)                       <span class="co"># utils/ is one folder up</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> utils.laser.laser2D <span class="im">import</span> Laser2D     <span class="co"># the simulated scanner</span></span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> utils.DrawRobot <span class="im">import</span> DrawRobot</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> utils.tcomp <span class="im">import</span> tcomp</span></code></pre></div>
-<p>El notebook está en <code>Chapter 04.Robot sensing/</code> y <code>utils/</code> está un nivel por encima. Por eso <code>".."</code>; con <code>"../.."</code> no encontraría <code>utils</code>. <code>Laser2D</code> está en el submódulo <code>utils.laser.laser2D</code>, no en <code>utils</code> directamente.</p>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> utils.tcomp <span class="im">import</span> tcomp</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> <span class="fu">create_laser_at_origin</span>(FOV, resolution, max_distance, noise_cov):</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    origin_pose <span class="op">=</span> np.<span class="fu">vstack</span>([<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>])      <span class="co"># column pose (3, 1)</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    laser <span class="op">=</span> <span class="fu">Laser2D</span>(FOV, resolution, max_distance, noise_cov, origin_pose)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> laser</span></code></pre></div>
+<p>El orden de los argumentos de <code>Laser2D</code> es <code>FOV, resolution, max_distance, noise_cov, pose</code>. El mapa <strong>no</strong> se pasa al constructor: se pasa al medir, en <code>take_observation(virtual_map)</code>. Cómo calcula el láser cada distancia está en el apartado 6.</p>
 </section>
-<section id="72-create_laser_at_origin" class="level3">
-<h3>7.2. <code>create_laser_at_origin()</code></h3>
-<div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> create_laser_at_origin(FOV, resolution, max_distance, noise_cov):</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    origin_pose <span class="op">=</span> np.vstack([<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>])</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    laser <span class="op">=</span> Laser2D(FOV, resolution, max_distance, noise_cov, origin_pose)</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> laser</span></code></pre></div>
-<p>Crea el láser en el origen con una pose columna <code>(3, 1)</code>. Después se mueve con <code>set_pose()</code>.</p>
-</section>
-<section id="73-assignment-1-plot_observations" class="level3">
-<h3>7.3. ASSIGNMENT 1: <code>plot_observations()</code></h3>
-<div class="sourceCode" id="cb8"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span> (z.shape[<span class="dv">1</span>]):                     <span class="co"># one iteration per beam (columns of z)</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    distance <span class="op">=</span> z[<span class="dv">0</span>, i]                            <span class="co"># row 0: range r</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    angle <span class="op">=</span> z[<span class="dv">1</span>, i]                               <span class="co"># row 1: bearing alpha (sensor frame)</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    x_local <span class="op">=</span> distance<span class="op">*</span>np.cos(angle)              <span class="co"># polar -&gt; cartesian, sensor frame</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    y_local <span class="op">=</span> distance<span class="op">*</span>np.sin(angle)</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    pose_obs_global <span class="op">=</span> tcomp(pose, np.vstack([x_local, y_local, <span class="dv">0</span>]))   <span class="co"># sensor pose ⊕ point</span></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> pose_obs_global[<span class="dv">0</span>]</span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> pose_obs_global[<span class="dv">1</span>]</span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> draw_lines:</span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>        ax.plot([x, pose[<span class="dv">0</span>]], [y, pose[<span class="dv">1</span>]], <span class="st">&#39;g--&#39;</span>, linewidth<span class="op">=</span><span class="dv">1</span>)       <span class="co"># beam from the sensor</span></span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    ax.plot(x, y, <span class="st">&#39;o&#39;</span>, markersize<span class="op">=</span><span class="dv">4</span>, color<span class="op">=</span>point_color)               <span class="co"># measured point</span></span></code></pre></div>
+<section id="72-assignment-1-dibujar-un-scan-en-el-mapa" class="level3">
+<h3>7.2. Assignment 1: dibujar un scan en el mapa</h3>
+<p><strong>Qué se pide.</strong> El láser devuelve cada scan como pares <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">[</mo><msub><mi>r</mi><mi>k</mi></msub><mo>,</mo><msub><mi>α</mi><mi>k</mi></msub><msup><mo stretchy="false" form="postfix">]</mo><mi>T</mi></msup></mrow><annotation encoding="application/x-tex">[r_k, \alpha_k]^T</annotation></semantics></math>: en <strong>polares</strong> y en el <strong>marco del sensor</strong>. Hay que programar <code>plot_observations()</code>, que recibe el scan <code>z</code> y la pose del sensor y dibuja cada medida como un punto <strong>del mapa</strong>.</p>
+<p><strong>Cómo se resuelve.</strong> Para cada haz se hacen las dos transformaciones del apartado 4:</p>
+<ol type="1">
+<li><strong>Polares → cartesianas</strong> en el marco del sensor: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">[</mo><mi>r</mi><mrow><mi mathvariant="normal">cos</mi><mo>&#8289;</mo></mrow><mi>α</mi><mo>,</mo><mspace width="0.222em"></mspace><mi>r</mi><mrow><mi mathvariant="normal">sin</mi><mo>&#8289;</mo></mrow><mi>α</mi><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">[r\cos\alpha,\ r\sin\alpha]</annotation></semantics></math>.</li>
+<li><strong>Sensor → mapa</strong>: componer la pose del sensor con el punto, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝐱</mi><mo>⊕</mo><msub><mi>𝐳</mi><mi>c</mi></msub></mrow><annotation encoding="application/x-tex">\mathbf{x} \oplus \mathbf{z}_c</annotation></semantics></math>, con <code>tcomp</code>. Como <code>tcomp</code> trabaja con poses de 3 filas, el punto se amplía con un ángulo 0.</li>
+</ol>
+<p><strong>Los bloques de <code>plot_observations()</code>:</strong></p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Bloque</th>
+<th>Para qué sirve</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1. Bucle por haces</td>
+<td>Recorrer las <strong>columnas</strong> de <code>z</code>: cada una es una medida</td>
+</tr>
+<tr>
+<td>2. Leer la medida</td>
+<td>Alcance en la fila 0 y ángulo en la fila 1</td>
+</tr>
+<tr>
+<td>3. Polares → cartesianas</td>
+<td>El punto en el marco del sensor</td>
+</tr>
+<tr>
+<td>4. Sensor → mapa</td>
+<td>Componer con la pose y quedarse con <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>x</mi><annotation encoding="application/x-tex">x</annotation></semantics></math> e <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>y</mi><annotation encoding="application/x-tex">y</annotation></semantics></math></td>
+</tr>
+<tr>
+<td>5. Dibujar</td>
+<td>El rayo (opcional, <code>draw_lines</code>) y el punto</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> <span class="fu">plot_observations</span>(z, pose, fig, ax, draw_lines <span class="op">=</span> <span class="va">True</span>, point_color <span class="op">=</span> <span class="st">&#39;r&#39;</span>):</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 1. One iteration per beam: the measurements are the columns of z (2 x K)</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span> (z.shape[<span class="dv">1</span>]):</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>        <span class="co"># 2. Row 0: range r, row 1: bearing alpha (relative to the sensor)</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>        distance <span class="op">=</span> z[<span class="dv">0</span>, i]</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>        angle <span class="op">=</span> z[<span class="dv">1</span>, i]</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>        <span class="co"># 3. Polar -&gt; cartesian, in the sensor frame</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>        x_local <span class="op">=</span> distance<span class="op">*</span>np.<span class="fu">cos</span>(angle)</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>        y_local <span class="op">=</span> distance<span class="op">*</span>np.<span class="fu">sin</span>(angle)</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>        <span class="co"># 4. Sensor frame -&gt; map: pose (+) point, the point as a pose with angle 0</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>        pose_obs_global <span class="op">=</span> <span class="fu">tcomp</span>(pose, np.<span class="fu">vstack</span>([x_local, y_local, <span class="dv">0</span>]))</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> pose_obs_global[<span class="dv">0</span>]</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>        y <span class="op">=</span> pose_obs_global[<span class="dv">1</span>]</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>        <span class="co"># 5. Draw the beam (optional) and the measured point</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> draw_lines:</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>            ax.<span class="fu">plot</span>([x, pose[<span class="dv">0</span>]], [y, pose[<span class="dv">1</span>]], <span class="st">&#39;g--&#39;</span>, linewidth<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>        ax.<span class="fu">plot</span>(x, y, <span class="st">&#39;o&#39;</span>, markersize<span class="op">=</span><span class="dv">4</span>, color<span class="op">=</span>point_color)</span></code></pre></div>
 <table>
 <colgroup>
 <col style="width: 33%" />
@@ -354,52 +470,152 @@ r = \frac{c\,\Delta t}{2}, \qquad c \approx 3\cdot 10^8 \text{ m/s}
 <td><code>(3, 1)</code></td>
 <td>Punto en el mapa (la fila 2 no se usa)</td>
 </tr>
+</tbody>
+</table>
+<p><strong>Cómo se prueba.</strong> El notebook da dos funciones para usarla:</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
 <tr>
-<td><code>x</code>, <code>y</code></td>
-<td><code>(1,)</code></td>
-<td>Coordenadas globales para dibujar</td>
+<th>Bloque</th>
+<th>Para qué sirve</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>run_laser_and_plot()</code></td>
+<td><strong>Colocar</strong> el láser (<code>set_pose</code>), <strong>medir</strong> (<code>take_observation</code>), dibujar el robot y llamar a <code>plot_observations()</code>. El orden importa: si se mide antes de colocarlo, se mide desde la pose anterior</td>
+</tr>
+<tr>
+<td><code>test_laser()</code></td>
+<td>Crear el láser con los valores de los deslizadores, con <code>np.diag([distance_noise, angle_noise])</code> como <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Q</mi><annotation encoding="application/x-tex">Q</annotation></semantics></math> (varianzas), y medir desde <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">[</mo><mn>6</mn><mo>,</mo><mn>4</mn><mo>,</mo><mi>π</mi><mi>/</mi><mn>2</mn><msup><mo stretchy="false" form="postfix">]</mo><mi>T</mi></msup></mrow><annotation encoding="application/x-tex">[6, 4, \pi/2]^T</annotation></semantics></math></td>
 </tr>
 </tbody>
 </table>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> <span class="fu">run_laser_and_plot</span>(laser, pose, fig, ax, draw_lines <span class="op">=</span> <span class="va">True</span>, color<span class="op">=</span><span class="st">&#39;r&#39;</span>):</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    laser.<span class="fu">set_pose</span>(pose)                                   <span class="co"># 1. place the sensor</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    measurement <span class="op">=</span> laser.<span class="fu">take_observation</span>(virtual_map)      <span class="co"># 2. measure against the map</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">DrawRobot</span>(fig, ax, pose, axis_percent<span class="op">=</span><span class="fl">0.015</span>, color<span class="op">=</span>color, linewidth<span class="op">=</span><span class="fl">1.5</span>)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plot_observations</span>(measurement, pose, fig, ax, draw_lines, color)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> fig, ax</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> <span class="fu">test_laser</span>(FOV, resolution, max_distance, distance_noise, angle_noise):</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    laser <span class="op">=</span> <span class="fu">create_laser_at_origin</span>(FOV, resolution, max_distance, np.<span class="fu">diag</span>([distance_noise, angle_noise]))</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    fig, ax <span class="op">=</span> <span class="fu">plot_virtual_map</span>(virtual_map)</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">run_laser_and_plot</span>(laser, np.<span class="fu">vstack</span>([<span class="dv">6</span>, <span class="dv">4</span>, np.pi<span class="op">/</span><span class="dv">2</span>]), fig, ax)</span></code></pre></div>
+<p><strong>Qué debe salir.</strong> Con los valores por defecto (FOV <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>=</mo><mn>3</mn><mi>π</mi><mi>/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">= 3\pi/2</annotation></semantics></math>, resolución 0.2, 24 haces), una nube de puntos rojos sobre las paredes y muebles que ve el robot, cada uno unido al sensor por una línea verde.</p>
+<p><strong>La comprobación con solución conocida.</strong> La resolución añade una celda que verifica <code>plot_observations()</code> sin ruido. Usa un láser con FOV <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>=</mo><mi>π</mi></mrow><annotation encoding="application/x-tex">= \pi</annotation></semantics></math> y resolución <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>π</mi><mi>/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">\pi/2</annotation></semantics></math>, es decir, 3 haces a <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>90</mn><mi>°</mi></mrow><annotation encoding="application/x-tex">-90°</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mi>°</mi></mrow><annotation encoding="application/x-tex">0°</annotation></semantics></math> y <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>+</mi><mn>90</mn><mi>°</mi></mrow><annotation encoding="application/x-tex">+90°</annotation></semantics></math>, colocado en <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">[</mo><mn>6</mn><mo>,</mo><mn>4</mn><mo>,</mo><mi>π</mi><mi>/</mi><mn>2</mn><msup><mo stretchy="false" form="postfix">]</mo><mi>T</mi></msup></mrow><annotation encoding="application/x-tex">[6, 4, \pi/2]^T</annotation></semantics></math> (mirando hacia <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>+</mi><mi>y</mi></mrow><annotation encoding="application/x-tex">+y</annotation></semantics></math>):</p>
+<table>
+<thead>
+<tr>
+<th>Haz</th>
+<th>Dirección en el mapa</th>
+<th>Choca con</th>
+<th>Alcance</th>
+<th>Punto</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>90</mn><mi>°</mi></mrow><annotation encoding="application/x-tex">-90°</annotation></semantics></math></td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>+</mi><mi>x</mi></mrow><annotation encoding="application/x-tex">+x</annotation></semantics></math></td>
+<td>La mesa (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo>=</mo><mn>9.5</mn></mrow><annotation encoding="application/x-tex">x = 9.5</annotation></semantics></math>)</td>
+<td>3.5 m</td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>9.5</mn><mo>,</mo><mn>4</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(9.5, 4)</annotation></semantics></math></td>
+</tr>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mi>°</mi></mrow><annotation encoding="application/x-tex">0°</annotation></semantics></math></td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>+</mi><mi>y</mi></mrow><annotation encoding="application/x-tex">+y</annotation></semantics></math></td>
+<td>El sofá (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mo>=</mo><mn>6</mn></mrow><annotation encoding="application/x-tex">y = 6</annotation></semantics></math>)</td>
+<td>2 m</td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>6</mn><mo>,</mo><mn>6</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(6, 6)</annotation></semantics></math></td>
+</tr>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>+</mi><mn>90</mn><mi>°</mi></mrow><annotation encoding="application/x-tex">+90°</annotation></semantics></math></td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mi>x</mi></mrow><annotation encoding="application/x-tex">-x</annotation></semantics></math></td>
+<td>La pared (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo>=</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">x = 2</annotation></semantics></math>)</td>
+<td>4 m</td>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>2</mn><mo>,</mo><mn>4</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(2, 4)</annotation></semantics></math></td>
+</tr>
+</tbody>
+</table>
+<p>También comprueba que <code>tcomp(pose, [r cos α, r sin α, 0])</code> da lo mismo que la fórmula directa <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">[</mo><mi>x</mi><mo>+</mo><mi>r</mi><mrow><mi mathvariant="normal">cos</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>α</mi><mo>+</mo><mi>θ</mi><mo stretchy="false" form="postfix">)</mo><mo>,</mo><mspace width="0.222em"></mspace><mi>y</mi><mo>+</mo><mi>r</mi><mrow><mi mathvariant="normal">sin</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>α</mi><mo>+</mo><mi>θ</mi><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">[x + r\cos(\alpha + \theta),\ y + r\sin(\alpha + \theta)]</annotation></semantics></math>.</p>
 </section>
-<section id="74-run_laser_and_plot-y-test_laser" class="level3">
-<h3>7.4. <code>run_laser_and_plot()</code> y <code>test_laser()</code></h3>
-<div class="sourceCode" id="cb9"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> run_laser_and_plot(laser, pose, fig, ax, draw_lines <span class="op">=</span> <span class="va">True</span>, color<span class="op">=</span><span class="st">&#39;r&#39;</span>):</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    laser.set_pose(pose)                                   <span class="co"># 1. place the sensor</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    measurement <span class="op">=</span> laser.take_observation(virtual_map)      <span class="co"># 2. measure against the map</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    DrawRobot(fig, ax, pose, axis_percent<span class="op">=</span><span class="fl">0.015</span>, color<span class="op">=</span>color, linewidth<span class="op">=</span><span class="fl">1.5</span>)<span class="op">;</span>   <span class="co"># 3. draw robot</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    plot_observations(measurement, pose, fig, ax, draw_lines, color)            <span class="co"># 4. draw points</span></span></code></pre></div>
+<section id="73-el-experimento-de-incertidumbre-y-el-thinking-about-it" class="level3">
+<h3>7.3. El experimento de incertidumbre y el Thinking about it</h3>
+<p><strong>Qué se pregunta.</strong> (1) ¿Qué afecta más a la fiabilidad de las medidas, la varianza de la distancia o la del ángulo? ¿Cuál es mayor en un sensor real? (2) ¿Cómo se calcularía la incertidumbre de cada punto en cartesianas?</p>
+<p><strong>Cómo se resuelve.</strong> La resolución añade una celda con un único punto medido a <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>r</mi><mo>=</mo><mn>5</mn></mrow><annotation encoding="application/x-tex">r = 5</annotation></semantics></math> m y <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>=</mo><mn>30</mn><mi>°</mi></mrow><annotation encoding="application/x-tex">\alpha = 30°</annotation></semantics></math>, con <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Q</mi><mo>=</mo><mrow><mi mathvariant="normal">d</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">g</mi></mrow><mo stretchy="false" form="prefix">(</mo><mn>0.01</mn><mo>,</mo><mn>0.001</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">Q = \mathrm{diag}(0.01, 0.001)</annotation></semantics></math>. Sus bloques: una función que propaga <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Q</mi><annotation encoding="application/x-tex">Q</annotation></semantics></math> a cartesianas con el jacobiano polar → cartesiano; otra que la lleva al mapa sumando la incertidumbre de la pose; y una comparación con 20 000 muestras de Monte Carlo. La teoría está en los apartados 8 y 9.</p>
+<p><strong>Conclusiones:</strong></p>
 <ul>
-<li><strong>Primero <code>set_pose()</code> y después <code>take_observation()</code>.</strong> Si se invierte el orden, se mide desde la pose anterior.</li>
-<li><strong>El mapa se pasa en <code>take_observation(virtual_map)</code>, no en el constructor.</strong></li>
-<li><code>DrawRobot</code> dimensiona el triángulo según los límites actuales de los ejes. Por eso primero se crea la figura con <code>plot_virtual_map()</code>.</li>
+<li>La elipse se orienta con el haz: semieje <strong>a lo largo</strong> de <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>σ</mi><mi>r</mi></msub><mo>=</mo><mn>0.10</mn></mrow><annotation encoding="application/x-tex">\sigma_r = 0.10</annotation></semantics></math> m y <strong>perpendicular</strong> de <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>r</mi><msub><mi>σ</mi><mi>α</mi></msub><mo>=</mo><mn>0.158</mn></mrow><annotation encoding="application/x-tex">r\sigma_\alpha = 0.158</annotation></semantics></math> m.</li>
+<li>El error angular crece con la distancia y el de rango no. Son iguales en <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>r</mi><mo>*</mo></msup><mo>=</mo><msub><mi>σ</mi><mi>r</mi></msub><mi>/</mi><msub><mi>σ</mi><mi>α</mi></msub><mo>=</mo><mn>3.16</mn></mrow><annotation encoding="application/x-tex">r^* = \sigma_r/\sigma_\alpha = 3.16</annotation></semantics></math> m.</li>
+<li>En la simulación domina el ángulo; en un sensor real, el rango (el ángulo lo fija un encoder muy preciso).</li>
+<li>La incertidumbre de cada punto se calcula como con los landmarks: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>J</mi><mi>Q</mi><msup><mi>J</mi><mi>T</mi></msup></mrow><annotation encoding="application/x-tex">J Q J^T</annotation></semantics></math>, y con la pose incierta se suma <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>J</mi><mi>𝐱</mi></msub><msub><mi mathvariant="normal">Σ</mi><mi>𝐱</mi></msub><msubsup><mi>J</mi><mi>𝐱</mi><mi>T</mi></msubsup></mrow><annotation encoding="application/x-tex">J_{\mathbf{x}}\Sigma_{\mathbf{x}}J_{\mathbf{x}}^T</annotation></semantics></math>.</li>
 </ul>
-<div class="sourceCode" id="cb10"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> test_laser(FOV, resolution, max_distance, distance_noise, angle_noise):</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    laser <span class="op">=</span> create_laser_at_origin(FOV, resolution, max_distance, np.diag([distance_noise, angle_noise]))</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    fig, ax <span class="op">=</span> plot_virtual_map(virtual_map)<span class="op">;</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    run_laser_and_plot(laser, np.vstack([<span class="dv">6</span>, <span class="dv">4</span>, np.pi<span class="op">/</span><span class="dv">2</span>]), fig, ax)<span class="op">;</span></span></code></pre></div>
-<p><code>np.diag([distance_noise, angle_noise])</code> construye <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Q</mi><annotation encoding="application/x-tex">Q</annotation></semantics></math>: el primer elemento de la diagonal es el de la distancia y el segundo, el del ángulo, y los dos son varianzas. Los deslizadores de <code>ipywidgets.interact</code> llaman a <code>test_laser</code> cada vez que cambian.</p>
 </section>
-<section id="75-assignment-2-explore_environment" class="level3">
-<h3>7.5. ASSIGNMENT 2: <code>explore_environment()</code></h3>
-<div class="sourceCode" id="cb11"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>pose_increments_list <span class="op">=</span> [</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    (np.vstack([<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>]), <span class="st">&#39;orangered&#39;</span>),</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    (np.vstack([<span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">0</span>]), <span class="st">&#39;olive&#39;</span>),</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    (np.vstack([<span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">0</span>]), <span class="st">&#39;teal&#39;</span>),</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    (np.vstack([<span class="dv">0</span>, <span class="dv">2</span>, np.pi<span class="op">/</span><span class="dv">2</span>]), <span class="st">&#39;magenta&#39;</span>),</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    (np.vstack([<span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">0</span>]), <span class="st">&#39;indigo&#39;</span>),</span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>]</span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plot_virtual_map(virtual_map, <span class="va">True</span>)</span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>current_pose <span class="op">=</span> np.vstack([<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">0</span>])</span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> step, color <span class="kw">in</span> pose_increments_list:</span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    current_pose <span class="op">=</span> tcomp(current_pose, step)</span>
-<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>    run_laser_and_plot(laser, current_pose, fig, ax, <span class="va">False</span>, color)</span></code></pre></div>
-<ul>
-<li>Cada elemento de la lista es una <strong>tupla <code>(incremento, color)</code></strong>, que el <code>for</code> desempaqueta en <code>step, color</code>.</li>
-<li><strong>Los incrementos están en el marco del robot</strong> y se acumulan con <code>tcomp</code>. Así es como se mueve el robot desde el tema 3.</li>
-<li>El primero es nulo, para medir también desde la pose inicial.</li>
-<li><code>draw_lines=False</code>: con 95 haces por pose, las líneas taparían los puntos.</li>
-</ul>
+<section id="74-assignment-2-explorar-la-habitación" class="level3">
+<h3>7.4. Assignment 2: explorar la habitación</h3>
+<p><strong>Qué se pide.</strong> Mover el robot desde <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">[</mo><mn>4</mn><mo>,</mo><mn>4</mn><mo>,</mo><mn>0</mn><msup><mo stretchy="false" form="postfix">]</mo><mi>T</mi></msup></mrow><annotation encoding="application/x-tex">[4, 4, 0]^T</annotation></semantics></math> con los incrementos <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">[</mo><mn>0</mn><mo>,</mo><mn>0</mn><mo>,</mo><mn>0</mn><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">[0,0,0]</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">[</mo><mn>2</mn><mo>,</mo><mn>0</mn><mo>,</mo><mn>0</mn><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">[2,0,0]</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">[</mo><mn>2</mn><mo>,</mo><mn>0</mn><mo>,</mo><mn>0</mn><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">[2,0,0]</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">[</mo><mn>0</mn><mo>,</mo><mn>2</mn><mo>,</mo><mi>π</mi><mi>/</mi><mn>2</mn><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">[0,2,\pi/2]</annotation></semantics></math> y <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">[</mo><mn>2</mn><mo>,</mo><mn>0</mn><mo>,</mo><mn>0</mn><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">[2,0,0]</annotation></semantics></math>, en ese orden, y tomar un scan en cada pose, cada uno de un color. Lo que hay que completar es la <strong>lista de incrementos</strong> con el formato correcto.</p>
+<p><strong>Cómo se resuelve.</strong> Cada incremento está en el <strong>marco del robot</strong>, así que la pose se actualiza <strong>componiendo</strong> con <code>tcomp</code>, como en el tema 3. Sumarlos sería un error.</p>
+<p><strong>Los bloques de <code>explore_environment()</code>:</strong></p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Bloque</th>
+<th>Para qué sirve</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1. Crear el láser</td>
+<td>FOV <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>=</mo><mn>3</mn><mi>π</mi><mi>/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">= 3\pi/2</annotation></semantics></math>, resolución 0.05 (95 haces), alcance 10 m y <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Q</mi><mo>=</mo><mrow><mi mathvariant="normal">d</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">g</mi></mrow><mo stretchy="false" form="prefix">(</mo><mn>0.03</mn><mo>,</mo><mn>0.01</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">Q = \mathrm{diag}(0.03, 0.01)</annotation></semantics></math></td>
+</tr>
+<tr>
+<td>2. Lista de incrementos</td>
+<td>Tuplas <code>(incremento columna, color)</code>. El primero es nulo para medir también en la pose inicial</td>
+</tr>
+<tr>
+<td>3. Figura</td>
+<td>El mapa con <code>dimensions_only=True</code>: solo los límites, sin paredes, para ver qué se reconstruye</td>
+</tr>
+<tr>
+<td>4. Bucle</td>
+<td>Componer el incremento, medir y dibujar desde la nueva pose, sin líneas (con 95 haces taparían los puntos)</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb9"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> <span class="fu">explore_environment</span>():</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 1. Laser of the assignment</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    laser <span class="op">=</span> <span class="fu">create_laser_at_origin</span>(FOV <span class="op">=</span> <span class="dv">3</span> <span class="op">*</span> np.pi<span class="op">/</span><span class="dv">2</span>,</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>        resolution <span class="op">=</span> <span class="fl">0.05</span>,</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>        max_distance <span class="op">=</span> <span class="dv">10</span>,</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>        noise_cov <span class="op">=</span> np.<span class="fu">diag</span>([<span class="fl">0.03</span>, <span class="fl">0.01</span>]))</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 2. Local increments (robot frame), each one with its color</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    pose_increments_list <span class="op">=</span> [</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>        (np.<span class="fu">vstack</span>([<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>]), <span class="st">&#39;orangered&#39;</span>),</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>        (np.<span class="fu">vstack</span>([<span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">0</span>]), <span class="st">&#39;olive&#39;</span>),</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>        (np.<span class="fu">vstack</span>([<span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">0</span>]), <span class="st">&#39;teal&#39;</span>),</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>        (np.<span class="fu">vstack</span>([<span class="dv">0</span>, <span class="dv">2</span>, np.pi<span class="op">/</span><span class="dv">2</span>]), <span class="st">&#39;magenta&#39;</span>),</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>        (np.<span class="fu">vstack</span>([<span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">0</span>]), <span class="st">&#39;indigo&#39;</span>),</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>    ]</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 3. Figure with the map limits only</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>    fig, ax <span class="op">=</span> <span class="fu">plot_virtual_map</span>(virtual_map, <span class="va">True</span>)</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 4. Compose each increment, then measure and draw from the new pose</span></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>    current_pose <span class="op">=</span> np.<span class="fu">vstack</span>([<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">0</span>])</span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> step, color <span class="kw">in</span> pose_increments_list:</span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>        current_pose <span class="op">=</span> <span class="fu">tcomp</span>(current_pose, step)</span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>        <span class="fu">run_laser_and_plot</span>(laser, current_pose, fig, ax, <span class="va">False</span>, color)</span></code></pre></div>
+<p><strong>Qué debe salir.</strong> Las poses visitadas son:</p>
 <table>
 <colgroup>
 <col style="width: 33%" />
@@ -441,7 +657,7 @@ r = \frac{c\,\Delta t}{2}, \qquad c \approx 3\cdot 10^8 \text{ m/s}
 </tr>
 </tbody>
 </table>
-<p>Si los incrementos se <strong>sumaran</strong>, la última pose saldría <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">[</mo><mn>10</mn><mo>,</mo><mn>6</mn><mo>,</mo><mi>π</mi><mi>/</mi><mn>2</mn><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">[10, 6, \pi/2]</annotation></semantics></math>, que es incorrecta.</p>
+<p>Si los incrementos se <strong>sumaran</strong>, la última pose saldría <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">[</mo><mn>10</mn><mo>,</mo><mn>6</mn><mo>,</mo><mi>π</mi><mi>/</mi><mn>2</mn><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">[10, 6, \pi/2]</annotation></semantics></math>. Los cinco scans superpuestos dejan intuir el contorno de la habitación, pero con <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>σ</mi><mi>α</mi></msub><mo>=</mo><mn>0.1</mn></mrow><annotation encoding="application/x-tex">\sigma_\alpha = 0.1</annotation></semantics></math> rad las paredes salen como bandas anchas: es el problema de <em>mapping</em> del tema 6.</p>
 <figure>
 <img src="../../Practicas/uma_robotics_2027/Chapter%2004.Robot%20sensing/img/4.2_captura_assignment2_exploracion.png" alt="Exploración" />
 <figcaption aria-hidden="true">Exploración</figcaption>
@@ -656,164 +872,8 @@ J_{\mathbf{z}} = R(\theta) = \begin{bmatrix} \cos\theta &amp; -\sin\theta \\ \si
 <li><strong>Resultado.</strong> 28 cm: más que el error del propio láser. Por eso, en mapeado, una buena estimación de la orientación es crucial.</li>
 </ul>
 </section>
-<section id="11-errores-típicos-en-el-código" class="level2">
-<h2>11. Errores típicos en el código</h2>
-<p>Cada fragmento tiene <strong>un</strong> error. Intenta encontrarlo antes de leer la corrección.</p>
-<p><strong>E1. Seno y coseno cambiados</strong></p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>x_local <span class="op">=</span> distance<span class="op">*</span>np.sin(angle)</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>y_local <span class="op">=</span> distance<span class="op">*</span>np.cos(angle)</span></code></pre></div>
-<blockquote>
-<p>Debe ser <code>x = r cos α</code>, <code>y = r sin α</code>. Así, el scan sale reflejado respecto a la diagonal <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mo>=</mo><mi>x</mi></mrow><annotation encoding="application/x-tex">y = x</annotation></semantics></math> del sensor.</p>
-</blockquote>
-<p><strong>E2. Orden de la composición</strong></p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>pose_obs_global <span class="op">=</span> tcomp(np.vstack([x_local, y_local, <span class="dv">0</span>]), pose)</span></code></pre></div>
-<blockquote>
-<p>Es <code>tcomp(pose, punto)</code>: primero la pose del sensor y después el punto en su marco. Así se giraría la pose con el ángulo 0 del punto: el resultado sería la suma de las dos posiciones.</p>
-</blockquote>
-<p><strong>E3. Punto con 2 filas</strong></p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>pose_obs_global <span class="op">=</span> tcomp(pose, np.vstack([x_local, y_local]))</span></code></pre></div>
-<blockquote>
-<p><code>tcomp</code> exige 3 filas y lanza <code>Exception('TCOMP: tbc is not a valid transformation!')</code>. Falta añadir un 0: <code>np.vstack([x_local, y_local, 0])</code>.</p>
-</blockquote>
-<p><strong>E4. Doble rotación</strong></p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>angle <span class="op">=</span> z[<span class="dv">1</span>, i] <span class="op">+</span> pose[<span class="dv">2</span>]</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>x_local <span class="op">=</span> distance<span class="op">*</span>np.cos(angle)</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>y_local <span class="op">=</span> distance<span class="op">*</span>np.sin(angle)</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>pose_obs_global <span class="op">=</span> tcomp(pose, np.vstack([x_local, y_local, <span class="dv">0</span>]))</span></code></pre></div>
-<blockquote>
-<p>O se suma <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>θ</mi><annotation encoding="application/x-tex">\theta</annotation></semantics></math> al ángulo (fórmula directa, sin <code>tcomp</code>), o se compone, pero no las dos cosas. Así, el scan sale girado <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>θ</mi><annotation encoding="application/x-tex">\theta</annotation></semantics></math> de más.</p>
-</blockquote>
-<p><strong>E5. Índices de <code>z</code> traspuestos</strong></p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>distance <span class="op">=</span> z[i, <span class="dv">0</span>]</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>angle <span class="op">=</span> z[i, <span class="dv">1</span>]</span></code></pre></div>
-<blockquote>
-<p><code>z</code> es <code>2 × K</code>: la fila es el tipo de dato y la columna, la medida. Debe ser <code>z[0, i]</code> y <code>z[1, i]</code>. Con <code>i ≥ 2</code> da <code>IndexError</code>.</p>
-</blockquote>
-<p><strong>E6. Recorrer las filas en vez de las columnas</strong></p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(z.shape[<span class="dv">0</span>]):</span></code></pre></div>
-<blockquote>
-<p><code>z.shape[0]</code> vale 2 (el número de filas). Hay que recorrer las K medidas: <code>z.shape[1]</code>.</p>
-</blockquote>
-<p><strong>E7. Sumar los incrementos</strong></p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>current_pose <span class="op">=</span> current_pose <span class="op">+</span> step</span></code></pre></div>
-<blockquote>
-<p>Los incrementos son locales: hay que componer, <code>tcomp(current_pose, step)</code>. Sumando, el paso <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">[</mo><mn>0</mn><mo>,</mo><mn>2</mn><mo>,</mo><mi>π</mi><mi>/</mi><mn>2</mn><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">[0, 2, \pi/2]</annotation></semantics></math> funciona por casualidad (con <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>θ</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\theta = 0</annotation></semantics></math>), pero el último <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">[</mo><mn>2</mn><mo>,</mo><mn>0</mn><mo>,</mo><mn>0</mn><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">[2, 0, 0]</annotation></semantics></math> se aplica en <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>x</mi><annotation encoding="application/x-tex">x</annotation></semantics></math> en lugar de en la nueva dirección <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>+</mi><mi>y</mi></mrow><annotation encoding="application/x-tex">+y</annotation></semantics></math>, y la pose final sale <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">[</mo><mn>10</mn><mo>,</mo><mn>6</mn><mo>,</mo><mi>π</mi><mi>/</mi><mn>2</mn><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">[10, 6, \pi/2]</annotation></semantics></math> en vez de <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">[</mo><mn>8</mn><mo>,</mo><mn>8</mn><mo>,</mo><mi>π</mi><mi>/</mi><mn>2</mn><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">[8, 8, \pi/2]</annotation></semantics></math>.</p>
-</blockquote>
-<p><strong>E8. Incremento como array 1D</strong></p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>(np.array([<span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">0</span>]), <span class="st">&#39;olive&#39;</span>),</span></code></pre></div>
-<blockquote>
-<p><code>tcomp</code> accede a <code>tbc[2, 0]</code>, que en un array de forma <code>(3,)</code> da <code>IndexError: too many indices</code>. Debe ser una columna: <code>np.vstack([2, 0, 0])</code>.</p>
-</blockquote>
-<p><strong>E9. Medir antes de colocar el sensor</strong></p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>measurement <span class="op">=</span> laser.take_observation(virtual_map)</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>laser.set_pose(pose)</span></code></pre></div>
-<blockquote>
-<p>Se mide desde la pose anterior (en la primera llamada, el origen) y se dibuja como si fuera desde la nueva. Primero <code>set_pose()</code>.</p>
-</blockquote>
-<p><strong>E10. Pasar el incremento en vez de la pose</strong></p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>current_pose <span class="op">=</span> tcomp(current_pose, step)</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>run_laser_and_plot(laser, step, fig, ax, <span class="va">False</span>, color)</span></code></pre></div>
-<blockquote>
-<p>Se mediría desde <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">[</mo><mn>2</mn><mo>,</mo><mn>0</mn><mo>,</mo><mn>0</mn><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">[2, 0, 0]</annotation></semantics></math>, fuera de la habitación. El segundo argumento es <code>current_pose</code>.</p>
-</blockquote>
-<p><strong>E11. Desviaciones en lugar de varianzas</strong></p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># we want sigma_r = 0.1 m and sigma_alpha = 0.01 rad</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>laser <span class="op">=</span> create_laser_at_origin(<span class="dv">3</span><span class="op">*</span>np.pi<span class="op">/</span><span class="dv">2</span>, <span class="fl">0.2</span>, <span class="dv">10</span>, np.diag([<span class="fl">0.1</span>, <span class="fl">0.01</span>]))</span></code></pre></div>
-<blockquote>
-<p><code>noise_cov</code> lleva varianzas: <code>np.diag([0.1**2, 0.01**2])</code> = <code>np.diag([0.01, 0.0001])</code>. Tal como está, σ&lt;sub&gt;r&lt;/sub&gt; = 0.32 m y σ&lt;sub&gt;α&lt;/sub&gt; = 0.1 rad.</p>
-</blockquote>
-<p><strong>E12. Olvidar el <code>+1</code> en el número de haces</strong></p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>n_beams <span class="op">=</span> math.floor(<span class="va">self</span>.FOV <span class="op">/</span> <span class="va">self</span>.resolution)</span></code></pre></div>
-<blockquote>
-<p>Con FOV <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>=</mo><mi>π</mi></mrow><annotation encoding="application/x-tex">=\pi</annotation></semantics></math> y resolución <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>π</mi><mi>/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">\pi/2</annotation></semantics></math> saldrían 2 haces (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>90</mn><mi>°</mi></mrow><annotation encoding="application/x-tex">-90°</annotation></semantics></math> y <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mi>°</mi></mrow><annotation encoding="application/x-tex">0°</annotation></semantics></math>) en lugar de 3: se pierde el extremo <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>+</mi><mn>90</mn><mi>°</mi></mrow><annotation encoding="application/x-tex">+90°</annotation></semantics></math>.</p>
-</blockquote>
-<p><strong>E13. <code>sys.path</code> incorrecto</strong></p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>sys.path.append(<span class="st">&quot;../..&quot;</span>)</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> utils.laser.laser2D <span class="im">import</span> Laser2D</span></code></pre></div>
-<blockquote>
-<p>El notebook está directamente en <code>Chapter 04.Robot sensing/</code>, así que <code>utils</code> está en <code>".."</code>. Con <code>"../.."</code> da <code>ModuleNotFoundError: No module named 'utils'</code>.</p>
-</blockquote>
-<p><strong>E14. Dibujar el punto local</strong></p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>ax.plot(x_local, y_local, <span class="st">&#39;o&#39;</span>, markersize<span class="op">=</span><span class="dv">4</span>, color<span class="op">=</span>point_color)</span></code></pre></div>
-<blockquote>
-<p>Se dibujaría el punto en el marco del sensor, como si el robot estuviera en el origen mirando hacia <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>+</mi><mi>x</mi></mrow><annotation encoding="application/x-tex">+x</annotation></semantics></math>. Hay que dibujar <code>x, y</code> (globales).</p>
-</blockquote>
-</section>
-<section id="12-rellena-el-hueco" class="level2">
-<h2>12. Rellena el hueco</h2>
-<p><strong>H1.</strong> Polares → cartesianas.</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>distance <span class="op">=</span> z[____, i]</span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>angle <span class="op">=</span> z[____, i]</span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>x_local <span class="op">=</span> distance<span class="op">*</span>np.____(angle)</span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>y_local <span class="op">=</span> distance<span class="op">*</span>np.____(angle)</span></code></pre></div>
-<blockquote>
-<p><code>0</code>, <code>1</code>, <code>cos</code>, <code>sin</code>.</p>
-</blockquote>
-<p><strong>H2.</strong> Composición con la pose.</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>pose_obs_global <span class="op">=</span> ____(pose, np.vstack([x_local, y_local, ____]))</span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> pose_obs_global[____]</span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> pose_obs_global[____]</span></code></pre></div>
-<blockquote>
-<p><code>tcomp</code>, <code>0</code>, <code>0</code>, <code>1</code>.</p>
-</blockquote>
-<p><strong>H3.</strong> Recorrer las medidas.</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(z.shape[____]):</span></code></pre></div>
-<blockquote>
-<p><code>1</code>.</p>
-</blockquote>
-<p><strong>H4.</strong> Crear el láser.</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>laser <span class="op">=</span> Laser2D(FOV, resolution, ____, noise_cov, ____)</span></code></pre></div>
-<blockquote>
-<p><code>max_distance</code>, <code>origin_pose</code> (o cualquier pose columna <code>(3, 1)</code>).</p>
-</blockquote>
-<p><strong>H5.</strong> Matriz de covarianza del sensor a partir de los deslizadores.</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>laser <span class="op">=</span> create_laser_at_origin(FOV, resolution, max_distance, np.____([distance_noise, angle_noise]))</span></code></pre></div>
-<blockquote>
-<p><code>diag</code>.</p>
-</blockquote>
-<p><strong>H6.</strong> Tomar una medida.</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>laser.____(pose)</span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>measurement <span class="op">=</span> laser.____(virtual_map)</span></code></pre></div>
-<blockquote>
-<p><code>set_pose</code>, <code>take_observation</code>.</p>
-</blockquote>
-<p><strong>H7.</strong> Lista de incrementos del Assignment 2 (el cuarto movimiento).</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>(np.vstack([<span class="dv">0</span>, <span class="dv">2</span>, ____]), <span class="st">&#39;magenta&#39;</span>),</span></code></pre></div>
-<blockquote>
-<p><code>np.pi/2</code>.</p>
-</blockquote>
-<p><strong>H8.</strong> Bucle de exploración.</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> step, color <span class="kw">in</span> pose_increments_list:</span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>    current_pose <span class="op">=</span> ____(current_pose, ____)</span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>    run_laser_and_plot(____, current_pose, fig, ax, <span class="va">False</span>, color)</span></code></pre></div>
-<blockquote>
-<p><code>tcomp</code>, <code>step</code>, <code>laser</code>.</p>
-</blockquote>
-<p><strong>H9.</strong> Dentro de <code>Laser2D</code>: ruido en la distancia.</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>z[<span class="dv">0</span>, i_beam] <span class="op">=</span> d <span class="op">+</span> np.random.normal(<span class="dv">0</span>, np.____(<span class="va">self</span>.noise_cov[<span class="dv">0</span>][<span class="dv">0</span>]))</span></code></pre></div>
-<blockquote>
-<p><code>sqrt</code>.</p>
-</blockquote>
-<p><strong>H10.</strong> Número de haces.</p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>n_beams <span class="op">=</span> math.____(<span class="va">self</span>.FOV <span class="op">/</span> <span class="va">self</span>.resolution) <span class="op">+</span> ____</span></code></pre></div>
-<blockquote>
-<p><code>floor</code>, <code>1</code>.</p>
-</blockquote>
-<p><strong>H11.</strong> Jacobiano polar → cartesiano.</p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>J <span class="op">=</span> np.array([[np.cos(alpha), <span class="op">-</span>r<span class="op">*</span>np.____(alpha)],</span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>              [np.sin(alpha),  ____<span class="op">*</span>np.cos(alpha)]])</span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>Sigma_c <span class="op">=</span> J <span class="op">@</span> Q <span class="op">@</span> J.____</span></code></pre></div>
-<blockquote>
-<p><code>sin</code>, <code>r</code>, <code>T</code>.</p>
-</blockquote>
-<p><strong>H12.</strong> Límites del dibujo ignorando los NaN.</p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>plt.xlim([np.____(virtual_map[<span class="dv">0</span>])<span class="op">-</span><span class="dv">2</span>, np.nanmax(virtual_map[<span class="dv">0</span>])<span class="op">+</span><span class="dv">2</span>])</span></code></pre></div>
-<blockquote>
-<p><code>nanmin</code>.</p>
-</blockquote>
-</section>
-<section id="13-preguntas-de-repaso-con-solución" class="level2">
-<h2>13. Preguntas de repaso (con solución)</h2>
+<section id="11-preguntas-de-repaso-con-solución" class="level2">
+<h2>11. Preguntas de repaso (con solución)</h2>
 <ol type="1">
 <li><p><strong>¿Qué devuelve <code>take_observation()</code> y en qué marco?</strong> Una matriz <code>2 × K</code> con los alcances (fila 0) y los ángulos (fila 1), en polares y en el marco del sensor.</p></li>
 <li><p><strong>¿Por qué hay que añadir un 0 al punto antes de llamar a <code>tcomp</code>?</strong> Porque <code>tcomp</code> compone poses <code>(3, 1)</code> y comprueba que tengan 3 filas. El ángulo del resultado se ignora.</p></li>
@@ -827,8 +887,8 @@ J_{\mathbf{z}} = R(\theta) = \begin{bmatrix} \cos\theta &amp; -\sin\theta \\ \si
 <li><p><strong>¿Qué faltaría para obtener un mapa fiable de los scans del Assignment 2?</strong> Tratarlos de forma probabilística (<em>mapping</em>, por ejemplo con rejillas de ocupación) y, si la pose es incierta, estimarla a la vez (SLAM).</p></li>
 </ol>
 </section>
-<section id="14-ideas-esenciales-para-recordar" class="level2">
-<h2>14. Ideas esenciales para recordar</h2>
+<section id="12-ideas-esenciales-para-recordar" class="level2">
+<h2>12. Ideas esenciales para recordar</h2>
 <ul>
 <li>Láser: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>r</mi><mo>=</mo><mi>c</mi><mi mathvariant="normal">Δ</mi><mi>t</mi><mi>/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">r = c\Delta t/2</annotation></semantics></math>. Haces: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>=</mo><mo stretchy="false" form="prefix">⌊</mo><mrow><mi mathvariant="normal">F</mi><mi mathvariant="normal">O</mi><mi mathvariant="normal">V</mi></mrow><mi>/</mi><mrow><mi mathvariant="normal">r</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">s</mi></mrow><mo stretchy="false" form="postfix">⌋</mo><mo>+</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">n = \lfloor\mathrm{FOV}/\mathrm{res}\rfloor + 1</annotation></semantics></math>, con <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mi>i</mi></msub><mo>=</mo><mi>i</mi><mo>⋅</mo><mrow><mi mathvariant="normal">r</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">s</mi></mrow><mo>−</mo><mrow><mi mathvariant="normal">F</mi><mi mathvariant="normal">O</mi><mi mathvariant="normal">V</mi></mrow><mi>/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">\alpha_i = i\cdot\mathrm{res} - \mathrm{FOV}/2</annotation></semantics></math> relativo al sensor.</li>
 <li><code>z</code> es <code>2 × K</code>: fila 0, alcances; fila 1, ángulos relativos. Se recorre con <code>z.shape[1]</code>.</li>

@@ -6,7 +6,7 @@
   <meta name="color-scheme" content="light">
   <title>P4.3 · Sensores con ROS 2 | RoboTest</title>
   <link rel="stylesheet" href="../assets/robotest.css?v=83d15755">
-  <link rel="stylesheet" href="../assets/resumenes.css?v=1a06a11b">
+  <link rel="stylesheet" href="../assets/resumenes.css?v=cd58c869">
   <script src="../assets/resumenes.js?v=5ba61f92" defer></script>
 </head>
 <body>
@@ -22,15 +22,15 @@
         <h1 id="hero-title">Sensores con ROS 2<span class="hero-period">.</span></h1>
         <p>Práctica 4.3: los sensores del TurtleBot3 en MVSim, el mensaje LaserScan y el árbol tf.</p>
         <div class="hero-actions"><a class="button primary" href="#apuntes">Empezar a leer <span aria-hidden="true">↘</span></a><button type="button" class="button subtle study-check" data-roadmap-key="robotica-ruta-parcial2-v1" data-step="study:P4.3" aria-pressed="false">Marcar como estudiado</button><a class="button subtle" href="index.html?lesson=P4.3#filters">Practicar el tema</a></div>
-        <div class="lesson-facts"><span>14 bloques de lectura</span><span>130 fórmulas renderizadas</span><span>Sin conexión</span></div>
+        <div class="lesson-facts"><span>12 bloques de lectura</span><span>136 fórmulas renderizadas</span><span>Sin conexión</span></div>
       </div>
       <div class="hero-art" aria-hidden="true"><div class="grid-plane"></div><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="robot-icon"><span class="eye"></span><span class="eye"></span></div><div class="beacon beacon-a"></div><div class="beacon beacon-b"></div><span class="art-label label-a">SENSE</span><span class="art-label label-b">PLAN</span><span class="art-label label-c">ACT</span></div>
     </section>
     <div class="reading-wrap" id="apuntes">
-      <section id="study-tracker" class="study-tracker" aria-label="Tu progreso" data-roadmap-key="robotica-ruta-parcial2-v1" data-page="P4.3" data-minutes="50" data-route-url="index.html#ruta" data-companions-title="Resto del tema L4" data-companions="[{&quot;key&quot;: &quot;L4&quot;, &quot;title&quot;: &quot;Percepción del robot&quot;, &quot;href&quot;: &quot;Resumen_L4_Percepcion_Robot.html&quot;, &quot;lesson&quot;: true}, {&quot;key&quot;: &quot;P4.1&quot;, &quot;title&quot;: &quot;Modelos basados en landmarks&quot;, &quot;href&quot;: &quot;P4.1_Landmarks.html&quot;, &quot;lesson&quot;: false}, {&quot;key&quot;: &quot;P4.2&quot;, &quot;title&quot;: &quot;Escáner láser&quot;, &quot;href&quot;: &quot;P4.2_Laser_scanner.html&quot;, &quot;lesson&quot;: false}]"></section>
+      <section id="study-tracker" class="study-tracker" aria-label="Tu progreso" data-roadmap-key="robotica-ruta-parcial2-v1" data-page="P4.3" data-minutes="60" data-route-url="index.html#ruta" data-companions-title="Resto del tema L4" data-companions="[{&quot;key&quot;: &quot;L4&quot;, &quot;title&quot;: &quot;Percepción del robot&quot;, &quot;href&quot;: &quot;Resumen_L4_Percepcion_Robot.html&quot;, &quot;lesson&quot;: true}, {&quot;key&quot;: &quot;P4.1&quot;, &quot;title&quot;: &quot;Modelos basados en landmarks&quot;, &quot;href&quot;: &quot;P4.1_Landmarks.html&quot;, &quot;lesson&quot;: false}, {&quot;key&quot;: &quot;P4.2&quot;, &quot;title&quot;: &quot;Escáner láser&quot;, &quot;href&quot;: &quot;P4.2_Laser_scanner.html&quot;, &quot;lesson&quot;: false}]"></section>
       <div class="reading-intro"><div><span class="overline">P4.3 / LECTURA</span><h2>Todo el contenido, mejor organizado.</h2><p>Índice navegable, secciones cortas y fórmulas legibles. El contenido del apunte original se mantiene íntegro.</p></div><a class="original-link" href="../../Teoria/Parcial-2/Guias_practicas/P4.3_Playing_with_ROS2.md">Ver Markdown original ↗</a></div>
-      <details class="mobile-toc"><summary>Índice de contenidos <span aria-hidden="true">⌄</span></summary><nav class="toc-items" aria-label="Apartados de la página"><details class="toc-chapter" open><summary><span class="toc-number">·</span><span>Índice</span></summary><div class="toc-links"><a href="#índice">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">01</span><span>Objetivo y lugar en el temario</span></summary><div class="toc-links"><a href="#1-objetivo-y-lugar-en-el-temario">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">02</span><span>El montaje: ROS 2, MVSim y RViz2</span></summary><div class="toc-links"><a href="#2-el-montaje-ros-2-mvsim-y-rviz2">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">03</span><span>El mundo XML y cómo configurar los sensores</span></summary><div class="toc-links"><a href="#3-el-mundo-xml-y-cómo-configurar-los-sensores">Ir al bloque</a><a href="#31-dónde-está-el-archivo">3.1. Dónde está el archivo</a><a href="#32-clases-de-vehículo-include-y-argumentos">3.2. Clases de vehículo, &lt;include&gt; y argumentos</a><a href="#33-cambiar-el-láser-assignment-5">3.3. Cambiar el láser (Assignment 5)</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">04</span><span>Los comandos de ROS 2 que hay que saber</span></summary><div class="toc-links"><a href="#4-los-comandos-de-ros-2-que-hay-que-saber">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">05</span><span>Los sensores del TurtleBot3 en ROS 2</span></summary><div class="toc-links"><a href="#5-los-sensores-del-turtlebot3-en-ros-2">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">06</span><span>El mensaje LaserScan</span></summary><div class="toc-links"><a href="#6-el-mensaje-laserscan">Ir al bloque</a><a href="#61-campos">6.1. Campos</a><a href="#62-solo-se-guardan-los-alcances">6.2. Solo se guardan los alcances</a><a href="#63-de-dónde-salen-los-800-haces">6.3. De dónde salen los 800 haces</a><a href="#64-qué-devuelve-un-haz-que-no-choca-con-nada">6.4. Qué devuelve un haz que no choca con nada</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">07</span><span>Ruido y configuración del láser</span></summary><div class="toc-links"><a href="#7-ruido-y-configuración-del-láser">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">08</span><span>Marcos de referencia y tf2</span></summary><div class="toc-links"><a href="#8-marcos-de-referencia-y-tf2">Ir al bloque</a><a href="#81-por-qué-hacen-falta">8.1. Por qué hacen falta</a><a href="#82-las-ideas-de-tf2">8.2. Las ideas de tf2</a><a href="#83-marcos-estándar-rep-105">8.3. Marcos estándar (REP 105)</a><a href="#84-el-árbol-del-turtlebot3">8.4. El árbol del TurtleBot3</a><a href="#85-lo-que-mide-cada-tf2_echo">8.5. Lo que mide cada tf2_echo</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">09</span><span>Los apartados opcionales</span></summary><div class="toc-links"><a href="#9-los-apartados-opcionales">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">10</span><span>Cálculos resueltos</span></summary><div class="toc-links"><a href="#10-cálculos-resueltos">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">11</span><span>Errores típicos</span></summary><div class="toc-links"><a href="#11-errores-típicos">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">12</span><span>Rellena el hueco</span></summary><div class="toc-links"><a href="#12-rellena-el-hueco">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">13</span><span>Preguntas de repaso (con solución)</span></summary><div class="toc-links"><a href="#13-preguntas-de-repaso-con-solución">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">14</span><span>Ideas esenciales para recordar</span></summary><div class="toc-links"><a href="#14-ideas-esenciales-para-recordar">Ir al bloque</a></div></details></nav></details>
-      <div class="reading-columns"><aside class="toc-sidebar"><div class="toc-box"><span class="overline">EN ESTA PÁGINA</span><p>L4 · 15 bloques</p><nav class="toc-items" aria-label="Apartados de la página"><details class="toc-chapter" open><summary><span class="toc-number">·</span><span>Índice</span></summary><div class="toc-links"><a href="#índice">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">01</span><span>Objetivo y lugar en el temario</span></summary><div class="toc-links"><a href="#1-objetivo-y-lugar-en-el-temario">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">02</span><span>El montaje: ROS 2, MVSim y RViz2</span></summary><div class="toc-links"><a href="#2-el-montaje-ros-2-mvsim-y-rviz2">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">03</span><span>El mundo XML y cómo configurar los sensores</span></summary><div class="toc-links"><a href="#3-el-mundo-xml-y-cómo-configurar-los-sensores">Ir al bloque</a><a href="#31-dónde-está-el-archivo">3.1. Dónde está el archivo</a><a href="#32-clases-de-vehículo-include-y-argumentos">3.2. Clases de vehículo, &lt;include&gt; y argumentos</a><a href="#33-cambiar-el-láser-assignment-5">3.3. Cambiar el láser (Assignment 5)</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">04</span><span>Los comandos de ROS 2 que hay que saber</span></summary><div class="toc-links"><a href="#4-los-comandos-de-ros-2-que-hay-que-saber">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">05</span><span>Los sensores del TurtleBot3 en ROS 2</span></summary><div class="toc-links"><a href="#5-los-sensores-del-turtlebot3-en-ros-2">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">06</span><span>El mensaje LaserScan</span></summary><div class="toc-links"><a href="#6-el-mensaje-laserscan">Ir al bloque</a><a href="#61-campos">6.1. Campos</a><a href="#62-solo-se-guardan-los-alcances">6.2. Solo se guardan los alcances</a><a href="#63-de-dónde-salen-los-800-haces">6.3. De dónde salen los 800 haces</a><a href="#64-qué-devuelve-un-haz-que-no-choca-con-nada">6.4. Qué devuelve un haz que no choca con nada</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">07</span><span>Ruido y configuración del láser</span></summary><div class="toc-links"><a href="#7-ruido-y-configuración-del-láser">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">08</span><span>Marcos de referencia y tf2</span></summary><div class="toc-links"><a href="#8-marcos-de-referencia-y-tf2">Ir al bloque</a><a href="#81-por-qué-hacen-falta">8.1. Por qué hacen falta</a><a href="#82-las-ideas-de-tf2">8.2. Las ideas de tf2</a><a href="#83-marcos-estándar-rep-105">8.3. Marcos estándar (REP 105)</a><a href="#84-el-árbol-del-turtlebot3">8.4. El árbol del TurtleBot3</a><a href="#85-lo-que-mide-cada-tf2_echo">8.5. Lo que mide cada tf2_echo</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">09</span><span>Los apartados opcionales</span></summary><div class="toc-links"><a href="#9-los-apartados-opcionales">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">10</span><span>Cálculos resueltos</span></summary><div class="toc-links"><a href="#10-cálculos-resueltos">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">11</span><span>Errores típicos</span></summary><div class="toc-links"><a href="#11-errores-típicos">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">12</span><span>Rellena el hueco</span></summary><div class="toc-links"><a href="#12-rellena-el-hueco">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">13</span><span>Preguntas de repaso (con solución)</span></summary><div class="toc-links"><a href="#13-preguntas-de-repaso-con-solución">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">14</span><span>Ideas esenciales para recordar</span></summary><div class="toc-links"><a href="#14-ideas-esenciales-para-recordar">Ir al bloque</a></div></details></nav><a class="toc-practice" href="index.html?lesson=P4.3#filters">Practicar preguntas ↗</a></div></aside><div class="reading-main"><article class="notes-body"><section id="43-sensores-reales-con-ros-2-y-mvsim" class="level1">
+      <details class="mobile-toc"><summary>Índice de contenidos <span aria-hidden="true">⌄</span></summary><nav class="toc-items" aria-label="Apartados de la página"><details class="toc-chapter" open><summary><span class="toc-number">·</span><span>Índice</span></summary><div class="toc-links"><a href="#índice">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">01</span><span>Objetivo y lugar en el temario</span></summary><div class="toc-links"><a href="#1-objetivo-y-lugar-en-el-temario">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">02</span><span>El montaje: ROS 2, MVSim y RViz2</span></summary><div class="toc-links"><a href="#2-el-montaje-ros-2-mvsim-y-rviz2">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">03</span><span>El mundo XML y cómo configurar los sensores</span></summary><div class="toc-links"><a href="#3-el-mundo-xml-y-cómo-configurar-los-sensores">Ir al bloque</a><a href="#31-dónde-está-el-archivo">3.1. Dónde está el archivo</a><a href="#32-clases-de-vehículo-include-y-argumentos">3.2. Clases de vehículo, &lt;include&gt; y argumentos</a><a href="#33-cambiar-el-láser-assignment-5">3.3. Cambiar el láser (Assignment 5)</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">04</span><span>Los comandos de ROS 2 que hay que saber</span></summary><div class="toc-links"><a href="#4-los-comandos-de-ros-2-que-hay-que-saber">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">05</span><span>Los sensores del TurtleBot3 en ROS 2</span></summary><div class="toc-links"><a href="#5-los-sensores-del-turtlebot3-en-ros-2">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">06</span><span>El mensaje LaserScan</span></summary><div class="toc-links"><a href="#6-el-mensaje-laserscan">Ir al bloque</a><a href="#61-campos">6.1. Campos</a><a href="#62-solo-se-guardan-los-alcances">6.2. Solo se guardan los alcances</a><a href="#63-de-dónde-salen-los-800-haces">6.3. De dónde salen los 800 haces</a><a href="#64-qué-devuelve-un-haz-que-no-choca-con-nada">6.4. Qué devuelve un haz que no choca con nada</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">07</span><span>Ruido y configuración del láser</span></summary><div class="toc-links"><a href="#7-ruido-y-configuración-del-láser">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">08</span><span>Marcos de referencia y tf2</span></summary><div class="toc-links"><a href="#8-marcos-de-referencia-y-tf2">Ir al bloque</a><a href="#81-por-qué-hacen-falta">8.1. Por qué hacen falta</a><a href="#82-las-ideas-de-tf2">8.2. Las ideas de tf2</a><a href="#83-marcos-estándar-rep-105">8.3. Marcos estándar (REP 105)</a><a href="#84-el-árbol-del-turtlebot3">8.4. El árbol del TurtleBot3</a><a href="#85-lo-que-mide-cada-tf2_echo">8.5. Lo que mide cada tf2_echo</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">09</span><span>El notebook, ejercicio a ejercicio</span></summary><div class="toc-links"><a href="#9-el-notebook-ejercicio-a-ejercicio">Ir al bloque</a><a href="#91-assignment-1-preparar-el-mundo">9.1. Assignment 1: preparar el mundo</a><a href="#92-assignment-2-inventario-de-sensores">9.2. Assignment 2: inventario de sensores</a><a href="#93-assignment-3-anatomía-de-un-scan">9.3. Assignment 3: anatomía de un scan</a><a href="#94-assignment-4-medir-el-ruido-del-láser">9.4. Assignment 4: medir el ruido del láser</a><a href="#95-assignment-5-configurar-el-láser">9.5. Assignment 5: configurar el láser</a><a href="#96-assignment-6-el-árbol-tf">9.6. Assignment 6: el árbol tf</a><a href="#97-los-apartados-opcionales">9.7. Los apartados opcionales</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">10</span><span>Cálculos resueltos</span></summary><div class="toc-links"><a href="#10-cálculos-resueltos">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">11</span><span>Preguntas de repaso (con solución)</span></summary><div class="toc-links"><a href="#11-preguntas-de-repaso-con-solución">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">12</span><span>Ideas esenciales para recordar</span></summary><div class="toc-links"><a href="#12-ideas-esenciales-para-recordar">Ir al bloque</a></div></details></nav></details>
+      <div class="reading-columns"><aside class="toc-sidebar"><div class="toc-box"><span class="overline">EN ESTA PÁGINA</span><p>L4 · 13 bloques</p><nav class="toc-items" aria-label="Apartados de la página"><details class="toc-chapter" open><summary><span class="toc-number">·</span><span>Índice</span></summary><div class="toc-links"><a href="#índice">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">01</span><span>Objetivo y lugar en el temario</span></summary><div class="toc-links"><a href="#1-objetivo-y-lugar-en-el-temario">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">02</span><span>El montaje: ROS 2, MVSim y RViz2</span></summary><div class="toc-links"><a href="#2-el-montaje-ros-2-mvsim-y-rviz2">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">03</span><span>El mundo XML y cómo configurar los sensores</span></summary><div class="toc-links"><a href="#3-el-mundo-xml-y-cómo-configurar-los-sensores">Ir al bloque</a><a href="#31-dónde-está-el-archivo">3.1. Dónde está el archivo</a><a href="#32-clases-de-vehículo-include-y-argumentos">3.2. Clases de vehículo, &lt;include&gt; y argumentos</a><a href="#33-cambiar-el-láser-assignment-5">3.3. Cambiar el láser (Assignment 5)</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">04</span><span>Los comandos de ROS 2 que hay que saber</span></summary><div class="toc-links"><a href="#4-los-comandos-de-ros-2-que-hay-que-saber">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">05</span><span>Los sensores del TurtleBot3 en ROS 2</span></summary><div class="toc-links"><a href="#5-los-sensores-del-turtlebot3-en-ros-2">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">06</span><span>El mensaje LaserScan</span></summary><div class="toc-links"><a href="#6-el-mensaje-laserscan">Ir al bloque</a><a href="#61-campos">6.1. Campos</a><a href="#62-solo-se-guardan-los-alcances">6.2. Solo se guardan los alcances</a><a href="#63-de-dónde-salen-los-800-haces">6.3. De dónde salen los 800 haces</a><a href="#64-qué-devuelve-un-haz-que-no-choca-con-nada">6.4. Qué devuelve un haz que no choca con nada</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">07</span><span>Ruido y configuración del láser</span></summary><div class="toc-links"><a href="#7-ruido-y-configuración-del-láser">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">08</span><span>Marcos de referencia y tf2</span></summary><div class="toc-links"><a href="#8-marcos-de-referencia-y-tf2">Ir al bloque</a><a href="#81-por-qué-hacen-falta">8.1. Por qué hacen falta</a><a href="#82-las-ideas-de-tf2">8.2. Las ideas de tf2</a><a href="#83-marcos-estándar-rep-105">8.3. Marcos estándar (REP 105)</a><a href="#84-el-árbol-del-turtlebot3">8.4. El árbol del TurtleBot3</a><a href="#85-lo-que-mide-cada-tf2_echo">8.5. Lo que mide cada tf2_echo</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">09</span><span>El notebook, ejercicio a ejercicio</span></summary><div class="toc-links"><a href="#9-el-notebook-ejercicio-a-ejercicio">Ir al bloque</a><a href="#91-assignment-1-preparar-el-mundo">9.1. Assignment 1: preparar el mundo</a><a href="#92-assignment-2-inventario-de-sensores">9.2. Assignment 2: inventario de sensores</a><a href="#93-assignment-3-anatomía-de-un-scan">9.3. Assignment 3: anatomía de un scan</a><a href="#94-assignment-4-medir-el-ruido-del-láser">9.4. Assignment 4: medir el ruido del láser</a><a href="#95-assignment-5-configurar-el-láser">9.5. Assignment 5: configurar el láser</a><a href="#96-assignment-6-el-árbol-tf">9.6. Assignment 6: el árbol tf</a><a href="#97-los-apartados-opcionales">9.7. Los apartados opcionales</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">10</span><span>Cálculos resueltos</span></summary><div class="toc-links"><a href="#10-cálculos-resueltos">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">11</span><span>Preguntas de repaso (con solución)</span></summary><div class="toc-links"><a href="#11-preguntas-de-repaso-con-solución">Ir al bloque</a></div></details><details class="toc-chapter" ><summary><span class="toc-number">12</span><span>Ideas esenciales para recordar</span></summary><div class="toc-links"><a href="#12-ideas-esenciales-para-recordar">Ir al bloque</a></div></details></nav><a class="toc-practice" href="index.html?lesson=P4.3#filters">Practicar preguntas ↗</a></div></aside><div class="reading-main"><article class="notes-body"><section id="43-sensores-reales-con-ros-2-y-mvsim" class="level1">
 <h1>4.3 Sensores reales con ROS 2 y MVSim</h1>
 <p>Guía de estudio del notebook <a href="../../Practicas/uma_robotics_2027/Chapter%2004.Robot%20sensing/4.3%20Playing%20with%20ROS2.ipynb">4.3 Playing with ROS2</a>. Lo que se hizo en la máquina virtual y los resultados obtenidos están en <a href="../../Practicas/uma_robotics_2027/Chapter%2004.Robot%20sensing/4.3%20Resoluci%C3%B3n%20y%20gu%C3%ADa%20de%20entrega.md">4.3 Resolución y guía de entrega.md</a>. La teoría del tema está en el <a href="../../Teoria/Parcial-2/L4-Robot-sensing/Resumen_L4_Percepcion_Robot.md">resumen de L4</a>.</p>
 <p><strong>Enfoque de examen.</strong> Este notebook no tiene código Python: se trabaja con <strong>comandos de ROS 2</strong> en la terminal y con el <strong>XML del mundo</strong> de MVSim. Por eso las preguntas de examen probables son de tres tipos:</p>
@@ -39,7 +39,7 @@
 <li><strong>Qué línea está mal</strong> en una secuencia de comandos o en un bloque XML.</li>
 <li><strong>Pequeños cálculos</strong> con los campos del mensaje <code>LaserScan</code> (índice de un haz, ángulo, número de haces) y con las transformaciones de tf (composición de poses).</li>
 </ul>
-<p>Al final hay cálculos resueltos, errores típicos, huecos para rellenar y preguntas de repaso.</p>
+<p>Los apartados 2–8 explican las herramientas; el 9 recorre el notebook ejercicio a ejercicio (qué se pide, cómo se resuelve y para qué sirve cada comando), y al final hay cálculos resueltos y preguntas de repaso. Para entrenar las preguntas de examen (qué línea está mal, qué falta en un comando), usa el <a href="index.html?lesson=P4.3#filters">test de la práctica 4.3</a>.</p>
 <section id="índice" class="level2">
 <h2>Índice</h2>
 <ol type="1">
@@ -51,12 +51,10 @@
 <li><a href="#6-el-mensaje-laserscan">El mensaje <code>LaserScan</code></a></li>
 <li><a href="#7-ruido-y-configuración-del-láser">Ruido y configuración del láser</a></li>
 <li><a href="#8-marcos-de-referencia-y-tf2">Marcos de referencia y tf2</a></li>
-<li><a href="#9-los-apartados-opcionales">Los apartados opcionales</a></li>
+<li><a href="#9-el-notebook-ejercicio-a-ejercicio">El notebook, ejercicio a ejercicio</a></li>
 <li><a href="#10-cálculos-resueltos">Cálculos resueltos</a></li>
-<li><a href="#11-errores-típicos">Errores típicos</a></li>
-<li><a href="#12-rellena-el-hueco">Rellena el hueco</a></li>
-<li><a href="#13-preguntas-de-repaso-con-solución">Preguntas de repaso (con solución)</a></li>
-<li><a href="#14-ideas-esenciales-para-recordar">Ideas esenciales para recordar</a></li>
+<li><a href="#11-preguntas-de-repaso-con-solución">Preguntas de repaso (con solución)</a></li>
+<li><a href="#12-ideas-esenciales-para-recordar">Ideas esenciales para recordar</a></li>
 </ol>
 </section>
 <section id="1-objetivo-y-lugar-en-el-temario" class="level2">
@@ -532,13 +530,263 @@ n_\text{rays} = \frac{1/\texttt{sensor\_hz}}{125\cdot10^{-6}} = \frac{0.1}{0.000
 <p>En la salida, el yaw es <strong>el último valor de <code>Rotation: in RPY (radian)</code></strong>.</p>
 </section>
 </section>
-<section id="9-los-apartados-opcionales" class="level2">
-<h2>9. Los apartados opcionales</h2>
+<section id="9-el-notebook-ejercicio-a-ejercicio" class="level2">
+<h2>9. El notebook, ejercicio a ejercicio</h2>
+<p>Este notebook no se ejecuta: es una guía de laboratorio. Cada ejercicio se hace en la terminal de la VM y en el notebook se pegan los comandos, sus salidas y capturas. El orden es:</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Parte</th>
+<th>Qué se pide</th>
+<th>Con qué se hace</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Assignment 1</td>
+<td>Preparar el mundo: quitar los sensores de la clase y montar láser e IMU</td>
+<td>El XML del mundo y <code>ros2 launch</code></td>
+</tr>
+<tr>
+<td>Assignment 2</td>
+<td>Inventario de sensores: topic, tipo, <code>frame_id</code> y frecuencia</td>
+<td><code>ros2 topic list -t</code>, <code>echo</code>, <code>hz</code></td>
+</tr>
+<tr>
+<td>Assignment 3</td>
+<td>Anatomía de un scan: campos de <code>LaserScan</code> y ángulo de cada haz</td>
+<td><code>ros2 interface show</code>, <code>echo --no-arr</code></td>
+</tr>
+<tr>
+<td>Assignment 4</td>
+<td>Medir el ruido del láser con el robot quieto</td>
+<td><code>echo --field ranges</code> varias veces</td>
+</tr>
+<tr>
+<td>Assignment 5</td>
+<td>Cambiar el ruido y el alcance del láser</td>
+<td>Argumentos del <code>&lt;include&gt;</code> del láser</td>
+</tr>
+<tr>
+<td>Thinking about it</td>
+<td>Qué gana <code>LaserScan</code> guardando solo alcances; lecturas de <code>range_max</code></td>
+<td>Razonamiento</td>
+</tr>
+<tr>
+<td>Assignment 6</td>
+<td>El árbol tf y la composición de poses</td>
+<td><code>view_frames</code> y <code>tf2_echo</code></td>
+</tr>
+<tr>
+<td>Opcionales</td>
+<td>Observar un landmark con tf; grabar y reproducir con rosbag</td>
+<td><code>static_transform_publisher</code>, <code>ros2 bag</code></td>
+</tr>
+</tbody>
+</table>
+<p>En cada uno se explica <strong>qué pide el enunciado</strong>, <strong>cómo se resuelve</strong> y <strong>para qué sirve cada comando o bloque</strong>, con lo que salió en la VM.</p>
+<section id="91-assignment-1-preparar-el-mundo" class="level3">
+<h3>9.1. Assignment 1: preparar el mundo</h3>
+<p><strong>Qué se pide.</strong> La clase del TurtleBot3 trae láser, cámara Full HD e IMU, y la cámara ralentiza mucho la simulación en una VM. Hay que (1) encontrar el archivo del mundo, (2) quitar los sensores de la clase con <code>default_sensors="false"</code>, (3) montar el láser y la IMU desde el mundo y (4) lanzar la simulación y hacer una captura.</p>
+<p><strong>Cómo se resuelve.</strong> La clase de vehículo es compartida por todos los mundos, así que no se toca: todo se cambia en el mundo (apartado 3).</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Paso</th>
+<th>Para qué sirve</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ros2 pkg prefix mvsim</code></td>
+<td>Saber dónde está instalado el paquete. El mundo está en <code>&lt;prefix&gt;/share/mvsim/mvsim_tutorial</code></td>
+</tr>
+<tr>
+<td><code>sudo cp ... .bak</code> y <code>sudo nano ...</code></td>
+<td>Copia de seguridad y edición. El archivo es del sistema: hace falta <code>sudo</code></td>
+</tr>
+<tr>
+<td><code>default_sensors="false"</code> en el <code>&lt;include&gt;</code> de la <strong>clase</strong></td>
+<td>Que el robot llegue sin sensores</td>
+</tr>
+<tr>
+<td>Dos <code>&lt;include&gt;</code> dentro de <code>&lt;vehicle name="r1"&gt;</code></td>
+<td>Montar el láser y la IMU con su pose sobre el robot y su nombre</td>
+</tr>
+<tr>
+<td><code>ros2 launch mvsim demo_turtlebot_world.launch.py</code></td>
+<td>Arrancar MVSim y RViz2 con el mundo modificado</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="va">$(</span><span class="ex">ros2</span> pkg prefix mvsim<span class="va">)</span>/share/mvsim/mvsim_tutorial</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> cp demo_turtlebot_world.world.xml demo_turtlebot_world.world.xml.bak</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> nano demo_turtlebot_world.world.xml</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">include</span> <span class="ot">file=</span><span class="st">&quot;../definitions/turtlebot3_burger.vehicle.xml&quot;</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="ot">default_sensors=</span><span class="st">&quot;false&quot;</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>/&gt;</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">vehicle</span> <span class="ot">name=</span><span class="st">&quot;r1&quot;</span> <span class="ot">class=</span><span class="st">&quot;turtlebot3_burger&quot;</span>&gt;</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">init_pose</span>&gt;-2 -0.5 0&lt;/<span class="kw">init_pose</span>&gt;</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    <span class="co">&lt;!-- 2D laser scanner: pose on the robot, rate and name (topic and frame) --&gt;</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">include</span> <span class="ot">file=</span><span class="st">&quot;../definitions/rplidar-a2.sensor.xml&quot;</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>      <span class="ot">raytrace_3d=</span><span class="st">&quot;true&quot;</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>      <span class="ot">sensor_x=</span><span class="st">&quot;-0.032&quot;</span> <span class="ot">sensor_z=</span><span class="st">&quot;0.171&quot;</span> <span class="ot">sensor_yaw=</span><span class="st">&quot;0&quot;</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>      <span class="ot">sensor_hz=</span><span class="st">&quot;10.0&quot;</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>      <span class="ot">sensor_name=</span><span class="st">&quot;laser1&quot;</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>    /&gt;</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>    <span class="co">&lt;!-- IMU at 200 Hz --&gt;</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">include</span> <span class="ot">file=</span><span class="st">&quot;../definitions/imu.sensor.xml&quot;</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>      <span class="ot">sensor_x=</span><span class="st">&quot;0.0&quot;</span> <span class="ot">sensor_y=</span><span class="st">&quot;0.05&quot;</span> <span class="ot">sensor_z=</span><span class="st">&quot;0.145&quot;</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>      <span class="ot">sensor_period_sec=</span><span class="st">&quot;$f{1/200.0}&quot;</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>      <span class="ot">sensor_name=</span><span class="st">&quot;imu1&quot;</span></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>    /&gt;</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">vehicle</span>&gt;</span></code></pre></div>
+<p><strong>Qué sale.</strong> «World file load done»: MVSim muestra el robot con los rayos del láser, y RViz2, sus ejes de tf y el scan. El panel <em>Image</em> dice «No Image», porque ya no hay cámara.</p>
+</section>
+<section id="92-assignment-2-inventario-de-sensores" class="level3">
+<h3>9.2. Assignment 2: inventario de sensores</h3>
+<p><strong>Qué se pide.</strong> Rellenar una tabla con el topic, el tipo de mensaje, el <code>frame_id</code> y la frecuencia de cada sensor, y comparar las frecuencias con las configuradas.</p>
+<p><strong>Cómo se resuelve.</strong> Un comando para cada columna de la tabla:</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Comando</th>
+<th>Para qué sirve</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ros2 topic list -t</code></td>
+<td>Topics <strong>con su tipo</strong> de mensaje</td>
+</tr>
+<tr>
+<td><code>ros2 topic echo &lt;topic&gt; --once --no-arr</code></td>
+<td>Un solo mensaje sin los arrays largos, para leer el <code>frame_id</code> del <code>header</code></td>
+</tr>
+<tr>
+<td><code>ros2 topic hz &lt;topic&gt;</code></td>
+<td>Frecuencia de publicación (Ctrl+C para pararlo)</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> topic list <span class="at">-t</span>                        <span class="co"># /imu1 [sensor_msgs/msg/Imu], /laser1 [...LaserScan], /odom [...Odometry]</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> topic echo /imu1 <span class="at">--once</span> <span class="at">--no-arr</span>     <span class="co"># header.frame_id: imu1</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> topic echo /odom <span class="at">--once</span> <span class="at">--no-arr</span>     <span class="co"># frame_id: odom, child_frame_id: base_link</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> topic hz /laser1                     <span class="co"># ~9.7-9.8 Hz</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> topic hz /imu1                       <span class="co"># ~147 Hz (configured: 200)</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> topic hz /odom                       <span class="co"># ~36 Hz (configured: 50)</span></span></code></pre></div>
+<p><strong>Qué sale.</strong> El láser coincide con lo configurado (10 Hz). La IMU y la odometría salen por debajo porque el bucle de MVSim va a 100 Hz: la IMU necesitaría dos lecturas por vuelta y la odometría se publica en la vuelta siguiente a cumplirse sus 20 ms (apartado 5).</p>
+</section>
+<section id="93-assignment-3-anatomía-de-un-scan" class="level3">
+<h3>9.3. Assignment 3: anatomía de un scan</h3>
+<p><strong>Qué se pide.</strong> (1) El comando que muestra la definición de <code>LaserScan</code>; (2) un mensaje de <code>/laser1</code> sin arrays, relacionando sus campos con los parámetros de <code>Laser2D</code> de la 4.2; (3) qué índice apunta al frente y hacia dónde apuntan el primer y el último haz.</p>
+<p><strong>Cómo se resuelve.</strong> Los tipos de mensaje son <strong>interfaces</strong>, así que se consultan con <code>ros2 interface show</code>. El ángulo de cada alcance se deduce de su posición en <code>ranges</code> (apartado 6).</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> interface show sensor_msgs/msg/LaserScan   <span class="co"># fields with their comments</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> topic echo /laser1 <span class="at">--once</span> <span class="at">--no-arr</span>         <span class="co"># angle_min: -3.1416, angle_max: 3.1416,</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>                                                <span class="co"># angle_increment: 0.0078638, range_max: 16.0,</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>                                                <span class="co"># ranges: &#39;&lt;sequence type: float, length: 800&gt;&#39;</span></span></code></pre></div>
+<p><strong>Qué sale.</strong> FOV de 360°, resolución de 0.4506°, alcance de 16 m y 800 haces. El frente es <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi><mo>=</mo><mi>π</mi><mi>/</mi><mn>0.0078638</mn><mo>≈</mo><mn>399.5</mn></mrow><annotation encoding="application/x-tex">k = \pi/0.0078638 \approx 399.5</annotation></semantics></math> (entre los haces 399 y 400), y los haces 0 y 799 apuntan los dos hacia atrás (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>±</mi><mn>180</mn><mi>°</mi></mrow><annotation encoding="application/x-tex">\pm 180°</annotation></semantics></math>).</p>
+</section>
+<section id="94-assignment-4-medir-el-ruido-del-láser" class="level3">
+<h3>9.4. Assignment 4: medir el ruido del láser</h3>
+<p><strong>Qué se pide.</strong> Con el robot <strong>quieto</strong>, comparar el mismo haz en varios scans y ver si la variación encaja con el <code>range_std_noise</code> del láser.</p>
+<p><strong>Cómo se resuelve.</strong> Si el robot está quieto, el valor real de cada haz no cambia, así que la variación entre scans es solo ruido. Se imprime varias veces solo el campo <code>ranges</code>:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> topic echo /laser1 <span class="at">--once</span> <span class="at">--field</span> ranges   <span class="co"># repeated 10 times, robot standing still</span></span></code></pre></div>
+<p><strong>Qué sale.</strong> Variaciones de ±1–2 cm, con una desviación típica mediana de 0.013 m. Encaja con el valor por defecto del sensor, <code>${sensor_std_noise|0.01}</code>: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>σ</mi><mi>r</mi></msub><mo>=</mo><mn>0.01</mn></mrow><annotation encoding="application/x-tex">\sigma_r = 0.01</annotation></semantics></math> m (apartado 7).</p>
+</section>
+<section id="95-assignment-5-configurar-el-láser" class="level3">
+<h3>9.5. Assignment 5: configurar el láser</h3>
+<p><strong>Qué se pide.</strong> Añadir <code>sensor_std_noise="0.10"</code> y <code>max_range="3.0"</code> al <code>&lt;include&gt;</code> del láser, relanzar, comparar el scan en RViz2 y ver qué vale <code>range_max</code> y qué devuelven los haces que no chocan. Al final, restaurar.</p>
+<p><strong>Cómo se resuelve.</strong> Son argumentos del archivo <strong>del sensor</strong>, así que van en su <code>&lt;include&gt;</code>, no en el de la clase. El mundo solo se lee al arrancar: hay que <strong>relanzar</strong>.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">include</span> <span class="ot">file=</span><span class="st">&quot;../definitions/rplidar-a2.sensor.xml&quot;</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="ot">sensor_std_noise=</span><span class="st">&quot;0.10&quot;</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="ot">max_range=</span><span class="st">&quot;3.0&quot;</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="ot">raytrace_3d=</span><span class="st">&quot;true&quot;</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="ot">sensor_x=</span><span class="st">&quot;-0.032&quot;</span> <span class="ot">sensor_z=</span><span class="st">&quot;0.171&quot;</span> <span class="ot">sensor_yaw=</span><span class="st">&quot;0&quot;</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="ot">sensor_hz=</span><span class="st">&quot;10.0&quot;</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="ot">sensor_name=</span><span class="st">&quot;laser1&quot;</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>/&gt;</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> topic echo /laser1 <span class="at">--once</span> <span class="at">--no-arr</span>          <span class="co"># range_max: 3.0</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> topic echo /laser1 <span class="at">--once</span> <span class="at">--field</span> ranges    <span class="co"># 144 of the 800 beams are exactly 3.0</span></span></code></pre></div>
+<p><strong>Qué sale.</strong> Los puntos se ven mucho más dispersos (σ diez veces mayor) y desaparece todo lo que está a más de 3 m. Los haces sin obstáculo valen exactamente <code>range_max</code> = 3.0, no <code>inf</code>: significa «no hay nada hasta 3 m», no «hay algo a 3 m».</p>
+<p><strong>Thinking about it.</strong> (1) Guardando solo los alcances, <code>LaserScan</code> envía la mitad de datos, porque los ángulos se deducen de <code>angle_min</code> y <code>angle_increment</code>. (2) Si un algoritmo de mapeo tratara las lecturas de <code>range_max</code> como impactos, llenaría el mapa de <strong>paredes fantasma</strong> en todas las zonas libres.</p>
+</section>
+<section id="96-assignment-6-el-árbol-tf" class="level3">
+<h3>9.6. Assignment 6: el árbol tf</h3>
+<p><strong>Qué se pide.</strong> (1) Generar el diagrama del árbol tf; (2) imprimir <code>base_link → laser1</code> y compararlo con el <code>&lt;include&gt;</code>; (3) imprimir <code>odom → base_link</code> mientras el robot se mueve; (4) calcular a mano <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝐱</mi><mo>⊕</mo><msub><mi>𝐱</mi><mi>s</mi></msub></mrow><annotation encoding="application/x-tex">\mathbf{x} \oplus \mathbf{x}_s</annotation></semantics></math> y comprobarlo con <code>odom → laser1</code>.</p>
+<p><strong>Cómo se resuelve.</strong> tf2 guarda cada transformación padre → hijo como la pose del hijo en el padre, y <code>tf2_echo A B</code> da la <strong>pose de B en A</strong> (apartado 8).</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Comando</th>
+<th>Para qué sirve</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ros2 run tf2_tools view_frames</code></td>
+<td>Escuchar <code>/tf</code> 5 s y guardar el árbol en un PDF</td>
+</tr>
+<tr>
+<td><code>ros2 run tf2_ros tf2_echo base_link laser1</code></td>
+<td>Pose del láser sobre el robot</td>
+</tr>
+<tr>
+<td><code>ros2 topic pub -r 10 /cmd_vel geometry_msgs/msg/Twist "{linear: {x: 0.1}, angular: {z: 0.3}}"</code></td>
+<td>Mover el robot en un arco</td>
+</tr>
+<tr>
+<td><code>ros2 run tf2_ros tf2_echo odom base_link</code></td>
+<td>Pose del robot según la odometría</td>
+</tr>
+<tr>
+<td><code>ros2 run tf2_ros tf2_echo odom laser1</code></td>
+<td>Pose del láser en <code>odom</code>, que tf2 obtiene componiendo</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb15"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> run tf2_tools view_frames</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> run tf2_ros tf2_echo base_link laser1   <span class="co"># Translation: [-0.032, 0.000, 0.171], RPY [0, 0, 0]</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> run tf2_ros tf2_echo odom base_link     <span class="co"># Translation: [0.350, 0.448, 0.000], RPY [0, 0, 1.816]</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> run tf2_ros tf2_echo odom laser1        <span class="co"># Translation: [0.358, 0.417, 0.171], RPY [0, 0, 1.816]</span></span></code></pre></div>
+<p><strong>Qué sale.</strong></p>
+<ul>
+<li>El árbol es <code>map → odom → base_link → {base_footprint, laser1, imu1}</code>. Los sensores cuelgan de <code>base_link</code>, y <code>base_footprint</code> es estática (rate 10000).</li>
+<li><code>base_link → laser1</code> coincide con el <code>&lt;include&gt;</code>: <code>sensor_x="-0.032"</code>, <code>sensor_z="0.171"</code>.</li>
+<li>Moviéndose con <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi><mo>=</mo><mn>0.1</mn></mrow><annotation encoding="application/x-tex">v = 0.1</annotation></semantics></math> m/s y <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ω</mi><mo>=</mo><mn>0.3</mn></mrow><annotation encoding="application/x-tex">\omega = 0.3</annotation></semantics></math> rad/s, <code>odom → base_link</code> describe un arco de radio cercano a <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi><mi>/</mi><mi>ω</mi><mo>=</mo><mn>0.33</mn></mrow><annotation encoding="application/x-tex">v/\omega = 0.33</annotation></semantics></math> m.</li>
+<li>A mano: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo>=</mo><mn>0.350</mn><mo>+</mo><mo stretchy="false" form="prefix">(</mo><mi>−</mi><mn>0.032</mn><mo stretchy="false" form="postfix">)</mo><mrow><mi mathvariant="normal">cos</mi><mo>&#8289;</mo></mrow><mn>1.816</mn><mo>=</mo><mn>0.358</mn></mrow><annotation encoding="application/x-tex">x = 0.350 + (-0.032)\cos 1.816 = 0.358</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mo>=</mo><mn>0.448</mn><mo>+</mo><mo stretchy="false" form="prefix">(</mo><mi>−</mi><mn>0.032</mn><mo stretchy="false" form="postfix">)</mo><mrow><mi mathvariant="normal">sin</mi><mo>&#8289;</mo></mrow><mn>1.816</mn><mo>=</mo><mn>0.417</mn></mrow><annotation encoding="application/x-tex">y = 0.448 + (-0.032)\sin 1.816 = 0.417</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>θ</mi><mo>=</mo><mn>1.816</mn></mrow><annotation encoding="application/x-tex">\theta = 1.816</annotation></semantics></math> y <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>z</mi><mo>=</mo><mn>0.171</mn></mrow><annotation encoding="application/x-tex">z = 0.171</annotation></semantics></math>. Coincide con <code>tf2_echo odom laser1</code> (cálculo C7). El yaw se lee en el <strong>último valor de RPY</strong>, no en el cuaternión.</li>
+</ul>
+</section>
+<section id="97-los-apartados-opcionales" class="level3">
+<h3>9.7. Los apartados opcionales</h3>
 <p>No se hicieron en la práctica, pero las ideas pueden caer:</p>
 <ul>
 <li><strong>Observar un landmark con tf.</strong> Se publica un frame fijo <code>landmark</code> con <code>static_transform_publisher</code> (padre <code>odom</code>) y se pide <code>tf2_echo laser1 landmark</code>: su traslación <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><msub><mi>x</mi><mi>l</mi></msub><mo>,</mo><msub><mi>y</mi><mi>l</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(x_l, y_l)</annotation></semantics></math> es el landmark visto desde el láser. De ahí, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>r</mi><mo>=</mo><msqrt><mrow><msubsup><mi>x</mi><mi>l</mi><mn>2</mn></msubsup><mo>+</mo><msubsup><mi>y</mi><mi>l</mi><mn>2</mn></msubsup></mrow></msqrt></mrow><annotation encoding="application/x-tex">r = \sqrt{x_l^2 + y_l^2}</annotation></semantics></math> y <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>=</mo><mrow><mi mathvariant="normal">atan2</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><msub><mi>y</mi><mi>l</mi></msub><mo>,</mo><msub><mi>x</mi><mi>l</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\alpha = \operatorname{atan2}(y_l, x_l)</annotation></semantics></math>: la <strong>observación predicha</strong> <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>𝐳</mi><mo accent="true">̂</mo></mover><mo>=</mo><mi>𝐡</mi><mo stretchy="false" form="prefix">(</mo><mi>𝐱</mi><mo>,</mo><mi>𝐦</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\hat{\mathbf{z}} = \mathbf{h}(\mathbf{x}, \mathbf{m})</annotation></semantics></math> de la 4.1. El haz que apunta ahí es <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mi>α</mi><mo>−</mo><mtext mathvariant="monospace">𝚊𝚗𝚐𝚕𝚎_𝚖𝚒𝚗</mtext><mo stretchy="false" form="postfix">)</mo><mi>/</mi><mtext mathvariant="monospace">𝚊𝚗𝚐𝚕𝚎_𝚒𝚗𝚌𝚛𝚎𝚖𝚎𝚗𝚝</mtext></mrow><annotation encoding="application/x-tex">k = (\alpha - \texttt{angle\_min})/\texttt{angle\_increment}</annotation></semantics></math>. Su lectura es <strong>menor que <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>r</mi><annotation encoding="application/x-tex">r</annotation></semantics></math></strong>, porque el láser mide la superficie de la columna, no su centro (cálculo C8).</li>
+</ul>
+<div class="sourceCode" id="cb16"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> run tf2_ros static_transform_publisher <span class="at">--x</span> 0.9 <span class="at">--y</span> 0.5 <span class="at">--frame-id</span> odom <span class="at">--child-frame-id</span> landmark</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> run tf2_ros tf2_echo laser1 landmark</span></code></pre></div>
+<ul>
 <li><strong>Rosbag.</strong> <code>ros2 bag record /laser1 /imu1 /odom /tf /tf_static</code> graba los mensajes; <code>ros2 bag info &lt;carpeta&gt;</code> muestra duración, topics y número de mensajes; <code>ros2 bag play &lt;carpeta&gt;</code> los vuelve a publicar <strong>sin el simulador</strong>. Así se crean los datasets de robótica. Sin <code>/tf</code> y <code>/tf_static</code>, los datos reproducidos no se podrían situar en el mundo.</li>
 </ul>
+</section>
 </section>
 <section id="10-cálculos-resueltos" class="level2">
 <h2>10. Cálculos resueltos</h2>
@@ -666,128 +914,8 @@ y + x_s \sin\theta + y_s \cos\theta \\
 <li><strong>Resultado.</strong> ≈ 0.009 m, coherente con σ_r = 0.01 m. Con tan pocas muestras la estimación es poco precisa (error relativo ≈ <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi>/</mi><msqrt><mrow><mn>2</mn><mo stretchy="false" form="prefix">(</mo><mi>n</mi><mo>−</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow></msqrt></mrow><annotation encoding="application/x-tex">1/\sqrt{2(n-1)}</annotation></semantics></math> ≈ 35 % con 5 muestras), por eso se usan muchos haces o muchos scans.</li>
 </ul>
 </section>
-<section id="11-errores-típicos" class="level2">
-<h2>11. Errores típicos</h2>
-<p>Cada fragmento tiene <strong>un</strong> error. Intenta encontrarlo antes de leer la corrección.</p>
-<p><strong>E1. Medir la frecuencia con <code>echo</code></strong></p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> topic list <span class="at">-t</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> topic echo /imu1 <span class="at">--once</span> <span class="at">--no-arr</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> topic echo /imu1          <span class="co"># para medir la frecuencia</span></span></code></pre></div>
-<blockquote>
-<p>Para la frecuencia se usa <code>ros2 topic hz /imu1</code>. <code>echo</code> imprime los mensajes, no su ritmo.</p>
-</blockquote>
-<p><strong>E2. Ver la definición de un mensaje con <code>topic</code></strong></p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> topic show sensor_msgs/msg/LaserScan</span></code></pre></div>
-<blockquote>
-<p>Los tipos de mensaje son <strong>interfaces</strong>: <code>ros2 interface show sensor_msgs/msg/LaserScan</code>. <code>ros2 topic</code> trabaja con topics en vivo, y <code>show</code> no es un subcomando suyo.</p>
-</blockquote>
-<p><strong>E3. <code>default_sensors</code> en el sitio equivocado</strong></p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">include</span> <span class="ot">file=</span><span class="st">&quot;../definitions/turtlebot3_burger.vehicle.xml&quot;</span> /&gt;</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">vehicle</span> <span class="ot">name=</span><span class="st">&quot;r1&quot;</span> <span class="ot">class=</span><span class="st">&quot;turtlebot3_burger&quot;</span> <span class="ot">default_sensors=</span><span class="st">&quot;false&quot;</span>&gt;</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">init_pose</span>&gt;-2 -0.5 0&lt;/<span class="kw">init_pose</span>&gt;</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">vehicle</span>&gt;</span></code></pre></div>
-<blockquote>
-<p><code>default_sensors</code> es un <strong>argumento de la clase</strong>, así que va en el <code>&lt;include&gt;</code> de <code>turtlebot3_burger.vehicle.xml</code>, no en <code>&lt;vehicle&gt;</code>.</p>
-</blockquote>
-<p><strong>E4. Los argumentos del láser en el <code>&lt;include&gt;</code> de la clase</strong></p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">include</span> <span class="ot">file=</span><span class="st">&quot;../definitions/turtlebot3_burger.vehicle.xml&quot;</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="ot">default_sensors=</span><span class="st">&quot;false&quot;</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="ot">sensor_std_noise=</span><span class="st">&quot;0.10&quot;</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="ot">max_range=</span><span class="st">&quot;3.0&quot;</span></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>/&gt;</span></code></pre></div>
-<blockquote>
-<p>El ruido y el alcance son argumentos del <strong>sensor</strong>: van en el <code>&lt;include&gt;</code> de <code>rplidar-a2.sensor.xml</code>, dentro de <code>&lt;vehicle name="r1"&gt;</code>.</p>
-</blockquote>
-<p><strong>E5. Cambiar el mundo sin relanzar</strong></p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> nano demo_turtlebot_world.world.xml     <span class="co"># añadir max_range=&quot;3.0&quot; y guardar</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> topic echo /laser1 <span class="at">--once</span> <span class="at">--no-arr</span>      <span class="co"># range_max: 16.0  ¿?</span></span></code></pre></div>
-<blockquote>
-<p>Falta <strong>cerrar y volver a lanzar</strong> la simulación (<code>ros2 launch mvsim demo_turtlebot_world.launch.py</code>). El mundo solo se lee al arrancar.</p>
-</blockquote>
-<p><strong>E6. Guardar el mundo sin <code>sudo</code></strong></p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="va">$(</span><span class="ex">ros2</span> pkg prefix mvsim<span class="va">)</span>/share/mvsim/mvsim_tutorial</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">nano</span> demo_turtlebot_world.world.xml</span></code></pre></div>
-<blockquote>
-<p>El archivo está en <code>/opt/ros/jazzy/...</code>, que es del sistema: sin <code>sudo</code>, nano no puede guardarlo (<em>Permission denied</em>). Es <code>sudo nano</code>.</p>
-</blockquote>
-<p><strong>E7. <code>view_frames</code> en el paquete equivocado</strong></p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> run tf2_ros view_frames</span></code></pre></div>
-<blockquote>
-<p><code>view_frames</code> está en <strong><code>tf2_tools</code></strong>: <code>ros2 run tf2_tools view_frames</code>. En <code>tf2_ros</code> están <code>tf2_echo</code> y <code>static_transform_publisher</code>.</p>
-</blockquote>
-<p><strong>E8. Orden de los frames en <code>tf2_echo</code></strong></p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Queremos la pose del láser sobre el robot, [-0.032, 0, 0.171]</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> run tf2_ros tf2_echo laser1 base_link</span></code></pre></div>
-<blockquote>
-<p>Es <code>tf2_echo base_link laser1</code>: primero el marco de referencia y después el frame cuya pose se quiere. Al revés da la transformación inversa, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">[</mo><mn>0.032</mn><mo>,</mo><mn>0</mn><mo>,</mo><mi>−</mi><mn>0.171</mn><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">[0.032, 0, -0.171]</annotation></semantics></math>.</p>
-</blockquote>
-<p><strong>E9. Medir el ruido con el robot en movimiento</strong></p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> topic pub <span class="at">-r</span> 10 /cmd_vel geometry_msgs/msg/Twist <span class="st">&quot;{linear: {x: 0.1}}&quot;</span> <span class="kw">&amp;</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> topic echo /laser1 <span class="at">--once</span> <span class="at">--field</span> ranges</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> topic echo /laser1 <span class="at">--once</span> <span class="at">--field</span> ranges</span></code></pre></div>
-<blockquote>
-<p>Para medir el ruido el robot debe estar <strong>quieto</strong>. Si se mueve, el valor real de cada haz cambia entre scans, y la variación ya no es solo ruido.</p>
-</blockquote>
-<p><strong>E10. Leer el yaw en el sitio equivocado</strong></p>
-<pre class="text"><code>- Translation: [0.350, 0.448, 0.000]
-- Rotation: in Quaternion (xyzw) [0.000, 0.000, 0.788, 0.615]
-- Rotation: in RPY (radian) [0.000, -0.000, 1.816]</code></pre>
-<blockquote>
-<p>Si se toma <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>θ</mi><mo>=</mo><mn>0.788</mn></mrow><annotation encoding="application/x-tex">\theta = 0.788</annotation></semantics></math> (la <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>z</mi><annotation encoding="application/x-tex">z</annotation></semantics></math> del cuaternión), la composición sale mal. El yaw es <strong>el último valor de RPY (radian)</strong>: 1.816. El cuaternión de un giro en Z es <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">[</mo><mn>0</mn><mo>,</mo><mn>0</mn><mo>,</mo><mrow><mi mathvariant="normal">sin</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>θ</mi><mi>/</mi><mn>2</mn><mo stretchy="false" form="postfix">)</mo><mo>,</mo><mrow><mi mathvariant="normal">cos</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>θ</mi><mi>/</mi><mn>2</mn><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">[0, 0, \sin(\theta/2), \cos(\theta/2)]</annotation></semantics></math>: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">sin</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>0.908</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>0.788</mn></mrow><annotation encoding="application/x-tex">\sin(0.908) = 0.788</annotation></semantics></math>.</p>
-</blockquote>
-</section>
-<section id="12-rellena-el-hueco" class="level2">
-<h2>12. Rellena el hueco</h2>
-<p><strong>H1.</strong> Tipos de los topics y un mensaje del láser sin arrays.</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> topic list ____</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> topic echo /laser1 ____ ____</span></code></pre></div>
-<blockquote>
-<p><code>-t</code>, <code>--once</code>, <code>--no-arr</code>.</p>
-</blockquote>
-<p><strong>H2.</strong> Frecuencia y publicadores.</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> topic ____ /imu1</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> topic ____ /camera1/image_raw     <span class="co"># Publisher count: 0</span></span></code></pre></div>
-<blockquote>
-<p><code>hz</code>, <code>info</code>.</p>
-</blockquote>
-<p><strong>H3.</strong> Definición del mensaje del láser y parámetros del simulador.</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> ____ show sensor_msgs/msg/LaserScan</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> param ____ /mvsim</span></code></pre></div>
-<blockquote>
-<p><code>interface</code>, <code>dump</code>.</p>
-</blockquote>
-<p><strong>H4.</strong> Quitar los sensores de la clase y configurar el láser.</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">include</span> <span class="ot">file=</span><span class="st">&quot;../definitions/turtlebot3_burger.vehicle.xml&quot;</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>    <span class="ot">____=</span><span class="st">&quot;false&quot;</span></span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>/&gt;</span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>...</span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">include</span> <span class="ot">file=</span><span class="st">&quot;../definitions/rplidar-a2.sensor.xml&quot;</span></span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  <span class="ot">____=</span><span class="st">&quot;0.10&quot;</span></span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  <span class="ot">____=</span><span class="st">&quot;3.0&quot;</span></span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>  <span class="er">...</span></span>
-<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>/&gt;</span></code></pre></div>
-<blockquote>
-<p><code>default_sensors</code>, <code>sensor_std_noise</code>, <code>max_range</code>.</p>
-</blockquote>
-<p><strong>H5.</strong> Árbol tf y transformaciones.</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> run ____ view_frames</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> run tf2_ros ____ odom laser1</span></code></pre></div>
-<blockquote>
-<p><code>tf2_tools</code>, <code>tf2_echo</code>.</p>
-</blockquote>
-<p><strong>H6.</strong> Mover el robot.</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> topic pub <span class="at">-r</span> 10 ____ geometry_msgs/msg/____ <span class="st">&quot;{linear: {x: 0.1}, angular: {z: 0.3}}&quot;</span></span></code></pre></div>
-<blockquote>
-<p><code>/cmd_vel</code>, <code>Twist</code>.</p>
-</blockquote>
-<p><strong>H7.</strong> El ángulo de un haz.</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>alpha_k <span class="op">=</span> scan.____ <span class="op">+</span> k <span class="op">*</span> scan.____</span></code></pre></div>
-<blockquote>
-<p><code>angle_min</code>, <code>angle_increment</code>.</p>
-</blockquote>
-</section>
-<section id="13-preguntas-de-repaso-con-solución" class="level2">
-<h2>13. Preguntas de repaso (con solución)</h2>
+<section id="11-preguntas-de-repaso-con-solución" class="level2">
+<h2>11. Preguntas de repaso (con solución)</h2>
 <ol type="1">
 <li><p><strong>¿Qué dos informaciones lleva el <code>header</code> de todo mensaje de sensor?</strong> <code>stamp</code> (cuándo se midió) y <code>frame_id</code> (en qué marco están los datos).</p></li>
 <li><p><strong>¿Por qué <code>LaserScan</code> no guarda los ángulos de los haces?</strong> Porque son fijos y equiespaciados: basta con <code>angle_min</code> y <code>angle_increment</code>, y el ángulo sale de la posición <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>. Ahorra la mitad de datos.</p></li>
@@ -802,8 +930,8 @@ y + x_s \sin\theta + y_s \cos\theta \\
 <li><p><strong>¿Para qué sirve grabar <code>/tf</code> y <code>/tf_static</code> en un rosbag?</strong> Para poder situar los datos de los sensores en el mundo al reproducirlos sin el simulador.</p></li>
 </ol>
 </section>
-<section id="14-ideas-esenciales-para-recordar" class="level2">
-<h2>14. Ideas esenciales para recordar</h2>
+<section id="12-ideas-esenciales-para-recordar" class="level2">
+<h2>12. Ideas esenciales para recordar</h2>
 <ul>
 <li><code>ros2 topic list -t</code> (tipos), <code>echo --once --no-arr</code> (un mensaje sin arrays), <code>--field ranges</code> (un campo), <code>hz</code> (frecuencia), <code>info</code> (publicadores/suscriptores); <code>ros2 interface show</code> (definición de un tipo); <code>ros2 param dump</code> (parámetros de un nodo).</li>
 <li>El mundo de MVSim se configura con <strong>argumentos de los <code>&lt;include&gt;</code></strong>, que dentro del archivo son <code>${nombre|defecto}</code>. <code>default_sensors="false"</code> en la clase quita sus sensores; los propios van dentro de <code>&lt;vehicle&gt;</code>. Hace falta <code>sudo</code> y <strong>relanzar</strong>.</li>
