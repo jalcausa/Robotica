@@ -135,20 +135,13 @@ PARCIALES = [
                 "title": "AMCL en ROS 2",
                 "subtitle": "Práctica 5.4: comandos ROS 2, tópicos, tf, partículas y recuperación de AMCL.",
             },
-            {
-                "key": "P6.3",
-                "lesson": "L6",
-                "source": TEORIA / "Parcial-2/Guias_practicas/P6.3_Occupancy_grid_mapping.md",
-                "title": "Mapas de rejilla de ocupación",
-                "subtitle": "Práctica 6.3: extremos de los haces, Bresenham, modelo inverso del sensor y log odds, ejercicio a ejercicio.",
-            },
         ],
         # Repaso de todo el parcial: va en el menú y como último paso de estudio de la ruta, antes de la pasada completa.
         "review": {
             "key": "Repaso",
             "source": TEORIA / "Parcial-2/Resumen_General_Parcial2.md",
             "title": "Resumen general del Parcial 2",
-            "subtitle": "Lo imprescindible de L4, L5 y las siete prácticas en un solo sitio, con un ejercicio tipo resuelto de cada clase de pregunta.",
+            "subtitle": "Lo imprescindible de L4, L5 y las seis prácticas en un solo sitio, con un ejercicio tipo resuelto de cada clase de pregunta.",
         },
     },
 ]

@@ -1,6 +1,6 @@
 # Resumen general del Parcial 2
 
-> **Qué entra:** L4 (percepción) y L5 (localización), más las prácticas 4.1, 4.2, 4.3, 5.2, 5.3, 5.4 y 6.3. Este documento junta lo imprescindible de todo el parcial en un solo sitio. Al final hay un **anexo con un ejercicio tipo resuelto de cada clase de pregunta** que puede salir.
+> **Qué entra:** L4 (percepción) y L5 (localización), más las prácticas 4.1, 4.2, 4.3, 5.2, 5.3 y 5.4. Este documento junta lo imprescindible de todo el parcial en un solo sitio. Al final hay un **anexo con un ejercicio tipo resuelto de cada clase de pregunta** que puede salir.
 
 > **Cómo es el examen:** la teoría pide **cálculos cortos con las fórmulas** (una distancia, un jacobiano, un paso de un filtro). Las prácticas preguntan por **el código de los notebooks**: rellenar huecos, encontrar la línea con el error y qué devuelve cada función.
 
@@ -28,14 +28,13 @@ Todo el parcial gira alrededor de una idea: el robot **mide** el entorno con sus
 |---|---|---|
 | **L4 · Percepción** | ¿Qué mide cada sensor y con qué error? | $\mathbf{z} = \mathbf{h}(\mathbf{x}, \mathbf{m}) + \mathbf{w}$ y la verosimilitud $p(\mathbf{z} \mid \mathbf{x}, \mathbf{m})$ |
 | **L5 · Localización** | ¿Dónde está el robot, dado un mapa? | Mínimos cuadrados, registro y filtros de Bayes |
-| **P6.3 · Mapeado** | ¿Cómo es el mapa, dadas las poses? | Rejilla de ocupación con log odds |
 
 **Qué se conoce y qué se estima en cada problema:**
 
 | Problema | Se conoce | Se estima | Dónde sale |
 |---|---|---|---|
 | **Localización** | Mapa $\mathbf{m}$, observaciones $\mathbf{z}_{1:t}$, comandos $\mathbf{u}_{1:t}$ | Pose $\mathbf{x}_t$ | L5, P5.2, P5.3, P5.4 |
-| **Mapeado** | Poses $\mathbf{x}_{1:t}$ y observaciones $\mathbf{z}_{1:t}$ | Mapa $\mathbf{m}$ | P6.3 |
+| **Mapeado** | Poses $\mathbf{x}_{1:t}$ y observaciones $\mathbf{z}_{1:t}$ | Mapa $\mathbf{m}$ | Fuera de este parcial (práctica 6.3, Parcial 3) |
 | **SLAM** | Solo $\mathbf{z}_{1:t}$ y $\mathbf{u}_{1:t}$ | Pose y mapa a la vez | Fuera de este parcial |
 
 **Notación que se usa en todo el documento:**
@@ -318,14 +317,6 @@ PEst = (np.eye(3) - K@H)@PPred
 - Covarianza de `/amcl_pose`: 36 valores (6×6 sobre $x, y, z$, roll, pitch, yaw). Índices **0, 7 y 35** son las varianzas de $x$, $y$ y yaw; **1 y 6**, la covarianza $xy$. Yaw $= 2\operatorname{atan2}(q_z, q_w)$.
 - Comandos: `ros2 node info /amcl`, `ros2 topic echo --once /amcl_pose --field pose.pose.position`, `ros2 service call /reinitialize_global_localization std_srvs/srv/Empty`, `ros2 param set /amcl max_particles 20`.
 
-### 5.7. Práctica 6.3 · Mapas de rejilla de ocupación
-
-- Poses conocidas; se estima $P(m_i \mid \mathbf{z}_{1:t}, \mathbf{x}_{1:t})$ por celda, suponiendo **celdas independientes**.
-- **Log odds:** $l_t = \tau_t + l_{t-1} + l_0$, con $\tau = \ln\frac{p}{1-p}$ y $l_0 = -\ln\frac{P(m)}{1 - P(m)}$ (0 con prior 0,5). Probabilidad: $P = 1 - \dfrac{1}{1 + e^{l}}$.
-- **Modelo inverso** ($\rho$ = distancia a la celda, $d$ = medida, ambas **en celdas**, $\sigma = 0{,}4$): 0,2 antes del impacto si $f < 0{,}2$; 0,5 detrás si $f < 0{,}5$; si no, $\min(f, 0{,}8)$.
-- Pipeline: extremos de los haces → celdas (Bresenham) → modelo inverso → log odds → probabilidades → umbrales (0,3 y 0,7).
-- Índices: metros / resolución y `int()`; la celda es `(x, y)` pero la matriz es `[y][x]`. `OccupancyGridMap(14, 12, 0.1)` da `shape (120, 140)`.
-
 ## 6. Hoja de fórmulas
 
 | Tema | Fórmula |
@@ -350,7 +341,6 @@ PEst = (np.eye(3) - K@H)@PPred
 | EKF | $\bar\Sigma = G\Sigma G^T + R$; $K = \bar\Sigma H^T(H\bar\Sigma H^T + Q)^{-1}$; $\boldsymbol{\mu} = \bar{\boldsymbol{\mu}} + K(\mathbf{z} - \mathbf{h}(\bar{\boldsymbol{\mu}}))$ |
 | Partículas | $w \propto e^{-\nu^2/2\sigma^2}$, normalizar; acumulada y $1/M$ tras remuestrear |
 | Media circular | $\operatorname{atan2}(\sum w\sin\theta,\ \sum w\cos\theta)$; varianza $1 - R$ |
-| Log odds | $l_t = \tau_t + l_{t-1} + l_0$; $P = 1 - 1/(1+e^{l})$ |
 | Cuaternión plano | $\text{yaw} = 2\operatorname{atan2}(q_z, q_w)$ |
 
 ## 7. Los errores que más puntos quitan
@@ -369,7 +359,6 @@ PEst = (np.eye(3) - K@H)@PPred
 12. **Sacar la orientación de distancias** a balizas: no es observable.
 13. **Sumar incrementos de pose** en vez de componerlos con `tcomp`, o componer en el orden equivocado: es `tcomp(pose, punto)`, con la pose primero.
 14. **Leer `range_max` como un obstáculo**, o los índices 1 y 6 de la covarianza de ROS como varianzas.
-15. **Rejilla de ocupación:** mezclar `(x, y)` con `[fila][columna]`, mezclar metros y celdas, o usar `1/(1+e^l)`, que es la probabilidad de **libre**.
 
 ## 8. Anexo A · Ejercicios tipo de L4
 
@@ -806,25 +795,6 @@ return [Particle(particles[k].pose.copy(), __(5)__) for k in selected]
 
 **Resultado.** (a) 0,2 m, 0,3 m, 6,3° y $\rho = 0{,}2$. (b) 45°. (c) $[0,\ 2,\ 90°]$.
 
-### 10.7. Práctica 6.3 · Índices, modelo inverso y log odds
-
-**Enunciado.** (a) `OccupancyGridMap(10, 6, 0.05)`: ¿`shape`? ¿Cómo se accede a la celda del punto $(3{,}27;\ 1{,}84)$ m? (b) Con $\sigma = 0{,}4$ celdas, ¿qué $P(m_i \mid z_t)$ da el modelo inverso a $\rho - d = -1{,}0$, $-0{,}2$, $+0{,}4$ y $+0{,}8$ celdas? (c) Con prior 0,5, una celda recibe 0,2, 0,6049 y 0,8 en tres scans. ¿Probabilidad final y valor tras umbralizar con 0,3 y 0,7?
-
-**Solución (a).** Filas = alto/res = 120 y columnas = ancho/res = 200: `shape (120, 200)`. Celda `(int(3.27/0.05), int(1.84/0.05)) = (65, 36)`, que en la matriz es `log_odds[36][65]` (`[y][x]`).
-
-**Solución (b).** Pico $1/\sqrt{2\pi \cdot 0{,}16} = 0{,}9974$ y $f = 0{,}9974\,e^{-(\rho - d)^2/(2 \cdot 0{,}16)}$:
-
-| $\rho - d$ | $f$ | Caso | $P$ |
-|---|---|---|---|
-| −1,0 | 0,0438 | Antes del impacto y $f < 0{,}2$ | **0,2** |
-| −0,2 | 0,8802 | Ninguno de los dos primeros; satura | **0,8** |
-| +0,4 | 0,6049 | Detrás, pero $f \ge 0{,}5$ | **0,6049** |
-| +0,8 | 0,1350 | Detrás y $f < 0{,}5$ | **0,5** |
-
-**Solución (c).** $\tau = \ln\frac{p}{1-p}$: $-1{,}3863$, $+0{,}4260$ y $+1{,}3863$. Con $l_0 = 0$, $l = 0{,}4260$ y $P = 1 - \dfrac{1}{1 + e^{0{,}426}} = 0{,}6049$.
-
-**Resultado.** (a) `(120, 200)` y `log_odds[36][65]`. (b) 0,2; 0,8; 0,6049; 0,5. (c) $P = 0{,}605$, entre 0,3 y 0,7: queda **desconocida** (0,5). Con tres impactos de 0,8 y uno libre, $l = 2{,}773$ y $P = 0{,}941$: ocupada.
-
 ## 11. Anexo D · Preguntas rápidas de concepto
 
 Respuestas cortas, para repasar en cinco minutos.
@@ -845,5 +815,3 @@ Respuestas cortas, para repasar en cinco minutos.
 14. **¿Para qué sirve el remuestreo?** Para concentrar las partículas donde hay probabilidad y evitar la degeneración.
 15. **¿Qué publica AMCL en tf y por qué no `map → base_link`?** `map → noisy_odom`; `base_link` ya tiene padre, y cada frame solo puede tener uno.
 16. **¿Qué es KLD-sampling?** Adaptar el número de partículas a la dispersión de la creencia.
-17. **¿Por qué el mapeado de la 6.3 no usa los comandos $\mathbf{u}$?** Porque las poses se conocen.
-18. **¿Qué log odds tiene una celda con $P = 0{,}5$?** 0: una observación «no sé» no la cambia.

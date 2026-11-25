@@ -11,7 +11,7 @@
 En la raíz solo están `Teoria/`, `Practicas/`, `web/` e `index.html`.
 
 - `Teoria/Parcial-N/`: todo el material de estudio de ese parcial. El usuario suelta aquí los archivos y se colocan así:
-  - `Lx-…/`: PDF de clase, `Resumen_Lx_….md` e `img/` de cada lección (Parcial-1 = L1–L3, Parcial-2 = L4 en adelante).
+  - `Lx-…/`: PDF de clase, `Resumen_Lx_….md` e `img/` de cada lección (Parcial-1 = L1–L3, Parcial-2 = L4–L5, Parcial-3 = L6 en adelante).
   - `Guias_practicas/`: guías de estudio de cada práctica (`P<n.m>_<tema>.md`).
   - `Examen/`: banco de preguntas, soluciones, `examenes_anteriores/` e `img/` de las preguntas.
   - `Resumen_General_ParcialN.md` (en la raíz del parcial, cuando se cierra el temario): resumen de todo el parcial con un anexo de ejercicios tipo resueltos. Sigue la misma numeración que los resúmenes (índice sin número, contenido desde 1).
