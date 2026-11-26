@@ -74,7 +74,7 @@ const questions = [
     answer: 0,
     explanation: "Se usa la misma expresión de dos formas. Con x y m fijos, z es la variable aleatoria y ∫p(z|x,m)dz = 1. Con z y m fijos, L(x; m, z) mide lo compatible que es cada pose x con la medida, y ∫L dx ≠ 1. En Bayes: posterior ∝ likelihood · prior." },
   { id: "L4-c14", lesson: "L4", topic: "Independencia condicional", kind: "Teoría", format: "single", source: "Nueva",
-    prompt: "Un scan tiene K medidas z₁…z_K. ¿Qué hipótesis permite escribir p(z|x,m) = ∏ p(z_k|x,m)?",
+    prompt: "Un scan tiene K medidas z₁…z_K. ¿Qué hipótesis permite escribir la verosimilitud del scan como un producto? $$p(z | x, m) = ∏ₖ p(z_k | x, m)$$",
     options: ["Que las medidas son independientes entre sí sin condiciones", "Que las medidas son condicionalmente independientes dada la pose x y el mapa m", "Que todas las medidas tienen la misma varianza", "Que el ruido es uniforme"],
     answer: 1,
     explanation: "Dados x y m, cada medida depende solo de su propio ruido, y la verosimilitud conjunta se aproxima por el producto. Sin condicionar no serían independientes, porque todas dependen de la misma pose." },
@@ -169,7 +169,7 @@ const questions = [
     answer: 1.109, tol: 0.005,
     explanation: "L(q) = α_hit · 1/(σ√(2π)) · exp(−d²/(2σ²)) + α_rand/z_max = 0,9 · 1,9947 · e^(−0,5) + 0,1/5 = 0,9 · 1,9947 · 0,6065 + 0,02 = 1,089 + 0,02 ≈ 1,109." },
   { id: "L4-n17", lesson: "L4", topic: "Covarianza de un landmark", kind: "Teoría", format: "numeric", source: "Diapositiva 41",
-    prompt: "Un robot ve un landmark con r = 3 m y θ + α = 90°. Σ_x = diag(0,01, 0,01, (5°)²) y Σ_z = diag(0,2², (3°)²), con los ángulos en rad. Usando Σ_m = J_x Σ_x J_xᵀ + J_z Σ_z J_zᵀ, ¿cuánto vale el elemento Σ_m[0,0] (varianza en x)?",
+    prompt: "Un robot ve un landmark con r = 3 m y θ + α = 90°. Σ_x = diag(0,01, 0,01, (5°)²) y Σ_z = diag(0,2², (3°)²), con los ángulos en rad. Usando $$Σ_m = J_x Σ_x J_xᵀ + J_z Σ_z J_zᵀ$$ ¿cuánto vale el elemento Σ_m[0,0] (varianza en x)?",
     answer: 0.1032, tol: 0.002, unit: "m²",
     explanation: "Con φ = 90°: J_x = [[1, 0, −r·sin φ], [0, 1, r·cos φ]] = [[1, 0, −3], [0, 1, 0]] y J_z = [[cos φ, −r·sin φ], [sin φ, r·cos φ]] = [[0, −3], [1, 0]]. Σ_m[0,0] = σ_x² + 9·σ_θ² + 9·σ_α² = 0,01 + 9·0,007615 + 9·0,002742 = 0,01 + 0,0685 + 0,0247 ≈ 0,1032 m². El error angular, multiplicado por r², domina la componente x." },
   { id: "L4-n18", lesson: "L4", topic: "Covarianza de un landmark", kind: "Teoría", format: "numeric", source: "Diapositiva 41",
@@ -177,7 +177,7 @@ const questions = [
     answer: 0.05, tol: 0.001, unit: "m²",
     explanation: "Fila 2 de J_x = [0, 1, 0] → aporta σ_y² = 0,01. Fila 2 de J_z = [1, 0] → aporta σ_r² = 0,04. Σ_m[1,1] = 0,01 + 0,04 = 0,05 m². En la dirección del haz (y) solo influyen el error en y y el error de rango." },
   { id: "L4-n19", lesson: "L4", topic: "Polar → cartesiano", kind: "Teoría", format: "numeric", source: "Nueva",
-    prompt: "Una observación polar z_p = [r, α] = [2 m, 0 rad] tiene Σ_zp = diag(0,04, 0,01). Con J = ∂z_c/∂z_p = [[cos α, −r·sin α], [sin α, r·cos α]], ¿cuánto vale la varianza en y de Σ_zc = J Σ_zp Jᵀ?",
+    prompt: "Una observación polar z_p = [r, α] = [2 m, 0 rad] tiene Σ_zp = diag(0,04, 0,01). Con $$J = ∂z_c/∂z_p = [[cos α, −r·sin α], [sin α, r·cos α]]$$ ¿cuánto vale la varianza en y de Σ_zc = J Σ_zp Jᵀ?",
     answer: 0.04, tol: 0.001, unit: "m²",
     explanation: "Con α = 0: J = [[1, 0], [0, 2]]. Σ_zc = diag(0,04, 2²·0,01) = diag(0,04, 0,04). La varianza lateral crece con r²·σ_α²." },
   { id: "L4-n20", lesson: "L4", topic: "LiDAR", kind: "Teoría", format: "numeric", source: "Nueva",
@@ -268,12 +268,12 @@ const questions = [
   {"id": "L5-n41", "lesson": "L5", "topic": "Filtro de Kalman", "kind": "Teoría", "format": "numeric", "source": "Diapositivas L5 (v3)", "prompt": "En 1D, con C = 2: Σ̄ = 1 y Q = 1. ¿Cuánto vale K?", "answer": 0.4, "tol": 0.0031, "unit": "", "explanation": "K = Σ̄C/(C²Σ̄ + Q) = 2/(4 + 1) = 0,4."},
   {"id": "L5-n42", "lesson": "L5", "topic": "Filtro de Kalman", "kind": "Teoría", "format": "numeric", "source": "Diapositivas L5 (v3)", "prompt": "En 1D, con C = 1: μ̄ = 7 m, K = 0,8 y z = 7,5 m. ¿Cuánto vale la media corregida?", "answer": 7.4, "tol": 0.006, "unit": "m", "explanation": "μ = μ̄ + K(z − μ̄) = 7 + 0,8·0,5 = 7,4 m."},
   {"id": "L5-n43", "lesson": "L5", "topic": "Filtro de Kalman", "kind": "Teoría", "format": "numeric", "source": "Diapositivas L5 (v3)", "prompt": "En 1D, con C = 2: Σ̄ = 1 y K = 0,4. ¿Cuánto vale la varianza corregida?", "answer": 0.2, "tol": 0.0031, "unit": "", "explanation": "Σ = (1 − KC)Σ̄ = (1 − 0,4·2)·1 = 0,2."},
-  {"id": "L5-n44", "lesson": "L5", "topic": "Kalman y MAP", "kind": "Teoría", "format": "numeric", "source": "Diapositivas L5 (v3)", "prompt": "En 1D, con C = 1: Σ̄ = 2 y Q = 2. Con la forma Σ = [Σ̄⁻¹ + CᵀQ⁻¹C]⁻¹, ¿cuánto vale Σ?", "answer": 1.0, "tol": 0.006, "unit": "", "explanation": "Σ = [1/2 + 1/2]⁻¹ = 1. Con dos fuentes iguales, la varianza se reduce a la mitad."},
+  {"id": "L5-n44", "lesson": "L5", "topic": "Kalman y MAP", "kind": "Teoría", "format": "numeric", "source": "Diapositivas L5 (v3)", "prompt": "En 1D, con C = 1: Σ̄ = 2 y Q = 2. Con la forma $$Σ = [Σ̄⁻¹ + CᵀQ⁻¹C]⁻¹$$ ¿cuánto vale Σ?", "answer": 1.0, "tol": 0.006, "unit": "", "explanation": "Σ = [1/2 + 1/2]⁻¹ = 1. Con dos fuentes iguales, la varianza se reduce a la mitad."},
   {"id": "L5-n45", "lesson": "L5", "topic": "Filtro de Kalman", "kind": "Teoría", "format": "numeric", "source": "Diapositivas L5 (v3)", "prompt": "Estado [x, y], Σ̄ = [[0,8; 0,2],[0,2; 0,4]], C = [1 0] y Q = 0,2. ¿Cuánto vale la segunda componente de K?", "answer": 0.2, "tol": 0.0031, "unit": "", "explanation": "S = CΣ̄Cᵀ + Q = 0,8 + 0,2 = 1. Σ̄Cᵀ = [0,8; 0,2]. K = [0,8; 0,2]."},
   {"id": "L5-n46", "lesson": "L5", "topic": "Filtro de Kalman", "kind": "Teoría", "format": "numeric", "source": "Diapositivas L5 (v3)", "prompt": "Estado [x, y], Σ̄ = [[0,8; 0,2],[0,2; 0,4]], C = [1 0] y Q = 0,2. Si la innovación vale 0,5, ¿cuánto se corrige y?", "answer": 0.1, "tol": 0.0031, "unit": "", "explanation": "K₂·ν = 0,2·0,5 = 0,1. y se corrige aunque no se mide, porque x e y están correlacionadas."},
   {"id": "L5-n47", "lesson": "L5", "topic": "Filtro de Kalman", "kind": "Teoría", "format": "numeric", "source": "Diapositivas L5 (v3)", "prompt": "Estado [x, y], Σ̄ = [[0,8; 0,2],[0,2; 0,4]], C = [1 0] y Q = 0,2. ¿Cuánto vale el elemento (2,2) de la covarianza corregida?", "answer": 0.36, "tol": 0.0031, "unit": "", "explanation": "I − KC = [[0,2; 0],[−0,2; 1]]. (I − KC)Σ̄ tiene en (2,2): −0,2·0,2 + 1·0,4 = 0,36."},
   {"id": "L5-n48", "lesson": "L5", "topic": "EKF", "kind": "Teoría", "format": "numeric", "source": "Diapositivas L5 (v3)", "prompt": "Dimensiones del EKF: el robot observa 5 landmarks con rango y marcación. ¿Cuántas filas tiene H?", "answer": 10.0, "tol": 0, "unit": "filas", "explanation": "2 filas por landmark: 2·5 = 10. H es 10×3 y K, 3×10."},
-  {"id": "L5-n49", "lesson": "L5", "topic": "EKF", "kind": "Teoría", "format": "numeric", "source": "Diapositivas L5 (v3)", "prompt": "Comando u = (2, 0, 0) y pose con θ = π/2. ¿Cuánto vale G(1,3) = −u_x·sin θ − u_y·cos θ?", "answer": -2.0, "tol": 0.006, "unit": "", "explanation": "−2·1 − 0·0 = −2."},
+  {"id": "L5-n49", "lesson": "L5", "topic": "EKF", "kind": "Teoría", "format": "numeric", "source": "Diapositivas L5 (v3)", "prompt": "Comando u = (2, 0, 0) y pose con θ = π/2. ¿Cuánto vale G(1,3)? $$G(1,3) = −u_x·sin θ − u_y·cos θ$$", "answer": -2.0, "tol": 0.006, "unit": "", "explanation": "−2·1 − 0·0 = −2."},
   {"id": "L5-n50", "lesson": "L5", "topic": "EKF", "kind": "Teoría", "format": "numeric", "source": "Diapositivas L5 (v3)", "prompt": "h(x) = √(x² + 16). μ̄ = 3, Σ̄ = 2 y Q = 0,28. ¿Cuánto vale el jacobiano H en μ̄?", "answer": 0.6, "tol": 0.0031, "unit": "", "explanation": "H = x/√(x² + 16) evaluado en 3: 3/5 = 0,6."},
   {"id": "L5-n51", "lesson": "L5", "topic": "EKF", "kind": "Teoría", "format": "numeric", "source": "Diapositivas L5 (v3)", "prompt": "h(x) = √(x² + 16). μ̄ = 3, Σ̄ = 2 y Q = 0,28. ¿Cuánto vale K?", "answer": 1.2, "tol": 0.006, "unit": "", "explanation": "H = 0,6. S = 0,36·2 + 0,28 = 1. K = Σ̄H/S = 2·0,6/1 = 1,2."},
   {"id": "L5-n52", "lesson": "L5", "topic": "EKF", "kind": "Teoría", "format": "numeric", "source": "Diapositivas L5 (v3)", "prompt": "h(x) = √(x² + 16). μ̄ = 3, Σ̄ = 2 y Q = 0,28. Si z = 5,5, ¿cuánto vale la media corregida?", "answer": 3.6, "tol": 0.006, "unit": "", "explanation": "h(3) = 5, así que ν = 0,5. K = 1,2. μ = 3 + 1,2·0,5 = 3,6."},
@@ -324,7 +324,7 @@ const questions = [
     answer: 1, tol: 0.05, unit: "",
     explanation: "La media está donde está el pico: μ = 2. La altura del pico es 1/(σ√(2π)), así que σ = 1/(0,40 · 2,5066) = 1/1,003 ≈ 1,0. Comprobación: a 1σ (en x = 1 y en x = 3) la curva vale el 60,7 % del máximo, unos 0,24. Era la gaussiana con mu = 2 y sigma = 1 del notebook." },
   { id: "L4-w03", lesson: "L4", topic: "Independencia condicional", kind: "Teoría", format: "single", source: "Wuolah · Preguntas de examen recordadas", wuolah: "Preguntas de examen recordadas; Preguntas de teoría 1.er parcial 2024-25",
-    prompt: "¿Qué hipótesis permite escribir p(z | x, m) = ∏ₖ p(zₖ | x, m)?",
+    prompt: "¿Qué hipótesis permite escribir la verosimilitud como un producto? $$p(z | x, m) = ∏ₖ p(zₖ | x, m)$$",
     options: ["Que todas las medidas tienen la misma varianza", "Que el modelo de observación es lineal", "Que las medidas son condicionalmente independientes dadas la pose y el mapa", "Que el mapa es de rejilla de ocupación"],
     answer: 2,
     explanation: "Si z₁, …, z_K son condicionalmente independientes dados x y m, la verosimilitud conjunta es el producto de las individuales. Ojo: no es lo mismo que «iid» (idénticamente distribuidas), que se refiere a que todas sigan el mismo tipo de distribución. En la práctica se suman logaritmos para no trabajar con números minúsculos. No hace falta que las varianzas sean iguales ni que el modelo sea lineal." },
@@ -373,7 +373,7 @@ const questions = [
     answer: 1,
     explanation: "Con e ~ N(0, Q), p(z | x) = K·exp{−½ eᵀQ⁻¹e}. Maximizarla equivale a minimizar eᵀQ⁻¹e, que es el coste de WLS: x̂_ML = x̂_LS. El LS ordinario es el caso Q = σ²I." },
   { id: "L5-w04", lesson: "L5", topic: "LS y máxima verosimilitud", kind: "Teoría", format: "single", source: "Wuolah · Preguntas de examen recordadas", wuolah: "Preguntas de examen recordadas",
-    prompt: "p(z | x, m) = K·exp{−½ [h(x, m) − z]ᵀ Q⁻¹ [h(x, m) − z]}. Si buscas la pose que maximiza esta expresión, ¿qué problema estás resolviendo?",
+    prompt: "$$p(z | x, m) = K · exp{−½ [h(x, m) − z]ᵀ Q⁻¹ [h(x, m) − z]}$$ Si buscas la pose que maximiza esta expresión, ¿qué problema estás resolviendo?",
     options: ["Un ICP con correspondencias desconocidas", "La predicción del filtro de Bayes", "Un remuestreo de partículas", "Mínimos cuadrados ponderados: minimizar eᵀQ⁻¹e con e = z − h(x, m)"],
     answer: 3,
     explanation: "K no depende de x y la exponencial es creciente, así que maximizar p equivale a minimizar [h(x, m) − z]ᵀQ⁻¹[h(x, m) − z]: es WLS. Q es la covarianza del sensor, y las medidas con menos varianza pesan más. Si h no es lineal, se resuelve con Gauss-Newton." },
@@ -398,7 +398,7 @@ const questions = [
     blanks: [["xEst"], ["z - zEst"], ["e"], ["+="]],
     explanation: "La predicción se hace desde la estimación actual, xEst, porque la pose real no se conoce. El error es la medida real menos la predicha. Con J = jH (filas [−Δx/d, −Δy/d]) y e = z − h(x̂), el paso ponderado es δ = (JᵀQ⁻¹J)⁻¹JᵀQ⁻¹e, y se suma: x̂ ← x̂ + δ. La versión de otros años usaba jE = −jH y por eso restaba (xEst −= incr). El resultado es el mismo." },
   { id: "L5-w09", lesson: "L5", topic: "EKF", kind: "Teoría", format: "single", source: "Wuolah · Preguntas de examen recordadas", wuolah: "Preguntas de examen recordadas; Self-assessment 1.er parcial 2024-25; Preguntas de teoría 1.er parcial 2024-25",
-    prompt: "En el examen daban las expresiones del EKF sin la parte izquierda y había que nombrarlas: (1) G_tΣ_{t−1}G_tᵀ + R_t · (2) μ̄_t + K_t(z_t − h(μ̄_t)) · (3) (I − K_tH_t)Σ̄_t · (4) μ_{t−1} ⊕ u_t. ¿Qué asignación es correcta?",
+    prompt: "En el examen daban las expresiones del EKF sin la parte izquierda y había que nombrarlas: $$(1)  G_t Σ_{t−1} G_tᵀ + R_t\n(2)  μ̄_t + K_t (z_t − h(μ̄_t))\n(3)  (I − K_t H_t) Σ̄_t\n(4)  μ_{t−1} ⊕ u_t$$ ¿Qué asignación es correcta?",
     options: ["(1) incertidumbre de la estimación · (2) predicción de la pose · (3) incertidumbre de la predicción · (4) estimación de la pose", "(1) incertidumbre de la predicción · (2) estimación de la pose · (3) incertidumbre de la estimación · (4) predicción de la pose", "(1) incertidumbre de la predicción · (2) predicción de la pose · (3) incertidumbre de la estimación · (4) estimación de la pose", "(1) ganancia de Kalman · (2) estimación de la pose · (3) incertidumbre de la predicción · (4) predicción de la pose"],
     answer: 1,
     explanation: "Predicción: la pose μ̄_t = μ_{t−1} ⊕ u_t (4) y su incertidumbre Σ̄_t = GΣGᵀ + R (1). Corrección: la ganancia K_t, la pose estimada μ_t = μ̄_t + K(z − h(μ̄_t)) (2) y su incertidumbre Σ_t = (I − KH)Σ̄_t (3). Truco: si aparece R (ruido de movimiento), es predicción; si aparecen K o z, es corrección." },
@@ -437,7 +437,7 @@ const questions = [
     answer: 1,
     explanation: "Con x y m dados, h(x, m) es una constante: sumarla al ruido solo desplaza la media. Así, z ~ N(h(x, m), Q). No hay jacobiano, porque no se propaga ninguna incertidumbre a través de h, y la covarianza es Q, no su inversa (Q⁻¹ aparece dentro de la exponencial)." },
   { id: "L4-w11", lesson: "L4", topic: "Verosimilitud", kind: "Teoría", format: "single", source: "Wuolah · Self-assessment 1.er parcial 2024-25", wuolah: "Self-assessment 1.er parcial 2024-25",
-    prompt: "En Bel(x_t) = η·p(z_t | x_t, m)·∫ p(x_t | u_t, x_{t−1}) Bel(x_{t−1}) dx_{t−1}, ¿cuál es la variable de la función p(z_t | x_t, m)?",
+    prompt: "En la ecuación del filtro de Bayes $$Bel(x_t) = η · p(z_t | x_t, m) · ∫ p(x_t | u_t, x_{t−1}) · Bel(x_{t−1}) d x_{t−1}$$ ¿cuál es la variable de la función p(z_t | x_t, m)?",
     options: ["m", "x_t", "m, x_t y z_t", "z_t"],
     answer: 1,
     explanation: "La medida z_t ya se ha tomado y el mapa m se conoce: son datos fijos. Lo que varía es la pose candidata x_t, así que p(z_t | x_t, m) se usa como verosimilitud L(x_t): dice lo compatible que es cada pose con lo medido. Por eso no tiene por qué integrar 1 respecto a x_t." },
@@ -709,7 +709,7 @@ const questions = [
     answer: 4, fix: "sys.path.append(\"..\")",
     explanation: "utils está en la raíz del repositorio, un nivel por encima de la carpeta del capítulo, así que hay que añadir \"..\". \"../..\" lo usan los notebooks del tema 3, que están en una subcarpeta más (Chapter 03/3.x …/)." },
   { id: "P42-n01", lesson: "P4.2", topic: "Laser2D", kind: "Práctica", format: "numeric", source: "Práctica 4.2",
-    prompt: "Laser2D calcula n_beams = floor(FOV/resolution) + 1. En explore_environment() se usa FOV = 3π/2 y resolution = 0,05 rad. ¿Cuántos haces tiene cada observación?",
+    prompt: "Laser2D calcula `n_beams = floor(FOV/resolution) + 1`. En explore_environment() se usa FOV = 3π/2 y resolution = 0,05 rad. ¿Cuántos haces tiene cada observación?",
     answer: 95, tol: 0,
     explanation: "3π/2 = 4,712 rad. 4,712/0,05 = 94,25 → floor = 94 → 94 + 1 = 95 haces. La forma de z es (2, 95)." },
   { id: "P42-n02", lesson: "P4.2", topic: "Medida a global", kind: "Práctica", format: "numeric", source: "Práctica 4.2",
@@ -729,7 +729,7 @@ const questions = [
     answer: -0.356, tol: 0.003, unit: "rad",
     explanation: "α₁₀ = 10·0,2 − 3π/4 = 2 − 2,356 = −0,356 rad (≈ −20,4°). Es relativo al sensor: con θ = π/2, su dirección en el mapa sería −0,356 + 1,571 = 1,215 rad." },
   { id: "P42-n06", lesson: "P4.2", topic: "Medida a global", kind: "Práctica", format: "numeric", source: "Práctica 4.2",
-    prompt: "El sensor está en [2, 1, π/6]ᵀ y un punto medido tiene coordenadas locales (x_local, y_local) = (3, 1). ¿Cuál es su x global, tcomp(pose, [3, 1, 0])[0]?",
+    prompt: "El sensor está en [2, 1, π/6]ᵀ y un punto medido tiene coordenadas locales (`x_local`, `y_local`) = (3, 1). ¿Cuál es su x global, `tcomp(pose, [3, 1, 0])[0]`?",
     answer: 4.098, tol: 0.01, unit: "m",
     explanation: "x = x_s + x_l·cos θ − y_l·sin θ = 2 + 3·0,866 − 1·0,5 = 4,098 m; y = 1 + 3·0,5 + 1·0,866 = 3,366 m. Es la rotación del punto local seguida de la traslación de la pose." },
   { id: "P42-n07", lesson: "P4.2", topic: "Incertidumbre de un punto", kind: "Práctica", format: "numeric", source: "Práctica 4.2",
@@ -761,7 +761,7 @@ const questions = [
     prompt: "El scan se dibuja como si el robot estuviera en el origen mirando hacia +x, aunque está en [6, 4, π/2]. ¿Qué línea tiene el error?",
     code: ["    x_local = distance*np.cos(angle)", "    y_local = distance*np.sin(angle)", "    pose_obs_global = tcomp(pose, np.vstack([x_local, y_local, 0]))", "    x = pose_obs_global[0]", "    y = pose_obs_global[1]", "    ax.plot(x_local, y_local, 'o', markersize=4, color=point_color)"],
     answer: 6, fix: "    ax.plot(x, y, 'o', markersize=4, color=point_color)",
-    explanation: "x_local e y_local están en el marco del sensor. Lo que hay que dibujar en el mapa es el punto ya compuesto con la pose, x e y." },
+    explanation: "`x_local` e `y_local` están en el marco del sensor. Lo que hay que dibujar en el mapa es el punto ya compuesto con la pose, x e y." },
   { id: "P42-z06", lesson: "P4.2", topic: "Incertidumbre de un punto", kind: "Práctica", format: "cloze", source: "Práctica 4.2 (Thinking about it)",
     prompt: "Completa la propagación de la covarianza del sensor (polares) a cartesianas en el marco del sensor.",
     code: "J = np.array([[np.cos(alpha), -r*np.{{0}}(alpha)],\n              [np.sin(alpha),  {{1}}*np.cos(alpha)]])\nSigma_c = J @ Q @ J.{{2}}",
@@ -1525,6 +1525,51 @@ function initQuiz() {
     if (className) element.className = className;
     return element;
   };
+  // Texto con fórmulas: `código`, $$fórmula en su propia línea$$, x_t / x_{t−1} como subíndice y e^(−λz) como superíndice.
+  const subSup = /(?<![\p{L}\p{N}_.\/])(\p{L}\p{M}*)_(\{[^}]+\}|[a-z0-9]+|[A-Z]+|[Ͱ-Ͽ])|\^(\([^)]+\)|[A-Za-z0-9Ͱ-Ͽ−-]+)/gu;
+  const appendMath = (parent, text) => {
+    let last = 0;
+    for (const match of text.matchAll(subSup)) {
+      parent.append(text.slice(last, match.index));
+      if (match[1]) {
+        const sub = document.createElement("sub");
+        sub.textContent = match[2].replace(/^\{|\}$/g, "");
+        parent.append(match[1], sub);
+      } else {
+        const sup = document.createElement("sup");
+        sup.textContent = match[3].replace(/^\(|\)$/g, "");
+        parent.append(sup);
+      }
+      last = match.index + match[0].length;
+    }
+    parent.append(text.slice(last));
+  };
+  const appendInline = (parent, text) => {
+    String(text).split("`").forEach((part, index) => {
+      if (index % 2) parent.append(addText("code", part, "inline-code"));
+      else appendMath(parent, part);
+    });
+  };
+  const fillRich = (element, text) => {
+    element.replaceChildren();
+    String(text ?? "").split("$$").forEach((part, index) => {
+      if (index % 2) {
+        const block = document.createElement("span");
+        block.className = "math-display";
+        part.trim().split("\n").forEach((line, row) => {
+          if (row) block.append(document.createElement("br"));
+          appendInline(block, line.trim());
+        });
+        element.append(block);
+      } else if (part) appendInline(element, index ? part.replace(/^\s+/, "") : part.replace(/\s+$/, ""));
+    });
+    return element;
+  };
+  const addRich = (tag, text, className) => {
+    const element = document.createElement(tag);
+    if (className) element.className = className;
+    return fillRich(element, text);
+  };
   const answerList = (q) => (Array.isArray(q.answer) ? q.answer : [q.answer]);
   const formatNumber = (value) => String(value).replace(".", ",");
 
@@ -1620,7 +1665,7 @@ function initQuiz() {
       input.value = String(index);
       input.checked = !!saved?.selected.includes(index);
       input.disabled = !!saved;
-      label.append(input, addText("span", `${String.fromCharCode(65 + index)}.`, "option-letter"), addText("span", option));
+      label.append(input, addText("span", `${String.fromCharCode(65 + index)}.`, "option-letter"), addRich("span", option));
       if (saved) {
         if (answer.includes(index)) label.classList.add("correct-option");
         else if (saved.selected.includes(index)) label.classList.add("wrong-option");
@@ -1738,7 +1783,7 @@ function initQuiz() {
     $("#quiz-progress").style.width = `${((current + 1) / session.length) * 100}%`;
     const wuolahNote = q.wuolah && !q.source.startsWith("Wuolah") ? ` · También en Wuolah (${q.wuolah})` : "";
     $("#question-meta").textContent = `${lessonNames[q.lesson]} · ${q.topic} · ${formatNames[q.format]} · ${q.source}${wuolahNote}`;
-    $("#question-title").textContent = q.prompt;
+    fillRich($("#question-title"), q.prompt);
     $("#answer-hint").textContent = hintFor(q);
     const options = $("#options");
     options.replaceChildren();
@@ -1759,7 +1804,7 @@ function initQuiz() {
         feedback.append(addText("p", "Línea corregida:", "fix-label"));
         feedback.append(addText("pre", q.fix, "code-block fix-block"));
       }
-      feedback.append(addText("p", q.explanation, "explanation"));
+      feedback.append(addRich("p", q.explanation, "explanation"));
     }
     $("#check-button").hidden = !!saved;
     $("#next-button").hidden = !saved;
