@@ -436,7 +436,7 @@ const questions = [
     options: ["p(z | x, m) ~ N(h(x, m), J_h·Q·J_hᵀ)", "p(z | x, m) ~ N(h(x, m), Q)", "p(z | x, m) ~ N(0, Q)", "p(z | x, m) ~ N(h(x, m), Q⁻¹)"],
     answer: 1,
     explanation: "Con x y m dados, h(x, m) es una constante: sumarla al ruido solo desplaza la media. Así, z ~ N(h(x, m), Q). No hay jacobiano, porque no se propaga ninguna incertidumbre a través de h, y la covarianza es Q, no su inversa (Q⁻¹ aparece dentro de la exponencial)." },
-  { id: "L4-w11", lesson: "L4", topic: "Verosimilitud", kind: "Teoría", format: "single", source: "Wuolah · Self-assessment 1.er parcial 2024-25", wuolah: "Self-assessment 1.er parcial 2024-25",
+  { id: "L5-w24", lesson: "L5", topic: "Filtro de Bayes", kind: "Teoría", format: "single", source: "Wuolah · Self-assessment 1.er parcial 2024-25", wuolah: "Self-assessment 1.er parcial 2024-25",
     prompt: "En la ecuación del filtro de Bayes $$Bel(x_t) = η · p(z_t | x_t, m) · ∫ p(x_t | u_t, x_{t−1}) · Bel(x_{t−1}) d x_{t−1}$$ ¿cuál es la variable de la función p(z_t | x_t, m)?",
     options: ["m", "x_t", "m, x_t y z_t", "z_t"],
     answer: 1,
